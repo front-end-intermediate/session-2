@@ -4,15 +4,15 @@ html {
   background: #eeeeee;
   font-family: 'Source Sans Pro', Helvetica, Clean, sans-serif;
   font-size: 100%;
-  font-weight: 400; 
+  font-weight: 400;
 }
 
 body {
-  margin: 0; 
+  margin: 0;
 }
 
 *, *:before, *:after {
-  box-sizing: inherit; 
+  box-sizing: inherit;
 }
 
 .site-wrap {
@@ -23,11 +23,11 @@ body {
   text-align: justify;
   box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.05);
   transform: scale(0.98);
-  transition: transform 0.5s; 
+  transition: transform 0.5s;
 }
 
 body.fixed-nav .site-wrap {
-  transform: scale(1); 
+  transform: scale(1);
 }
 
 header {
@@ -37,14 +37,14 @@ header {
   background-size: cover;
   display: flex;
   align-items: center;
-  justify-content: center; 
+  justify-content: center;
 }
 
 h1 {
   color: white;
   font-size: 7vw;
   font-weight: 300;
-  text-shadow: 3px 4px 0 rgba(0, 0, 0, 0.2); 
+  text-shadow: 3px 4px 0 rgba(0, 0, 0, 0.2);
 }
 
 nav {
@@ -53,12 +53,12 @@ nav {
   width: 100%;
   transition: all 0.5s;
   position: relative;
-  z-index: 1; 
+  z-index: 1;
 }
 
 body.fixed-nav nav {
   position: fixed;
-  box-shadow: 0 5px 3px rgba(0, 0, 0, 0.1); 
+  box-shadow: 0 5px 3px rgba(0, 0, 0, 0.1);
 }
 
 nav ul {
@@ -66,7 +66,8 @@ nav ul {
   padding: 0;
   list-style: none;
   display: flex;
-  min-height: 2.25rem; 
+  flex:1;
+  min-height: 2.25rem;
 }
 
 nav li {
@@ -74,12 +75,15 @@ nav li {
   text-align: center;
   display: flex;
   justify-content: center;
-  align-items: center; 
+  align-items: center;
 }
 
 nav a {
   text-decoration: none;
   display: inline-block;
-  color: white; 
+  color: white;
 }
 
+.logo img {
+  display:none;
+}

@@ -1,11 +1,13 @@
 #Session Two
 
-Today we begin with some tooling using Node Package Manager to implement a simple workflow for SASS and automatic browser refresh. We will review arrow functions, take a quick look at SVG, start using SASS on our layout, create responsive features and use GIT and Github to create versioning.
+Today we begin with some tooling - using Node Package Manager to implement a simple workflow for SASS and automatic browser refresh. We will start using SASS on our project to create responsive features and use GIT and Github to create versioning.
 
 
 ##EXERCISE (continued)
 
-* Take care of the jankey jump using offsetHeight to add padding equal to the height of the nav:
+Scroll to make the nav sticky and note the content jump as the nav changes class. 
+
+Correct this jankey jump using offsetHeight to add padding equal to the height of the nav:
 
 ```js
 function fixNav() {
@@ -21,104 +23,124 @@ function fixNav() {
 
 Note paddingTop (camel case) - I used Javascript for this because offSetHeight could vary. Otherwise I would have used CSS. Always try to use CSS instead of Javascript wherever possible.
 
-###Add the SVG Logo Image
+###SVG Logo Image
 
-```js
-const logo = nav.querySelector('ul>li');
-logo.classList.add('logo');
-logo.firstChild.innerHTML = '<img src="img/logo.svg" />';
-```
-
-Format the logo and create the sliding logo behaviour. Note: CSS only, no JavaScript:
+Format the logo and create the sliding logo behaviour. CSS only, no JavaScript:
 
 ```css
-li.logo img {
-  padding-top: 0.25rem;
-  width: 2.5rem;
-}
 
-li.logo {
+.logo img {
+  padding-top: 0.25rem;
+  width: 2rem;
+  margin-left: 0.5rem;
+}
+```
+
+Note the use of an SVG file. Change the CSS in the SVG to make the logo white.
+
+Add `display:flex` to nav 
+
+```css
+nav {
+  ...
+  display: flex;
+}
+```
+
+Animate
+
+```css
+.logo {
   max-width:0;
   overflow: hidden;
-  background: white;
   transition: all 0.5s;
-  font-weight: 600;
-  font-size: 30px;
 }
 
-.fixed-nav li.logo {
+.fixed-nav .logo {
   max-width:500px;
 }
 ```
 
 Note the use of max-width above. We are using this because transitions do not animate width.
 
-Note the use of an SVG file. Some interesting applications of SVG:
 
-* http://responsivelogos.co.uk
-* http://www.svgeneration.com/recipes/Beam-Center/
 
-###Faking a SPA
+###Faking a Single Page Application (SPA)
 
 Note the use of hashes in the nav links:
 
 `<a href="#watchlist">Watchlist</a>`
 
-These allow us to navigate to sections of the document marked up with the corresponding id:
+These allow us to navigate (`index.html#research`) to sections of the document marked up with the corresponding id:
 
 `<p id="watchlist">`
 
-We'll set up one of them, the Workbook link, to behave differently. This emulates a single page application (SPA).
+These hashes are an important element in creating SPAs as the URLs are used to load different content via AJAX from a server:
+
+```js
+const navAnchors = navLinks.querySelectorAll('a');
+for (let i=0; i<navAnchors.length; i++){
+  console.log(navAnchors[i].hash);
+}
+```
+
+We'll set up our page emulate a single page application.
+
+* add a click event listener to the links:
+
+```js
+const navAnchors = navLinks.querySelectorAll('a');
+for (let i=0; i<navAnchors.length; i++){
+  navAnchors[i].addEventListener('click', function(e){
+      console.log(e);
+    })
+}
+```
+
+I would be amiss here if I didn't reference [event delegation](https://davidwalsh.name/event-delegate) in connection with the above.
+
+We need a way to 'link' our nav items with the content in the `navitems.js` data store.
+
+* leverage HTML5 [data attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/data-*) to uniquely id the content headers and content by adding them to the DOM:
+
+```js
+const markup = `
+<ul>
+  ${navItems.map( listItem =>
+    `<li><a data-navid="${listItem.navid}" href="${listItem.link}">${listItem.label}</a></li>`
+    ).join('')}
+</ul>
+`;
+```
+
+* and using them to conditionally grab content:
 
 ```js
 const siteWrap = document.querySelector('.site-wrap');
-const navTest = document.querySelectorAll('#main ul li a');
-for (let i=0; i<navTest.length; i++){
-  // console.log('hash ', navTest[i].hash);
-  navTest[i].addEventListener('click', prepContent)
+const navAnchors = navLinks.querySelectorAll('a');
+for (let i=0; i<navAnchors.length; i++){
+  navAnchors[i].addEventListener('click', function(e){
+    // console.log(this.dataset);
+    let id = this.dataset.navid;
+    siteWrap.innerHTML = `<h2>${navItems[id].header}</h2><p>${navItems[id].content}</p>`;
+  })
 }
 ```
 
-```js
-function prepContent(e){
-  if (this.hash == "#workbook"){
-    e.preventDefault();
-  }
-}
-```
+A couple of things to note 
 
-```js
-function prepContent(e){
-  if (this.hash == "#workbook"){
-    // const header = navItems[4].header;
-    // const content = navItems[4].content;
-    const { header, content } = navItems[4];
-    siteWrap.innerHTML = `
-      <h2>${header}</h2>
-      <p>${content}</p>
-    `;
-    e.preventDefault();
-  }
-}
-```
+1. a hash in the location string does not cause the correct content to load on refresh
+1. we have broken the back button
+1. we cannot bookmark the location
+
+We have broken the web. Obviously we are not done here.
+
 
 ##NPM for SASS and Browser Refresh
 
-####SASS Workflow
-
-SASS is a transpiler that allows us to take advantage of a number of features that are missing in vanilla CSS. 
-
 We will use node-sass - a version of the software written in C - as opposed to the classic SASS which was written in Ruby and is installed via Ruby Gems) because this is a class revolving around the node ecosystem.
 
-The 'classic' method of running SASS is to just use the command line:
-
-1. Rename existing css styles `styles.css` > `styles.scss`
-2. `$ cd` to that directory in a new terminal 
-3. Run SASS: `sass --watch styles.scss:styles.css`
-
-For our purposes we will use...
-
-####NPM
+####Node Package Manager (NPM)
 
 1. `$ cd` to the working directory
 1. `$ npm init`
@@ -134,7 +156,7 @@ For our purposes we will use...
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build-css": "node-sass --include-path scss scss/styles.scss   public/css/test.css",
+    "build-css": "node-sass --include-path scss scss/styles.scss   public/css/styles.css",
     "watch-node-sass": "node-sass --watch scss/styles.scss --output public/css/  --source-map true",
   },
   "author": "",
@@ -145,7 +167,7 @@ For our purposes we will use...
 }
 ```
 
-Test with a variable: `$badass: #bada55;` and:
+Create `scss` directory and place `styles.scss` within. Test with a variable: `$badass: #bada55;` and:
 
 ```
 html {
@@ -160,32 +182,32 @@ Now to get rid of the manual refresh.
 
 [BrowserSync](https://browsersync.io) is billed as a testing tool but makes a nice server and auto refresher for everyday use. With npm you have the option of installing it globally or on a per project basis.
 
-1. Stop the process running in the terminal
+1. Stop any process running in the terminal
 1. `$ npm install browser-sync --save-dev`
 2. Add a task to our npm scripts e.g. `"start-test": "browser-sync start --directory --server --files '*.js, *.html, *.css'",`
 3. [Documentation](https://browsersync.io/docs/command-line)
 2. test it in the terminal, look at `localhost:3001`
-2. Add/Edit another task to our npm scripts e.g. `"start": "browser-sync start --server 'public' --files 'public'"`
+2. Add/Edit another task to our npm scripts e.g. `"start": "browser-sync start --browser \"google chrome\" --server 'public' --files 'public'",`
 3. Restart and test
 
 ####Concurrently
 
 As it stands we need two terminal tabs to run our two processes - SASS and BrowserSync - in. To ameliorate this we can install a simple  utility called Concurrently and write a 'master' npm script.
 
-1. `npm install concurrently --save-dev`
-2. add a new script e.g. `"boom!": "concurrently \"npm run start\" \"npm run watch-node-sass\" "`
+1. `$ npm install concurrently --save-dev`
+2. add a new script: `"boom!": "concurrently \"npm run start\" \"npm run watch-node-sass\" "`
 
-[Here's](https://github.com/kimmobrunfeldt/dont-copy-paste-this-frontend-template/blob/5cd2bde719654941bdfc0a42c6f1b8e69ae79980/package.json#L9) a sample of a complex concurrent config.
+Here's our final package.json:
 
-```
+```js
 {
   "name": "basic-dom",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "watch-node-sass": "node-sass -w scss/styles.scss -o public/css/",
-    "start": "browser-sync start --server 'public' --files 'public'",
+    "watch-node-sass": "node-sass --watch scss/styles.scss --output public/css/  --source-map true",
+    "start": "browser-sync start --browser \"google chrome\" --server 'public' --files 'public'",
     "boom!": "concurrently \"npm run start\" \"npm run watch-node-sass\" "
   },
   "author": "",
@@ -193,9 +215,10 @@ As it stands we need two terminal tabs to run our two processes - SASS and Brows
   "devDependencies": {
     "browser-sync": "^2.18.6",
     "concurrently": "^3.1.0",
-    "node-sass": "^4.3.0"
+    "node-sass": "^4.4.0"
   }
 }
+
 ```
 
 
@@ -230,6 +253,7 @@ $break-two: 46.25em;
 $break-one: 22.5em;
 // 360
 ```
+<div id="all-resolution-ww-monthly-201512-201612" width="600" height="400" style="width:600px; height: 400px;"></div><!-- You may change the values of width and height above to resize the chart --><p>Source: <a href="http://gs.statcounter.com/screen-resolution-stats">StatCounter Global Stats - Screen Resolution Market Share</a></p><script type="text/javascript" src="http://www.statcounter.com/js/fusioncharts.js"></script><script type="text/javascript" src="http://gs.statcounter.com/chart.php?all-resolution-ww-monthly-201512-201612&chartWidth=600"></script>
 
 Create `_main.scss` in `scss > imports` folder
 
@@ -707,3 +731,32 @@ Finally - when downloading a github repo use the `clone` method to move it to yo
 
 ###Notes
 
+Some interesting applications of SVG:
+
+* http://responsivelogos.co.uk
+* http://www.svgeneration.com/recipes/Beam-Center/
+```
+
+{
+  "name": "babel",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "babel": "babel app.js --watch --out-file app-compiled.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "babel-cli": "^6.10.1",
+    "babel-plugin-transform-object-rest-spread": "^6.8.0",
+    "babel-preset-es2015": "^6.9.0"
+  },
+  "babel": {
+    "presets": [
+      "es2015"
+    ],
+    "plugins": ["transform-object-rest-spread"]
+  }
+}
+```

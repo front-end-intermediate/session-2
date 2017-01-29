@@ -5,6 +5,7 @@ nav {
   transition: all 0.5s;
   position: relative;
   z-index: 1; 
+  display: flex;
   .fixed-nav & {
     position: fixed;
     box-shadow: 0 5px 3px rgba(0, 0, 0, 0.1); 
@@ -14,6 +15,7 @@ nav {
     padding: 0;
     list-style: none;
     display: flex;
+    flex: 1;
     flex-direction: column;
     min-height: 2.25rem; 
     @media screen and (min-width: $break-two) {
@@ -31,26 +33,6 @@ nav {
       justify-content: center;
       text-align: center;
     }
-
-    &.logo {
-      display: block;
-      max-width:100%;
-      background: white;
-      transition: all 0.5s;
-      font-weight: 600;
-      font-size: 30px;
-      @media screen and (min-width: $break-two) {
-        max-width:0;
-        overflow: hidden;
-      }
-      .fixed-nav & {
-        max-width:500px;
-      }
-      img {
-        padding-top: 0.25rem;
-        width: 2.5rem;
-      }
-    }
   }
   a {
     text-decoration: none;
@@ -60,4 +42,26 @@ nav {
 }
 .show {
   display: block !important;
+}
+
+.logo {
+  display: block;
+  max-width:100%;
+  transition: all 0.5s;
+  font-weight: 600;
+  font-size: 30px;
+  @media screen and (min-width: $break-two) {
+    max-width:0;
+    overflow: hidden;
+  }
+  .fixed-nav & {
+    max-width:500px;
+  }
+  img {
+    padding-top: 0.25rem;
+    width: 2.5rem;
+  }
+  svg .bird {
+    background: red !important;
+  }
 }

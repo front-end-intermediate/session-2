@@ -1,52 +1,32 @@
 const nav = document.getElementById('main');
+const logo = nav.querySelector('.logo');
+const markup = `${navItems.map( listItem => `<li><a data-navid="${listItem.navid}" href="${listItem.link}">${listItem.label}</a></li>`).join('')}`;
+const navLinks = document.getElementById('nav-links');
+navLinks.innerHTML = markup;
 
 
-const markup = `
-<ul>
-${navItems.map( listItem => 
-	`<li><a href="${listItem.link}">${listItem.label}</a></li>`
-	).join('')}
-	</ul>
-	`;
-	nav.innerHTML = markup;
-
-	const logo = nav.querySelector('ul>li');
-	logo.classList.add('logo');
-	logo.firstChild.innerHTML = '<img src="img/logo.svg" />';
-
-
-	let topOfNav = nav.offsetTop;
-	function fixNav() {
-		if(window.scrollY >= topOfNav) {
-			document.body.style.paddingTop = nav.offsetHeight + 'px';
-			document.body.classList.add('fixed-nav');
-		} else {
-			document.body.classList.remove('fixed-nav');
-			document.body.style.paddingTop = 0;
-		}
+let topOfNav = nav.offsetTop;
+function fixNav() {
+	if(window.scrollY >= topOfNav) {
+		document.body.style.paddingTop = nav.offsetHeight + 'px';
+		document.body.classList.add('fixed-nav');
+	} else {
+		document.body.classList.remove('fixed-nav');
+		document.body.style.paddingTop = 0;
 	}
-
-	window.addEventListener('scroll', fixNav);
-
-
-	const siteWrap = document.querySelector('.site-wrap');
-	const navTest = document.querySelectorAll('#main ul li a');
-	for (let i=0; i<navTest.length; i++){
-  // console.log('hash ', navTest[i].hash);
-  navTest[i].addEventListener('click', prepContent)
 }
+window.addEventListener('scroll', fixNav);
 
-function prepContent(e){
-	if (this.hash == "#workbook"){
-    // const header = navItems[4].header;
-    // const content = navItems[4].content;
-    const { header, content } = navItems[4];
-    siteWrap.innerHTML = `
-    <h2>${header}</h2>
-    <p>${content}</p>
-    `;
-    e.preventDefault();
+
+const navAnchors = document.querySelectorAll('#main ul li a');
+for (let i=0; i<navAnchors.length; i++){
+  navAnchors[i].addEventListener('click', showContent)
 }
+const siteWrap = document.querySelector('.site-wrap');
+function showContent(e){
+	let id = this.dataset.navid;
+	siteWrap.innerHTML = `<h2>${navItems[id].header}</h2><p>${navItems[id].content}</p>`;
+	e.preventDefault();
 }
 
 
@@ -56,7 +36,6 @@ if (document.documentElement.clientWidth <= 740) {
 }
 
 function showMenu(e){
-	console.log(e)
 	listItems.forEach((listItem) => listItem.classList.toggle('show'));
 	e.preventDefault();
 }

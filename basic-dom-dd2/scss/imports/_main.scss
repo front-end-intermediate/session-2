@@ -1,0 +1,40 @@
+
+@import "https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,200i,300,300i,400,400i,600,600i,700,700i,900,900i";
+html {
+  box-sizing: border-box;
+  background: $badass;
+  font-family: 'Source Sans Pro', Helvetica, Clean, sans-serif;
+  font-size: 100%;
+  font-weight: 400; 
+}
+
+body {
+  margin: 0; 
+}
+
+*, *:before, *:after {
+  box-sizing: inherit; 
+}
+
+a {
+  color: $links;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.site-wrap {
+  max-width: 780px;
+  margin: 40px auto;
+  background: white;
+  padding: 40px;
+  text-align: justify;
+  box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.05);
+  transform: scale(0.98);
+  transition: transform 0.5s; 
+  body.fixed-nav & {
+    transform: scale(1); 
+  }
+}
+
+

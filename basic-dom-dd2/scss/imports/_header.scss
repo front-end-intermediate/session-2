@@ -1,0 +1,24 @@
+header {
+  text-align: center;
+  height: 20vh;
+  background: url(../img/img.jpg) top no-repeat;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  @media (min-width: $break-two){
+    height: 40vh;
+    background-size: 100% auto;
+    background-attachment: fixed;
+  }
+  h1 {
+    color: white;
+    font-size: 12vw;
+    line-height: 1;
+    font-weight: 300;
+    text-shadow: 3px 4px 0 rgba(0, 0, 0, 0.2); 
+    @media (min-width: $break-one){
+      font-size: 7vw;
+    }
+  }
+}

@@ -3,7 +3,7 @@
 Today we begin with some tooling - using Node Package Manager to implement a simple workflow for SASS and automatic browser refresh. We will start using SASS on our project to create responsive features and finish by using GIT and Github to create versioning.
 
 ##Homework
-1. Review setting up a workflow using NPM on your comuter (use last week's homework file as a test case)
+1. Review setting up a workflow using NPM on your computer (use last week's homework file as a test case)
 2. Download the done branch for this week's class and correct one or more of the responsive display issues:
     * The hamburger menu does not need to display on wide screens - hide it
     * The layout of the menu on small screens is awkward - try optimizing it so it looks more like [this](http://getbootstrap.com/examples/navbar-fixed-top/) - bonus if you can make it [animate](http://css3.bradshawenterprises.com/animating_height/) on click

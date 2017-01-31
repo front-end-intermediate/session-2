@@ -18,17 +18,19 @@ function fixNav() {
 window.addEventListener('scroll', fixNav);
 
 
-const navAnchors = document.querySelectorAll('#main ul li a');
-for (let i=0; i<navAnchors.length; i++){
-  navAnchors[i].addEventListener('click', showContent)
-}
 const siteWrap = document.querySelector('.site-wrap');
-function showContent(e){
-	let id = this.dataset.navid;
-	siteWrap.innerHTML = `<h2>${navItems[id].header}</h2><p>${navItems[id].content}</p>`;
-	e.preventDefault();
+window.onload = function(){
+  // window.location.hash = '#watchlist'
+  setTimeout( () => window.location.hash = '#watchlist' , 500)
 }
-
+window.onhashchange = function() {
+  let newloc = window.location.hash;
+  let newContent = navItems.filter( navItem => navItem.link == newloc );
+  siteWrap.innerHTML = `
+  <h2>${newContent[0].header}</h2>
+  <p>${newContent[0].content}</p>
+  `;
+}
 
 const listItems = nav.querySelectorAll('li');
 if (document.documentElement.clientWidth <= 740) {

@@ -225,7 +225,9 @@ SASS Features:
 
 Create `_variables.scss` in an new `scss > imports` folder
 
-* why are we using an underscore?
+* why are we using an underscore? 
+
+* (See [bootstrap in sass](https://github.com/twbs/bootstrap-sass/tree/master/assets/stylesheets))
 
 Add `@import "imports/variables";` to the top of styles.scss
 
@@ -633,6 +635,15 @@ function showMenu(e){
 }
 ```
 
+```
+window.onhashchange = function() {
+  if(location.hash == '#0'){
+    return;
+  }
+  let newloc = window.location.hash;
+  ...
+```
+
 Add to `_nav.scss`:
 
 ```
@@ -641,7 +652,7 @@ Add to `_nav.scss`:
 }
 ```
 
-##And critically... The viewport sMETA tag
+##And critically... The viewport META tag
 
 * Use the meta tag `<meta name="viewport" content="width=device-width, initial-scale=1.0">` to ensure this works on devices
 
@@ -809,16 +820,19 @@ Some interesting applications of SVG:
 
 Username is the first seven letters of your last name + first letter of first name
 
+Hostname is oit2.scps.nyu.edu
+
 Password is first initial, last initial, 123890
 
 e.g. devereld // dd123890
 
-Hostname is oit2.scps.nyu.edu
-
 Test to see if your account is active by entering this URL into a new browser tab (use your username after the tilde):
 
-http://oit2.scps.nyu.edu/~******/
-Try using an FTP client.
+http://oit2.scps.nyu.edu/~******
+
+Ensure you are using sFTP (port 22).
+
+Suggested clients: Cyberduck, FileZilla
 
 
 

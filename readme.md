@@ -217,16 +217,17 @@ We are going to retrofit our page for responsive layout using SASS - and in part
 
 SASS Features:
 
-* error checking ➜
-* 🔧: watch for errors and messages in the terminal if it looks like the CSS is not being processed
+* error checking 
+* 📌 watch for errors and messages in the terminal if it looks like the CSS is not being processed
 * variables
-* imports and structure
+* imports 
+* better structure and more
 
 Create `_variables.scss` in an new `scss > imports` folder
 
 Add `@import "imports/variables";` to the top of styles.scss
 
-Add to variables:
+Add badass to variables as well as:
 ```
 $break-five: 81.25em;
 // 1300px
@@ -239,6 +240,7 @@ $break-two: 46.25em;
 $break-one: 22.5em;
 // 360
 ```
+
 <div id="all-resolution-ww-monthly-201512-201612" width="600" height="400" style="width:600px; height: 400px;"></div><!-- You may change the values of width and height above to resize the chart --><p>Source: <a href="http://gs.statcounter.com/screen-resolution-stats">StatCounter Global Stats - Screen Resolution Market Share</a></p><script type="text/javascript" src="http://www.statcounter.com/js/fusioncharts.js"></script><script type="text/javascript" src="http://gs.statcounter.com/chart.php?all-resolution-ww-monthly-201512-201612&chartWidth=600"></script>
 
 Create `_main.scss` in `scss > imports` folder

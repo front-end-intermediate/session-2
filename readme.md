@@ -67,7 +67,7 @@ Note the use of max-width above. We are using this because transitions do not an
 
 ###Faking a Single Page Application (SPA)
 
-Note the use of hashes in the nav links:
+Note the use of hashes in the navigation:
 
 `<a href="#watchlist">Watchlist</a>`
 
@@ -75,79 +75,50 @@ These allow us to navigate (`index.html#research`) to sections of the document m
 
 `<p id="watchlist">`
 
-These hashes are an important element in creating SPAs as the URLs are used to load different content via AJAX from a server:
-
-```js
-const navAnchors = navLinks.querySelectorAll('a');
-for (let i=0; i<navAnchors.length; i++){
-  console.log(navAnchors[i].hash);
-}
-```
+Note that clicking on an hashed link doesn't refresh the page. This makes hashes an important feature for creating SPAs - they are used to load different content via AJAX from a server with no page refresh.
 
 We'll set up our page emulate a single page application.
 
-* add a click event listener to the links:
-
-```js
-const navAnchors = navLinks.querySelectorAll('a');
-for (let i=0; i<navAnchors.length; i++){
-  navAnchors[i].addEventListener('click', function(e){
-      console.log(e);
-    })
-}
-```
-
-I would be amiss here if I didn't reference [event delegation](https://davidwalsh.name/event-delegate) in connection with the above.
-
-We need a way to 'link' our nav items with the content in the `navitems.js` data store.
-
-* leverage HTML5 [data attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/data-*) to uniquely id the content headers and content by adding them to the DOM:
-
-```js
-const markup = `
-<ul>
-  ${navItems.map( listItem =>
-    `<li><a data-navid="${listItem.navid}" href="${listItem.link}">${listItem.label}</a></li>`
-    ).join('')}
-</ul>
-`;
-```
-
-* and using them to conditionally grab content:
 
 ```js
 const siteWrap = document.querySelector('.site-wrap');
-const navAnchors = navLinks.querySelectorAll('a');
-for (let i=0; i<navAnchors.length; i++){
-  navAnchors[i].addEventListener('click', function(e){
-    // console.log(this.dataset);
-    let id = this.dataset.navid;
-    siteWrap.innerHTML = `<h2>${navItems[id].header}</h2><p>${navItems[id].content}</p>`;
-  })
+window.onload = function(){
+  // window.location.hash = '#watchlist'
+  // setTimeout( () => window.location.hash = '#watchlist' , 500)
 }
 ```
 
-A couple of things to note 
+`array.prototype.filter()`
 
-1. a hash in the location string does not cause the correct content to load on refresh
-1. we have broken the back button
-1. we cannot bookmark the location
-
-We have broken the web. Obviously we are not done here.
+```js
+window.onhashchange = function() {
+  let newloc = window.location.hash;
+  let newContent = navItems.filter( navItem => navItem.link == newloc );
+  siteWrap.innerHTML = `
+  <h2>${newContent[0].header}</h2>
+  <p>${newContent[0].content}</p>
+  `;
+}
+```
 
 
 ##NPM for SASS and Browser Refresh
 
-We will use node-sass - a version of the software written in C - as opposed to the classic SASS which was written in Ruby and is installed via Ruby Gems) because this is a class revolving around the node ecosystem.
+* [Node Package Manager](https://www.npmjs.com)
+
+* [SASS](http://sass-lang.com)
+
+* [node-sass](https://www.npmjs.com/package/node-sass)
+
 
 ####Node Package Manager (NPM)
 
 1. `$ cd` to the working directory
-1. `$ npm init`
-2. examine the file
+1. run `$ npm init` and accept the defaults
+2. examine the `package.json` file
 2. `$ npm install --save-dev node-sass`
-3. examine the file: --save-dev vs. --save, node_modules
-3. [Add scripts to the package.json file](https://github.com/sass/node-sass#usage-1):
+3. examine the file again (--save-dev vs. --save, vs. -g, and the node_modules folder)
+3. Add a [sass script](https://github.com/sass/node-sass#usage-1) to the package.json file. e.g.:
 
 ```
 {
@@ -291,7 +262,7 @@ html {
 
 Create a new _heading.scss import and move the code into it:
 
-```
+```css
 header {
   text-align: center;
   height: 40vh;
@@ -322,7 +293,7 @@ a {
 }
 ```
 
-Before (demo only):
+=====Before (demo only):
 
 ```css
 body {
@@ -337,7 +308,7 @@ body.fixed-nav .site-wrap {
 }
 ```
 
-After:
+=====After (demo only):
 
 ```css
 body {

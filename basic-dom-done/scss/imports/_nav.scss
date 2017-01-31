@@ -22,8 +22,13 @@ nav {
       flex-direction: row;
     }
   }
-  li {
+  #nav-links {
     display: none;
+    @media (min-width: $break-two){
+      display: flex;
+    }
+  }
+  li {
     padding: 0.5rem;
     align-items: center; 
     @media screen and (min-width: $break-two) {

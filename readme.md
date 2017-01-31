@@ -462,7 +462,7 @@ header {
     line-height: 1;
     font-weight: 300;
     text-shadow: 3px 4px 0 rgba(0, 0, 0, 0.2); 
-    @media (min-width: $break-one){
+    @media (min-width: $break-two){
       font-size: 7vw;
     }
   }
@@ -541,11 +541,16 @@ Flip the `<ul>` flex direction on small screens vs wide:
   }
 ```
 
-Hide the list initially on small screens while maintaining the display characteristics on wide:
+Hide the nav-liks initially on small screens while maintaining the flex display characteristics on wide:
 
 ```css
-  li {
+  #nav-links {
     display: none;
+    @media (min-width: $break-two){
+      display: flex;
+    }
+  }
+  li {
     padding: 0.5rem;
     align-items: center; 
     @media screen and (min-width: $break-two) {
@@ -557,7 +562,7 @@ Hide the list initially on small screens while maintaining the display character
     }
 ```
 
-Show the logo in small screens to use as button or hamburger icon to show the menu:
+Show the logo in small screens to use as a button (e.g. hamburger icon) to show the menu:
 
 ```css
     &.logo {
@@ -573,17 +578,15 @@ Show the logo in small screens to use as button or hamburger icon to show the me
       }
 ```
 
-Show the menu:
+Make clicking on the logo show the menu on narrow screens:
 
 ```js
-const listItems = nav.querySelectorAll('li');
 if (document.documentElement.clientWidth <= 740) {
   logo.addEventListener('click', showMenu);
 }
 
 function showMenu(e){
-  console.log(e)
-  listItems.forEach((listItem) => listItem.classList.toggle('show'));
+  navLinks.classList.toggle('show');
   e.preventDefault();
 }
 ```

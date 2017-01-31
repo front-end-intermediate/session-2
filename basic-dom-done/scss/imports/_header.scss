@@ -17,7 +17,7 @@ header {
     line-height: 1;
     font-weight: 300;
     text-shadow: 3px 4px 0 rgba(0, 0, 0, 0.2); 
-    @media (min-width: $break-one){
+    @media (min-width: $break-two){
       font-size: 7vw;
     }
   }

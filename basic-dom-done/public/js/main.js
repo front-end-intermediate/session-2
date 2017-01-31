@@ -32,12 +32,11 @@ window.onhashchange = function() {
   `;
 }
 
-const listItems = nav.querySelectorAll('li');
 if (document.documentElement.clientWidth <= 740) {
 	logo.addEventListener('click', showMenu);
 }
 
 function showMenu(e){
-	listItems.forEach((listItem) => listItem.classList.toggle('show'));
+	navLinks.classList.toggle('show');
 	e.preventDefault();
 }

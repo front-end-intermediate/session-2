@@ -19,7 +19,7 @@ a {
 
 .site-wrap {
   max-width: 780px;
-  margin: 40px auto;
+  margin: 20px auto;
   background: white;
   padding: 40px;
   text-align: justify;
@@ -51,8 +51,12 @@ nav {
     @media screen and (min-width: 46.25em) {
       nav ul {
         flex-direction: row; } }
+  nav #nav-links {
+    display: none; }
+    @media (min-width: 46.25em) {
+      nav #nav-links {
+        display: flex; } }
   nav li {
-    display: none;
     padding: 0.5rem;
     align-items: center; }
     @media screen and (min-width: 46.25em) {
@@ -107,7 +111,7 @@ header {
     line-height: 1;
     font-weight: 300;
     text-shadow: 3px 4px 0 rgba(0, 0, 0, 0.2); }
-    @media (min-width: 22.5em) {
+    @media (min-width: 46.25em) {
       header h1 {
         font-size: 7vw; } }
 

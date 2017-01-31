@@ -807,6 +807,8 @@ git push -u origin master
 
 Finally - when downloading a github repo use the `clone` method to move it to your local disk while retaining the git history, branches, and etc.
 
+Use of MSCode as a Git / diff client?
+
 
 
 ###Notes

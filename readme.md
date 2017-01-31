@@ -225,6 +225,8 @@ SASS Features:
 
 Create `_variables.scss` in an new `scss > imports` folder
 
+* why are we using an underscore?
+
 Add `@import "imports/variables";` to the top of styles.scss
 
 Add badass to variables as well as:
@@ -254,11 +256,11 @@ Copy paste all code from styles (except first line) and add `@import "imports/ma
 By convention apply native variables to the highest level element in the DOM (although any element will work):
 
 ```
-    :root {
-      --base: #ffc600;
-      --spacing: 10px;
-      --blur: 10px;
-    }
+:root {
+  --base: #ffc600;
+  --spacing: 10px;
+  --blur: 10px;
+}
 ```
 
 and here is the syntax for usage:
@@ -275,9 +277,9 @@ html {
 
 [Can I Use](http://caniuse.com/#search=css%20v)
 
-####Nesting
+####Nesting - _header.scss
 
-Create a new _heading.scss import and move the code into it:
+Create a new _heading.scss import and move the code into it as:
 
 ```css
 header {
@@ -310,7 +312,7 @@ a {
 }
 ```
 
-=====Before (demo only):
+=====Prefix: Before (demo only):
 
 ```css
 body {
@@ -325,7 +327,7 @@ body.fixed-nav .site-wrap {
 }
 ```
 
-=====After (demo only):
+=====Prefix: After (demo only):
 
 ```css
 body {
@@ -340,10 +342,11 @@ body {
 }
 ```
 
-Alternative use of ampersand (at the end of the selector)
+Postfix: use of ampersand at the end of the selector:
 
 ```css
 nav {
+  display: flex;
   background: #007eb6;
   top: 0;
   width: 100%;
@@ -375,7 +378,19 @@ nav {
 
 ####Media Queries
 
+The grand daddy of media queries - print stylesheets:
 
+```
+@media print {
+  a[href]:after {
+    content: " (" attr(href) ") ";
+  }
+}
+```
+
+The birth of [responsive design](http://alistapart.com/article/responsive-web-design) 
+
+In `_header.scss`:
 
 ```css
 @media screen and (min-width: 760px){
@@ -401,10 +416,10 @@ Compare this to the media query in last week's homework assignment.
 }
 ```
 
-The first adds CSS instructions to wider screens and the second adds features to smaller screens.
+The first adds CSS instructions to wider screens (Mobile First responsive design) and the second adds features to smaller screens.
 
 
-####Sample
+####Sample 1
 
 `@media screen and (min-width: 760px){ ... }`
 
@@ -425,8 +440,11 @@ The choice between max and min width has profound consquences for the way you wr
 
 Mobile first design: use min-width media queries to add features to larger screens `@media (min-width: 46.25em) { }` instead of using max-width media queries to add features to smaller screens.
 
+####Sample 3
 
 `@media screen and (min-width:100px) and (max-width:200px) { ... }`
+
+####Translation 3
 
 In this example you are only targeting devices with a width between 100px and 200px.
 
@@ -455,6 +473,8 @@ header {
 }
 ```
 
+If we want to work mobile first then we want to establish the default CSS as that NOT in the media query:
+
 ```css
 header {
   text-align: center;
@@ -482,7 +502,7 @@ header {
 }
 ```
 
-Leveraging SASS nesting in your media queries organizes your code. The CSS changes are together with the element - not grouped together in a separate area of your file
+Leveraging SASS nesting in your media queries enforces a specific organization of your code. The media queries are grouped together with the element - not in separate files or in separate blocks within your CSS.
 
 Move all nav related css into a new partial `_nav.scss` and import.
 
@@ -575,20 +595,29 @@ Hide the nav-liks initially on small screens while maintaining the flex display 
     }
 ```
 
+`flex: 1;`
+
 Show the logo in small screens to use as a button (e.g. hamburger icon) to show the menu:
 
 ```css
-    &.logo {
-      display: block;
-      max-width:100%;
-      background: white;
-      transition: all 0.5s;
-      font-weight: 600;
-      font-size: 30px;
-      @media screen and (min-width: $break-two) {
-        max-width:0;
-        overflow: hidden;
-      }
+.logo {
+  display: block;
+  max-width:100%;
+  transition: all 0.5s;
+  font-weight: 600;
+  font-size: 30px;
+  @media screen and (min-width: $break-two) {
+    max-width:0;
+    overflow: hidden;
+  }
+  .fixed-nav & {
+    max-width:500px;
+  }
+  img {
+    padding-top: 0.25rem;
+    width: 2.5rem;
+  }
+}
 ```
 
 Make clicking on the logo show the menu on narrow screens:
@@ -612,9 +641,13 @@ Add to `_nav.scss`:
 }
 ```
 
-####And critically...
+##And critically... The viewport sMETA tag
 
 * Use the meta tag `<meta name="viewport" content="width=device-width, initial-scale=1.0">` to ensure this works on devices
+
+* Chrome device toolbar
+
+* http://daniel.deverell.com/barcap/public
 
 
 ##SASS Links
@@ -771,6 +804,21 @@ Some interesting applications of SVG:
 
 * http://responsivelogos.co.uk
 * http://www.svgeneration.com/recipes/Beam-Center/
+
+##Server Accounts
+
+Username is the first seven letters of your last name + first letter of first name
+
+Password is first initial, last initial, 123890
+
+e.g. devereld // dd123890
+
+Hostname is oit2.scps.nyu.edu
+
+Test to see if your account is active by entering this URL into a new browser tab (use your username after the tilde):
+
+http://oit2.scps.nyu.edu/~******/
+Try using an FTP client.
 
 
 

@@ -241,7 +241,7 @@ $break-one: 22.5em;
 // 360
 ```
 
-<div id="all-resolution-ww-monthly-201512-201612" width="600" height="400" style="width:600px; height: 400px;"></div><!-- You may change the values of width and height above to resize the chart --><p>Source: <a href="http://gs.statcounter.com/screen-resolution-stats">StatCounter Global Stats - Screen Resolution Market Share</a></p><script type="text/javascript" src="http://www.statcounter.com/js/fusioncharts.js"></script><script type="text/javascript" src="http://gs.statcounter.com/chart.php?all-resolution-ww-monthly-201512-201612&chartWidth=600"></script>
+Checkout: [StatCounter Global Stats - Screen Resolution Market Share](href="http://gs.statcounter.com/screen-resolution-stats")
 
 Create `_main.scss` in `scss > imports` folder
 

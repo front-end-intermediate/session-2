@@ -48,7 +48,7 @@ Format the logo and create the sliding logo behaviour. CSS only, no JavaScript:
 
 Note the use of an SVG file. Change the CSS in the SVG to make the logo white.
 
-Add `display:flex` to nav 
+Add `display:flex` to nav:
 
 ```css
 nav {
@@ -99,6 +99,24 @@ window.onload = function(){
 ```
 
 `array.prototype.filter()`
+
+```js
+window.onhashchange = function() {
+  let newloc = window.location.hash;
+  console.log(newloc)
+  let newContent = navItems.filter(
+    function(navItem){
+      return navItem.link == newloc
+    })
+  console.log(newContent)
+  siteWrap.innerHTML = `
+  <h2>${newContent[0].header}</h2>
+  <p>${newContent[0].content}</p>
+  `;
+}
+```
+
+Refactor:
 
 ```js
 window.onhashchange = function() {

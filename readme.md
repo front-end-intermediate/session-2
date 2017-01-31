@@ -127,8 +127,7 @@ window.onhashchange = function() {
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build-css": "node-sass --include-path scss scss/styles.scss   public/css/styles.css",
-    "watch-node-sass": "node-sass --watch scss/styles.scss --output public/css/  --source-map true",
+    "build-css": "node-sass --include-path scss scss/styles.scss   public/css/styles.css"
   },
   "author": "",
   "license": "ISC",
@@ -146,6 +145,19 @@ html {
   ...
 }
 ```
+
+Compile the css: `$ npm run build-css`
+
+Add watching:
+
+```
+  "scripts": {
+    "build-css": "node-sass --include-path scss scss/styles.scss   public/css/styles.css",
+    "watch-node-sass": "node-sass --watch scss/styles.scss --output public/css/  --source-map true"
+  },
+```
+
+and `$ npm run watch-node.sass`
 
 Now to get rid of the manual refresh.
 
@@ -167,6 +179,7 @@ As it stands we need two terminal tabs to run our two processes - SASS and Brows
 
 1. `$ npm install concurrently --save-dev`
 2. add a new script: `"boom!": "concurrently \"npm run start\" \"npm run watch-node-sass\" "`
+3. `$ npm run boom!`
 
 Here's our final package.json:
 
@@ -196,16 +209,18 @@ Here's our final package.json:
 
 ##SASS
 
-We are going to retrofit our page for responsive layout using SASS. 
+We are going to retrofit our page for responsive layout using SASS - and in particular node-sass. 
+
+[Sass homepage](http://sass-lang.com)
+
+[Bootstrap SASS](https://github.com/twbs/bootstrap-sass)
 
 SASS Features:
 
-* error checking - watch for errors and messages in the terminal if CSS looks like its not being processed
+* error checking ➜
+* 🔧: watch for errors and messages in the terminal if it looks like the CSS is not being processed
 * variables
 * imports and structure
-* mapping
-
-[Bootstrap SASS](https://github.com/twbs/bootstrap-sass)
 
 Create `_variables.scss` in an new `scss > imports` folder
 

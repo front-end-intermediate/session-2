@@ -1,6 +1,6 @@
 #Session Two
 
-Today we begin with some tooling - using Node Package Manager to implement a simple workflow for SASS and automatic browser refresh. We will start using SASS on our project to create responsive features and finish by using GIT and Github to create versioning. test.
+Today we begin with some tooling - using Node Package Manager to implement a simple workflow for SASS and automatic browser refresh. We will start using SASS on our project to create responsive features and finish by using GIT and Github to create versioning.
 
 
 ##EXERCISE (continued)
@@ -413,10 +413,6 @@ Mobile first design: use min-width media queries to add features to larger scree
 
 In this example you are only targeting devices with a width between 100px and 200px.
 
-And critically...
-
-* Use the meta tag `<meta name="viewport" content="width=device-width, initial-scale=1.0">` to ensure this works on devices
-
 
 ####Nested Media Query (SASS)
 
@@ -599,6 +595,10 @@ Add to `_nav.scss`:
 }
 ```
 
+####And critically...
+
+* Use the meta tag `<meta name="viewport" content="width=device-width, initial-scale=1.0">` to ensure this works on devices
+
 
 ##SASS Links
 
@@ -606,7 +606,52 @@ Add to `_nav.scss`:
 
 [Responsive Design Patterns](https://bradfrost.github.io/this-is-responsive/)
 
-[Viewport Demo for Phone](http://daniel.deverell.com/css-files/responsive-meta-example/)
+
+##Babel
+
+Install the dependencies and test:
+
+```
+{
+  "name": "basic-dom-dd2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "watch-node-sass": "node-sass --watch scss/styles.scss --output public/css/  --source-map true",
+    "start": "browser-sync start --browser \"google chrome\" --server 'public' --files 'public'",
+    "babel": "babel app.js --watch --out-file test.js",
+    "boom!": "concurrently \"npm run start\" \"npm run watch-node-sass\" "
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-cli": "^6.22.2",
+    "babel-preset-es2015": "^6.22.0",
+    "browser-sync": "^2.18.6",
+    "concurrently": "^3.1.0",
+    "node-sass": "^4.4.0"
+  },
+  "babel": {
+    "presets": [
+      "es2015"
+    ]
+  }
+}
+
+```
+
+Compile the js into the public/js directory:
+
+```
+"babel": "babel app.js --watch --out-file public/js/main.js",
+```
+
+Add babel to our concurrent commands:
+
+```
+"boom!": "concurrently \"npm run start\" \"npm run watch-node-sass\"  \"npm run babel\" "
+```
 
 
 
@@ -709,28 +754,6 @@ Some interesting applications of SVG:
 
 * http://responsivelogos.co.uk
 * http://www.svgeneration.com/recipes/Beam-Center/
-```
 
-{
-  "name": "babel",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "babel": "babel app.js --watch --out-file app-compiled.js"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "babel-cli": "^6.10.1",
-    "babel-plugin-transform-object-rest-spread": "^6.8.0",
-    "babel-preset-es2015": "^6.9.0"
-  },
-  "babel": {
-    "presets": [
-      "es2015"
-    ],
-    "plugins": ["transform-object-rest-spread"]
-  }
-}
-```
+
+

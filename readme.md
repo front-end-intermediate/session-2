@@ -4,16 +4,11 @@ Today we begin with some tooling - using Node Package Manager to implement a sim
 
 ##Homework
 
-There is a starter page for homework available in this repo in the homework directory. 
+There is a starter page for homework available in this repo in the homework directory. Please review the tasks there.
 
 1. Review setting up a workflow using NPM on your computer (use last week's homework files) which includes node-sass, browsernyc, and concurrently
 2. Convert the CSS to SASS - use variables and nesting
 3. Implement media queries using a mobile first strategy (add as much content as you think you need)
-<!-- 2. Optional: Download the done branch for this week's class and correct one or more of the responsive display issues:
-    * The hamburger menu does not need to display on wide screens - hide it
-    * The layout of the menu on small screens is awkward - try optimizing it so it looks more like [this](http://getbootstrap.com/examples/navbar-fixed-top/) - bonus if you can make it [animate](http://css3.bradshawenterprises.com/animating_height/) on click
-    * When the user clicks on a link in the small screen the menu stays open - have it close after a click
-    * Any others? -->
 
 
 ##EXERCISE (continued)
@@ -866,6 +861,13 @@ http://oit2.scps.nyu.edu/~******
 Ensure you are using sFTP (port 22).
 
 Suggested clients: Cyberduck, FileZilla
+
+
+<!-- 2. Optional: Download the done branch for this week's class and correct one or more of the responsive display issues:
+    * The hamburger menu does not need to display on wide screens - hide it
+    * The layout of the menu on small screens is awkward - try optimizing it so it looks more like [this](http://getbootstrap.com/examples/navbar-fixed-top/) - bonus if you can make it [animate](http://css3.bradshawenterprises.com/animating_height/) on click
+    * When the user clicks on a link in the small screen the menu stays open - have it close after a click
+    * Any others? -->
 
 
 

@@ -183,7 +183,7 @@ Add watching:
   },
 ```
 
-and `$ npm run watch-node.sass`
+and `$ npm run watch-node-sass`
 
 Now to get rid of the manual refresh.
 

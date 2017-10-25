@@ -1,8 +1,8 @@
-#Session Two
+# Session Two
 
 Today we begin with some tooling - using Node Package Manager to implement a simple workflow for SASS and automatic browser refresh. We will start using SASS on our project to create responsive features and finish by using GIT and Github to create versioning.
 
-##Homework
+## Homework
 
 There is a starter page for homework available in this repo in the homework directory. Please review the tasks there.
 
@@ -10,70 +10,7 @@ There is a starter page for homework available in this repo in the homework dire
 2. Convert the CSS to SASS - use variables and nesting
 3. Implement media queries using a mobile first strategy (add as much content as you think you need)
 
-
-##EXERCISE (continued)
-
-Scroll to make the nav sticky and note the content jump as the nav changes class. 
-
-Correct this jankey jump using offsetHeight to add padding equal to the height of the nav:
-
-```js
-function fixNav() {
-  if(window.scrollY >= topOfNav) {
-    document.body.style.paddingTop = nav.offsetHeight + 'px';
-    document.body.classList.add('fixed-nav');
-  } else {
-    document.body.classList.remove('fixed-nav');
-    document.body.style.paddingTop = 0;
-  }
-}
-```
-
-Note paddingTop (camel case) - I used Javascript for this because offSetHeight could vary. Otherwise I would have used CSS. Always try to use CSS instead of Javascript wherever possible.
-
-###SVG Logo Image
-
-Format the logo and create the sliding logo behaviour. CSS only, no JavaScript:
-
-```css
-
-.logo img {
-  padding-top: 0.25rem;
-  width: 2rem;
-  margin-left: 0.5rem;
-}
-```
-
-Note the use of an SVG file. Change the CSS in the SVG to make the logo white.
-
-Add `display:flex` to nav:
-
-```css
-nav {
-  ...
-  display: flex;
-}
-```
-
-Animate
-
-```css
-.logo {
-  max-width:0;
-  overflow: hidden;
-  transition: all 0.5s;
-}
-
-.fixed-nav .logo {
-  max-width:500px;
-}
-```
-
-Note the use of max-width above. We are using this because transitions do not animate width.
-
-
-
-###Faking a Single Page Application (SPA)
+### Faking a Single Page Application (SPA)
 
 Note the use of hashes in the navigation:
 
@@ -128,7 +65,7 @@ window.onhashchange = function() {
 ```
 
 
-##NPM for SASS and Browser Refresh
+## NPM for SASS and Browser Refresh
 
 * [Node Package Manager](https://www.npmjs.com)
 
@@ -137,7 +74,7 @@ window.onhashchange = function() {
 * [node-sass](https://www.npmjs.com/package/node-sass)
 
 
-####Node Package Manager (NPM)
+#### Node Package Manager (NPM)
 
 1. `$ cd` to the working directory
 1. run `$ npm init` and accept the defaults
@@ -187,7 +124,7 @@ and `$ npm run watch-node-sass`
 
 Now to get rid of the manual refresh.
 
-####Browser Sync
+#### Browser Sync
 
 [BrowserSync](https://browsersync.io) is billed as a testing tool but makes a nice server and auto refresher for everyday use. With npm you have the option of installing it globally or on a per project basis.
 
@@ -199,7 +136,7 @@ Now to get rid of the manual refresh.
 2. Add/Edit another task to our npm scripts e.g. `"start": "browser-sync start --browser \"google chrome\" --server 'public' --files 'public'",`
 3. Restart and test
 
-####Concurrently
+#### Concurrently
 
 As it stands we need two terminal tabs to run our two processes - SASS and BrowserSync - in. To ameliorate this we can install a simple  utility called Concurrently and write a 'master' npm script.
 
@@ -233,7 +170,7 @@ Here's our final package.json:
 
 
 
-##SASS
+## SASS
 
 We are going to retrofit our page for responsive layout using SASS - and in particular node-sass. 
 
@@ -279,7 +216,7 @@ Copy paste all code from styles (except first line) and add `@import "imports/ma
 
 
 
-####Aside - CSS native variables
+#### Aside - CSS native variables
 
 By convention apply native variables to the highest level element in the DOM (although any element will work):
 
@@ -305,7 +242,7 @@ html {
 
 [Can I Use](http://caniuse.com/#search=css%20v)
 
-####Nesting - _header.scss
+#### Nesting - _header.scss
 
 Create a new _heading.scss import and move the code into it as:
 
@@ -327,7 +264,7 @@ header {
 }
 ```
 
-####Ampersands
+#### Ampersands
 
 Frequently used with pseudo selectors:
 
@@ -404,7 +341,7 @@ nav {
 }
 ```
 
-####Media Queries
+#### Media Queries
 
 The grand daddy of media queries - print stylesheets:
 
@@ -447,20 +384,20 @@ Compare this to the media query in last week's homework assignment.
 The first adds CSS instructions to wider screens (Mobile First responsive design) and the second adds features to smaller screens.
 
 
-####Sample 1
+#### Sample 1
 
 `@media screen and (min-width: 760px){ ... }`
 
-####Translation
+#### Translation
 
 If the device width is greater than or equal to 760px then do {...}
 If the actual device width is 320px this condition will return false.
 
-####Sample 2
+#### Sample 2
 
 `@media (max-width: 600px) { ... }`
 
-####Translation 2
+#### Translation 2
 
 If the device width is less than or equal to [specified #], then do {...}
 
@@ -468,16 +405,16 @@ The choice between max and min width has profound consquences for the way you wr
 
 Mobile first design: use min-width media queries to add features to larger screens `@media (min-width: 46.25em) { }` instead of using max-width media queries to add features to smaller screens.
 
-####Sample 3
+#### Sample 3
 
 `@media screen and (min-width:100px) and (max-width:200px) { ... }`
 
-####Translation 3
+#### Translation 3
 
 In this example you are only targeting devices with a width between 100px and 200px.
 
 
-####Nested Media Query (SASS)
+#### Nested Media Query (SASS)
 
 ```css
 header {
@@ -678,7 +615,7 @@ Add to `_nav.scss`:
 }
 ```
 
-##And critically... The viewport META tag
+## And critically... The viewport META tag
 
 * Use the meta tag `<meta name="viewport" content="width=device-width, initial-scale=1.0">` to ensure this works on devices
 
@@ -687,14 +624,14 @@ Add to `_nav.scss`:
 * http://daniel.deverell.com/barcap/public
 
 
-##SASS Links
+## SASS Links
 
 [The SASS Way](http://thesassway.com)
 
 [Responsive Design Patterns](https://bradfrost.github.io/this-is-responsive/)
 
 
-##Babel
+## Babel
 
 Install the dependencies and test:
 
@@ -742,7 +679,7 @@ Add babel to our concurrent commands:
 
 
 
-##GIT and GITHUB
+## GIT and GITHUB
 
 Since we've just created a nice reusable setup we should save it. 
 
@@ -837,14 +774,14 @@ Use of MSCode as a Git / diff client?
 
 
 
-###Notes
+### Notes
 
 Some interesting applications of SVG:
 
 * http://responsivelogos.co.uk
 * http://www.svgeneration.com/recipes/Beam-Center/
 
-##Server Accounts
+## Server Accounts
 
 Username is the first seven letters of your last name + first letter of first name
 

@@ -12,34 +12,68 @@ There is a starter page for homework available in this repo in the homework dire
 
 ### Faking a Single Page Application (SPA)
 
-PAge fragment links (`index.html#research`) allow us to navigate to sections of the document marked up with the corresponding id:
+Page fragment links (`index.html#research`) allow us to navigate to sections of the document marked up with the corresponding id:
 
 `<p id="watchlist">`
 
+  Like [this](https://live.barcap.com/publiccp/RSR/nyfipubs/barclaysliveapp/).
+
 Note that clicking on an hashed link doesn't refresh the page. This makes hashes an important feature for creating SPAs - they are used to load different content via AJAX from a server with no page refresh.
 
-We'll set up our page emulate a single page application.
+We'll set up our page to emulate a SPA.
+
+This time we'll use a new event `window.onhashchange` and `filter()` and a slightly modified `navItems` array (look at `navItems.js`).
 
 
 ```js
 const siteWrap = document.querySelector('.site-wrap');
-window.onload = function(){
-  // window.location.hash = '#watchlist'
-  // setTimeout( () => window.location.hash = '#watchlist' , 500)
-}
 ```
 
-`array.prototype.filter()`
+`array.prototype.filter()` - the filter() method creates a new array with all elements that pass the test implemented by the provided function.
+
+Isolate the hash:
 
 ```js
 window.onhashchange = function() {
   let newloc = window.location.hash;
   console.log(newloc)
+  }
+```
+
+Use that value to filter the navItems (our fake data):
+
+```js
+window.onhashchange = function() {
+  let newloc = window.location.hash;
+  console.log(newloc)
+
   let newContent = navItems.filter(
     function(navItem){
       return navItem.link == newloc
     })
-  console.log(newContent)
+
+  console.log('new content: ' + newContent)
+  console.log('length ' + newContent.length)
+  console.log('new content item: ' + newContent[0].header)
+}
+```
+
+Filter selects an entry in navItems based on its hash (`newLoc`) and saves it into a const `newContent`.
+
+Finally, set the innerHTML of the siteWrap to content from the resulting array:
+
+```js
+window.onhashchange = function() {
+  let newloc = window.location.hash;
+  console.log(newloc)
+
+  let newContent = navItems.filter(
+    function(navItem){
+      return navItem.link == newloc
+    })
+
+  console.log('new content: ' + newContent)
+
   siteWrap.innerHTML = `
   <h2>${newContent[0].header}</h2>
   <p>${newContent[0].content}</p>
@@ -47,7 +81,7 @@ window.onhashchange = function() {
 }
 ```
 
-Refactor:
+Refactor to use an arrow function:
 
 ```js
 window.onhashchange = function() {
@@ -77,7 +111,7 @@ window.onhashchange = function() {
 This script style worked for me when trying to "start" browser sync:
 
 ```sh
-"start": "browser-sync start --browser \"chrome.exe\" --server \"app\" --files \"app\"" 
+"start": " browser-sync start --browser \"chrome.exe\" --server \"app\" --files \"app\" " 
 ```
 
 Essentially, it requires '.exe' for chrome and uses delineated double quotes - \"
@@ -88,13 +122,13 @@ Additional Windows resources for Nodejs:
 
 Of particular note if you are trying to use the `node-sass` npm package is [this entry](https://github.com/Microsoft/nodejs-guidelines/blob/master/windows-environment.md#compiling-native-addon-modules) on compiling modules.
 
-It appears that Windows users need to install [this npm package](https://github.com/nodejs/node-gyp#on-windows)
+It appears that Windows users need to install [this npm package](https://github.com/nodejs/node-gyp#on-windows) using [elevated permissions](https://blogs.technet.microsoft.com/danstolts/2012/01/how-to-run-powershell-with-elevated-permissions/).
 
 Windows users may wish to install and use [Visual Studio Code](https://code.visualstudio.com) as a text editor - it may help you feel a bit more at home.
 
 ====
 
-1. `$ cd` to the working directory
+1. `$ cd` to the working directory (basic-dom)
 1. run `$ npm init` and accept the defaults
 2. examine the `package.json` file
 2. `$ npm install --save-dev node-sass`
@@ -133,12 +167,12 @@ Add watching:
 
 ```
   "scripts": {
-    "build-css": "node-sass --include-path scss scss/styles.scss   public/css/styles.css",
-    "watch-node-sass": "node-sass --watch scss/styles.scss --output public/css/  --source-map true"
+    "build-css": "node-sass --include-path scss scss/styles.scss   app/css/styles.css",
+    "watch-node-sass": "node-sass --watch scss/styles.scss --output app/css/  --source-map true"
   },
 ```
 
-and `$ npm run watch-node-sass`
+and `$ npm run watch-node-sass`. Note the map file.
 
 Now to get rid of the manual refresh.
 
@@ -146,7 +180,7 @@ Now to get rid of the manual refresh.
 
 [BrowserSync](https://browsersync.io) is billed as a testing tool but makes a nice server and auto refresher for everyday use. With npm you have the option of installing it globally or on a per project basis.
 
-1. Stop any process running in the terminal
+1. Stop any process running in the terminal with ctrl-c
 1. `$ npm install browser-sync --save-dev`
 2. Add a task to our npm scripts e.g. `"start-test": "browser-sync start --directory --server --files '*.js, *.html, *.css'",`
 3. [Documentation](https://browsersync.io/docs/command-line)
@@ -171,8 +205,8 @@ Here's our final package.json:
   "description": "",
   "main": "index.js",
   "scripts": {
-    "watch-node-sass": "node-sass --watch scss/styles.scss --output public/css/  --source-map true",
-    "start": "browser-sync start --browser \"google chrome\" --server 'public' --files 'public'",
+    "watch-node-sass": "node-sass --watch scss/styles.scss --output app/css/  --source-map true",
+    "start": "browser-sync start --browser \"google chrome\" --server 'app' --files 'app'",
     "boom!": "concurrently \"npm run start\" \"npm run watch-node-sass\" "
   },
   "author": "",
@@ -260,6 +294,8 @@ html {
 
 [Can I Use](http://caniuse.com/#search=css%20v)
 
+Note - becasue css variables are inherited from an element they cannot be used for things like media queries.
+
 #### Nesting - _header.scss
 
 Create a new _heading.scss import and move the code into it as:
@@ -287,6 +323,10 @@ header {
 Frequently used with pseudo selectors:
 
 ```css
+$links: #007eb6;
+```
+
+```css
 a {
   color: $links;
   &:hover {
@@ -295,22 +335,7 @@ a {
 }
 ```
 
-=====Prefix: Before (demo only):
-
-```css
-body {
-  margin: 0; 
-}
-body.fixed-nav nav {
-  position: fixed;
-  box-shadow: 0 5px 3px rgba(0, 0, 0, 0.1); 
-}
-body.fixed-nav .site-wrap {
-  transform: scale(1); 
-}
-```
-
-=====Prefix: After (demo only):
+=====Prefix: before (demo only):
 
 ```css
 body {

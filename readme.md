@@ -12,18 +12,6 @@ There is a starter page for homework available in this repo in the homework dire
 
 ### Faking a Single Page Application (SPA)
 
-Note the use of hashes in the navigation:
-
-`<a href="#watchlist">Watchlist</a>`
-
-These allow us to navigate (`index.html#research`) to sections of the document marked up with the corresponding id:
-
-`<p id="watchlist">`
-
-Note that clicking on an hashed link doesn't refresh the page. This makes hashes an important feature for creating SPAs - they are used to load different content via AJAX from a server with no page refresh.
-
-We'll set up our page emulate a single page application.
-
 
 ```js
 const siteWrap = document.querySelector('.site-wrap');
@@ -106,7 +94,7 @@ Windows users may wish to install and use [Visual Studio Code](https://code.visu
 3. examine the file again (--save-dev vs. --save, vs. -g, and the node_modules folder)
 3. Add a [sass script](https://github.com/sass/node-sass#usage-1) to the package.json file. e.g.:
 
-```
+```js
 {
   "name": "basic-dom",
   "version": "1.0.0",

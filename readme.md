@@ -71,10 +71,33 @@ window.onhashchange = function() {
 
 * [SASS](http://sass-lang.com)
 
-* [node-sass](https://www.npmjs.com/package/node-sass)
+* [node-sass](https://www.npmjs.com/package/node-sass) and the [github repo](https://github.com/sass/node-sass)
 
 
-#### Node Package Manager (NPM)
+### Node Package Manager (NPM)
+
+#### For Windows users
+
+This script style worked for me when trying to "start" browser sync:
+
+```sh
+"start": "browser-sync start --browser \"chrome.exe\" --server \"app\" --files \"app\"" 
+```
+
+Essentially, it requires '.exe' for chrome and uses delineated double quotes - \"
+
+Additional Windwos resources for Nodejs:
+
+[Microsoft's Nodejs Guidelines](https://github.com/Microsoft/nodejs-guidelines) is full of helpful information.
+
+Of particular note if you are trying to use the `node-sass` npm package is [this entry](https://github.com/Microsoft/nodejs-guidelines/blob/master/windows-environment.md#compiling-native-addon-modules) on compiling modules.
+
+It appears that Windows users need to install [this npm package](https://github.com/nodejs/node-gyp#on-windows)
+
+Windows users may wish to install and use [Visual Studio Code](https://code.visualstudio.com) as a text editor - it may help you feel a bit more at home.
+
+
+====
 
 1. `$ cd` to the working directory
 1. run `$ npm init` and accept the defaults

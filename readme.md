@@ -6,13 +6,13 @@ Today we begin with some tooling - using Node Package Manager to implement a sim
 
 There is a starter page for homework available in this repo in the homework directory. Please review the tasks there.
 
-1. Review setting up a workflow using NPM on your computer (use last week's homework files) which includes node-sass, browsernyc, and concurrently
+1. Review setting up a workflow using NPM on your computer (use last week's homework files) which includes node-sass, browser-snyc, and concurrently
 2. Convert the CSS to SASS - use variables and nesting
 3. Implement media queries using a mobile first strategy (add as much content as you think you need)
 
 ### Faking a Single Page Application (SPA)
 
-These allow us to navigate (`index.html#research`) to sections of the document marked up with the corresponding id:
+PAge fragment links (`index.html#research`) allow us to navigate to sections of the document marked up with the corresponding id:
 
 `<p id="watchlist">`
 
@@ -82,7 +82,7 @@ This script style worked for me when trying to "start" browser sync:
 
 Essentially, it requires '.exe' for chrome and uses delineated double quotes - \"
 
-Additional Windwos resources for Nodejs:
+Additional Windows resources for Nodejs:
 
 [Microsoft's Nodejs Guidelines](https://github.com/Microsoft/nodejs-guidelines) is full of helpful information.
 
@@ -91,7 +91,6 @@ Of particular note if you are trying to use the `node-sass` npm package is [this
 It appears that Windows users need to install [this npm package](https://github.com/nodejs/node-gyp#on-windows)
 
 Windows users may wish to install and use [Visual Studio Code](https://code.visualstudio.com) as a text editor - it may help you feel a bit more at home.
-
 
 ====
 

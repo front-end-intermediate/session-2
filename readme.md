@@ -12,6 +12,14 @@ There is a starter page for homework available in this repo in the homework dire
 
 ### Faking a Single Page Application (SPA)
 
+These allow us to navigate (`index.html#research`) to sections of the document marked up with the corresponding id:
+
+`<p id="watchlist">`
+
+Note that clicking on an hashed link doesn't refresh the page. This makes hashes an important feature for creating SPAs - they are used to load different content via AJAX from a server with no page refresh.
+
+We'll set up our page emulate a single page application.
+
 
 ```js
 const siteWrap = document.querySelector('.site-wrap');

@@ -1,6 +1,6 @@
 const nav = document.getElementById('main');
 const navLinks = document.getElementById('nav-links');
-const markup = `<ul>${navItems.map( listItem => `<li><a href="${listItem.link}">${listItem.label}</a></li>`).join('')}</ul>`;
+const markup = `${navItems.map( listItem => `<li><a href="${listItem.link}">${listItem.label}</a></li>`).join('')}`;
 navLinks.innerHTML = markup;
 
 
@@ -17,7 +17,7 @@ function fixNav() {
   }
 }
 
-// const logo = document.querySelector('#main ul li');
-// logo.classList.add('logo');
-// logo.firstChild.innerHTML = '<img src="img/logo.svg" />';
+const logo = document.querySelector('#main ul li');
+logo.classList.add('logo');
+logo.firstChild.innerHTML = '<img src="img/logo.svg" />';
 

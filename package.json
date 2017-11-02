@@ -1,0 +1,20 @@
+{
+  "name": "session-2",
+  "version": "1.0.0",
+  "description": "Note: review the following from session 1 'work' branch: * Aside: Objects * Aside: Destructuring * Array Methods * Arrow functions",
+  "main": "index.js",
+  "scripts": {
+    "start": "browser-sync start --browser \"google chrome\" --server 'app' --files 'app'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/front-end-intermediate/session-2.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/front-end-intermediate/session-2/issues"
+  },
+  "homepage": "https://github.com/front-end-intermediate/session-2#readme"
+}

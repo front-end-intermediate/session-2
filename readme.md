@@ -1,4 +1,20 @@
-# Session Two
+# Session 
+
+Note: review the following from session 1 'work' branch:
+* Aside: Objects
+* Aside: Destructuring
+* Array Methods
+* Arrow functions
+
+Pick up session 1 work at 'Refactor using an arrow function:'
+
+`navTest.forEach( (el) => console.log(el.hash))`
+`[...navTest].forEach( (el) => console.log(el.hash))`
+
+`[...navTest].forEach( (el) => el.addEventListener('click', prepContent))`
+
+
+
 
 Today we begin with some tooling - using Node Package Manager to implement a simple workflow for SASS and automatic browser refresh. We will start using SASS on our project to create responsive features and finish by using GIT and Github to create versioning.
 

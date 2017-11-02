@@ -121,7 +121,6 @@ window.onhashchange = function() {
 
 Note that arrow functions have an implicit return.
 
-
 ## NPM node-sass
 
 * [Node Package Manager](https://www.npmjs.com)
@@ -149,10 +148,10 @@ You should probably install Xcode.
 ====
 
 1. `$ cd` to the working directory
-2. examine the `package.json` file
-2. `$ npm install --save-dev node-sass`
-3. examine the file again (--save-dev vs. --save, vs. -g, and the node_modules folder)
-3. Add a [sass script](https://github.com/sass/node-sass#usage-1) to the package.json file. e.g.:
+1. examine the `package.json` file
+1. `$ npm install --save-dev node-sass`
+1. examine the file again (--save-dev vs. --save, vs. -g, and the node_modules folder)
+1. Add a [sass script](https://github.com/sass/node-sass#usage-1) to the package.json file. e.g.:
 
 ```js
 {
@@ -192,8 +191,8 @@ and `$ npm run watch-node-sass`. Note the map file.
 As it stands we need two terminal tabs to run our two processes - SASS and BrowserSync - in. To ameliorate this we can install a simple  utility called Concurrently and write a 'master' npm script.
 
 1. `$ npm install concurrently --save-dev`
-2. add a new script: `"boom!": "concurrently \"npm run start\" \"npm run watch-node-sass\" "`
-3. `$ npm run boom!`
+1. add a new script: `"boom!": "concurrently \"npm run start\" \"npm run watch-node-sass\" "`
+1. `$ npm run boom!`
 
 Here's our final package.json:
 
@@ -228,13 +227,13 @@ Warning: use of VS Code will not protect you in the long run from having to have
 Install Live SASS Compiler and set the workspace settings as shown:
 
 ```js
-    {
-        "liveSassCompile.settings.formats": [
-            {
-                "savePath": "/css"
-            }
-        ]
-    }
+{
+    "liveSassCompile.settings.formats": [
+        {
+            "savePath": "/css"
+        }
+    ]
+}
 ```
 
 or

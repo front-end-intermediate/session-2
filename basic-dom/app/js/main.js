@@ -5,11 +5,19 @@ navLinks.innerHTML = markup;
 
 
 let topOfNav = nav.offsetTop;
+window.addEventListener('scroll', fixNav);
+
 function fixNav() {
   if(window.scrollY >= topOfNav) {
+    document.body.style.paddingTop = nav.offsetHeight + 'px';
     document.body.classList.add('fixed-nav');
   } else {
     document.body.classList.remove('fixed-nav');
+    document.body.style.paddingTop = 0;
   }
 }
-window.addEventListener('scroll', fixNav);
+
+// const logo = document.querySelector('#main ul li');
+// logo.classList.add('logo');
+// logo.firstChild.innerHTML = '<img src="img/logo.svg" />';
+

@@ -54,11 +54,20 @@ nav {
   transition: all 0.5s;
   position: relative;
   z-index: 1;
+  display: flex;
 }
 
+/*body.fixed-nav nav {
+  position: fixed;
+  top: 0;
+  box-shadow: 0 5px 3px rgba(0, 0, 0, 0.1);
+}*/
 body.fixed-nav nav {
   position: fixed;
-  box-shadow: 0 5px 3px rgba(0, 0, 0, 0.1);
+  box-shadow:0 5px 3px rgba(0,0,0,0.1);
+  top: 0;
+  width: 100%;
+  z-index: 1;
 }
 
 nav ul {
@@ -84,6 +93,24 @@ nav a {
   color: white;
 }
 
-.logo img {
+/*.logo img {
   display:none;
+}*/
+
+.logo img {
+  padding-top: 0.25rem;
+  width: 2.5rem;
+}
+
+.logo {
+  max-width:0;
+  overflow: hidden;
+  background: white;
+  transition: all 0.5s;
+  font-weight: 600;
+  font-size: 30px;
+}
+
+.fixed-nav .logo {
+  max-width:500px;
 }

@@ -1,21 +1,11 @@
-# Session One (cont)
-
-Note: review the following from session 1 'work' branch:
-
-* Aside: Objects
-* Aside: Destructuring
-* Array Methods
-* Arrow functions
-
-Pick up session 1 work at 'Refactor using an arrow function:'
-
-`navTest.forEach( (el) => console.log(el.hash))`
-`[...navTest].forEach( (el) => console.log(el.hash))`
-
-`[...navTest].forEach( (el) => el.addEventListener('click', prepContent))`
-
-
 # Session Two
+
+## Homework
+
+1. Review the material below and set up a workflow using NPM and SASS on your computer which includes node-sass and browser refresh
+1. Continue the exersize to add a click on the logo that displays the menu on small screens
+
+===
 
 Today we begin with some tooling - using Node Package Manager to implement a simple workflow for SASS and automatic browser refresh. We will start using SASS on our project to create responsive features and finish by using GIT and Github to create versioning.
 
@@ -32,11 +22,6 @@ This script style worked for me when trying to "start" browser sync:
 ```
 
 Essentially, it requires '.exe' for chrome and uses delineated double quotes - \"
-
-## Homework
-
-1. Review the material below and set up a workflow using NPM and SASS on your computer which includes node-sass and browser refresh
-1. Convert the CSS to SASS - use variables and nesting
 
 ### Faking a Single Page Application (SPA)
 
@@ -619,12 +604,12 @@ Make clicking on the logo show the menu on narrow screens:
 
 ```js
 if (document.documentElement.clientWidth <= 740) {
-	logo.addEventListener('click', showMenu);
+  logo.addEventListener('click', showMenu);
 }
 
 function showMenu(e) {
-	document.body.classList.toggle('show');
-	e.preventDefault();
+  document.body.classList.toggle('show');
+  e.preventDefault();
 }
 ```
 

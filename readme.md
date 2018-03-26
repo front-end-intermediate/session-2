@@ -1,4 +1,4 @@
-# Session Two 
+# Session Two
 
 ## Homework
 

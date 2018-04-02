@@ -4,7 +4,7 @@
 
 1. Review the material below and set up a workflow using NPM and SASS on your computer which includes node-sass and browser refresh
 1. Continue the exersize to add a click on the logo that displays the menu on small screens
-1. Please install [git](https://git-scm.com) on your computer and create an account on github.
+1. Install [git](https://git-scm.com) on your computer and create an account on github.
 
 ===
 

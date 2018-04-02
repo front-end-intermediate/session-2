@@ -166,14 +166,12 @@ Arrow functions are commonly used to shorten the syntax for anonymous functions.
 
 * [Node Package Manager](https://www.npmjs.com)
 * [SASS](http://sass-lang.com)
-* [node-sass](https://www.npmjs.com/package/node-sass) and the [github repo](https://github.com/sass/node-sass)
+* [node-sass](https://www.npmjs.com/package/node-sass) and its [github repo](https://github.com/sass/node-sass)
 * sass processing can be accomplished using a [variety of desktop apps](https://graygrids.com/best-tools-resources-compile-manage-sass-less-stylus-css-preprocessors/)
 
 ### Node Package Manager (NPM)
 
-#### For Windows users
-
-Additional Windows resources for Nodejs:
+* A Note for Windows users
 
 [Microsoft's Nodejs Guidelines](https://github.com/Microsoft/nodejs-guidelines) is full of helpful information.
 
@@ -181,16 +179,16 @@ Of particular note if you are trying to use the `node-sass` npm package is [this
 
 It appears that Windows users need to install [this npm package](https://github.com/nodejs/node-gyp#on-windows) using [elevated permissions](https://blogs.technet.microsoft.com/danstolts/2012/01/how-to-run-powershell-with-elevated-permissions/): `npm install -g node-gyp`.
 
-#### For MacOS users
+* A Note for MacOS users
 
 You should probably install Xcode.
 
-====
+Use the existing manifest. In the terminal:
 
 1. `$ cd` to the working directory
 1. examine the `package.json` file
 1. `$ npm install --save-dev node-sass`
-1. examine the file again (--save-dev vs. --save, vs. -g, and the node_modules folder)
+1. examine the file again (note: --save-dev vs. --save, vs. -g, and the node_modules folder)
 1. Add a [sass script](https://github.com/sass/node-sass#usage-1) to the package.json file. e.g.:
 
 ```js
@@ -258,11 +256,9 @@ Here's our final package.json:
 
 ```
 
-#### For Windows and Mac users
+#### CSS Preprocessing in the Editor
 
-Windows users may wish to install and use [Visual Studio Code](https://code.visualstudio.com) as a text editor - it may help you feel a bit more at home and help ease the development process. Mac users may find this useful as well although similar .
-
-Warning: use of VS Code will not protect you in the long run from having to have some facility with [NPM](https://marketplace.visualstudio.com/items?itemName=eg2.vscode-npm-script)
+[Visual Studio Code](https://code.visualstudio.com) offers an array of plug-ins that we can use to perform the same preprocessing function. Note that tse of VS Code will not protect you in the long run from having to have some facility with [NPM](https://marketplace.visualstudio.com/items?itemName=eg2.vscode-npm-script)
 
 [Live Sass Compiler](https://marketplace.visualstudio.com/items?itemName=ritwickdey.live-sass) for VS Code.
 

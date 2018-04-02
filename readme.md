@@ -1,6 +1,6 @@
-# II DOM Maipulation
+# II - DOM Manipulation
 
-Before starting we will review some of the concepts from [session 1](https://github.com/front-end-intermediate/session-1#exercise---sticky-menu)
+Before starting we will review some of the concepts from [session 1](https://github.com/front-end-intermediate/session-1#exercise---sticky-menu). 
 
 ## Homework
 

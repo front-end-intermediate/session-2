@@ -354,13 +354,11 @@ $break-one: 22.5em;
 // 360
 ```
 
-Checkout: [StatCounter Global Stats - Screen Resolution Market Share](http://gs.statcounter.com/screen-resolution-stats)
-
 Create `_main.scss` in `scss > imports` folder
 
 Copy paste all code from styles (except first line) and add `@import "imports/main";` to the top of styles.scss
 
-### Aside - CSS native variables
+<!-- ### Aside - CSS native variables
 
 By convention apply native variables to the highest level element in the DOM (although any element will work):
 
@@ -386,7 +384,7 @@ html {
 
 [Can I Use](http://caniuse.com/#search=css%20v)
 
-Note - because css variables are inherited from an element they cannot be used for media query breakpoints.
+Note - because css variables are inherited from an element they cannot be used for media query breakpoints. -->
 
 ### Nesting - _header.scss
 
@@ -494,7 +492,7 @@ and
 
 ### Media Queries
 
-The birth of responsive design is in [this article](http://alistapart.com/article/responsive-web-design). The "grand daddy" of media queries are print stylesheets:
+The birth of responsive design is [this article](http://alistapart.com/article/responsive-web-design). The "grand daddy" of media queries are print stylesheets:
 
 ```css
 @media print {
@@ -519,7 +517,10 @@ Examine using the Toggle Device Toolbar in Chrome's developer tools.
 
 ### The Device meta tag
 
-Test in the browser
+Test in the browser using the Developer Tools.
+
+1. by resizing the visible area
+1. by Toggling the Device Toolbar
 
 [The responsive meta tag](https://css-tricks.com/snippets/html/responsive-meta-tag/)
 
@@ -546,13 +547,11 @@ If the device width is less than or equal to [specified #], then do {...}
 
 The choice between max and min width has profound consquences for the way you write your CSS. Typically, with min-width patterns, you're designing for mobile first. With max-width patterns, you're designing for desktop first.
 
-Mobile first design: use min-width media queries to add features to larger screens instead of using max-width media queries to add features to smaller screens.
+Mobile first design: use `min-width` media queries to add features to larger screens instead of using `max-width` media queries to add features to smaller screens.
 
 ### min / max width
 
 `@media screen and (min-width:100px) and (max-width:200px) { ... }`
-
-Translation
 
 In this example you are only targeting devices with a width between 100px and 200px. You shouldn't need to do this often.
 
@@ -578,7 +577,7 @@ header {
 }
 ```
 
-If we want to work mobile first then we want to establish the default CSS as that NOT in the media query:
+If we want to work mobile first then we want to establish the default CSS as that NOT in the media query (see the `h1` below):
 
 ```css
 header {
@@ -605,6 +604,8 @@ header {
 ```
 
 Leveraging SASS nesting in your media queries enforces a specific organization of your code. The media queries are grouped together with the element - not in separate files or in separate blocks within your CSS.
+
+### The Navbar
 
 Move all nav related css into a new partial `_nav.scss` and import.
 
@@ -682,7 +683,7 @@ body.fixed-nav .site-wrap {
 }
 ```
 
-Use the ampersand to further nest the code:
+Use the ampersand to further nest the code (see the `.logo img` selector):
 
 ```css
 nav {
@@ -921,9 +922,8 @@ body.fixed-nav .site-wrap {
 
 ## SASS Links
 
-[The SASS Way](http://thesassway.com)
-
-[Responsive Design Patterns](https://bradfrost.github.io/this-is-responsive/)
+* [The SASS Way](http://thesassway.com)
+* [Responsive Design Patterns](https://bradfrost.github.io/this-is-responsive/)
 
 ## Babel
 

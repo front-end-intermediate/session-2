@@ -76,3 +76,7 @@ img {
     width: 100%;
 }
 
+#main {
+    position: sticky;
+    top: 0px;
+  }

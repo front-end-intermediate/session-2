@@ -1,31 +1,89 @@
 # II - DOM Manipulation
 
-Before starting we will review some of the concepts from [session 1](https://github.com/front-end-intermediate/session-1#exercise---sticky-menu). 
-
 ## Homework
 
-1. Review the material below and set up a workflow using NPM and SASS on your computer which includes node-sass and browser refresh
-1. Install [git](https://git-scm.com) on your computer and create an account on github.
+1. tbd
 
-===
+## NPM Manifests
 
-Today we begin with some tooling - using Node Package Manager to implement a simple workflow for SASS and automatic browser refresh. We will start using SASS on our project to create responsive features and finish by using GIT and Github to create versioning.
+We will be again using [Browser Sync](https://www.browsersync.io) as our sample application.
 
-`npm install browser-sync`
+`npm init` and npm install:
 
-`npm run start`
-
-## For Windows users
-
-This script style worked for me when trying to "start" browser sync:
-
-```bash
-"start": " browser-sync start --browser \"chrome.exe\" --server \"app\" --files \"app\" " 
+```sh
+npm init
+npm install browser-sync --save-dev
 ```
 
-Essentially, it requires '.exe' for chrome and uses delineated double quotes - \"
+* `npm init` creates `package.json`
+* `npm install browser-sync --save-dev` installs [Browser Sync](https://www.browsersync.io) into the `node_modules` folder
+* `--save-dev` adds the software to a list of development dependancies in the manifest
 
-### Faking a Single Page Application (SPA)
+Notes:
+
+* package.json
+* dependencies
+* node_modules folder
+* discuss the need for `.gitignore`.
+
+### Editing package.json
+
+* Browser Sync [Command Line (CLI) documentation](https://www.browsersync.io/docs/command-line)
+* [Github Repo](https://github.com/BrowserSync/browser-sync)
+
+Create the NPM script using the Browser Sync command line documentation:
+
+```js
+  "scripts": {
+    "start": "browser-sync start --server 'app' --files 'app'"
+  },
+```
+
+Or, on a Windows PC:
+
+```js
+"start": "browser-sync start --server \"app\" --files \"app\""
+```
+
+Note: Windows users should check out Microsoft's [Nodejs Guidelines](https://github.com/Microsoft/nodejs-guidelines).
+
+And run the process:
+
+```sh
+npm run start
+```
+
+Quit the process with Control-c.
+
+Try adding a `--directory` option:
+
+```js
+  "scripts": {
+    "startmac": "browser-sync start --directory --server 'app' --files 'app'",
+    "startpc": "browser-sync start --directory --server \"app\" --files \"app\""
+  },
+```
+
+Quit the process with Control-c.
+
+Try adding a `--browser` option (note the PC browser name):
+
+```js
+"startmac": "browser-sync start --browser 'google chrome' --server 'app' --files 'app'"
+"startpc": "browser-sync start --browser \"chrome.exe\" --server \"app\" --files \"app\""
+```
+
+Run the script:
+
+```sh
+npm run start
+```
+
+This will open index.html in your editor - examine the html and css in the inspector.
+
+Note: Browser Sync has an interface running at port 3001.
+
+## Faking a Single Page Application (SPA)
 
 Page fragment links (`index.html#research`) allow us to navigate to sections of the document marked up with the corresponding id:
 
@@ -35,16 +93,17 @@ Like [this](https://live.barcap.com/publiccp/RSR/nyfipubs/barclaysliveapp/).
 
 Note that clicking on an hashed link doesn't refresh the page. This makes hashes an important feature for creating SPAs - they are used to load different content via AJAX from a server with no page refresh.
 
-We'll set up our page to emulate a SPA.
+We'll set up our page to _emulate_ a SPA.
 
-This time we'll use a new event `window.onhashchange` and `filter()` and a slightly modified `navItems` array (look at `navItems.js`).
+This time we'll use a new event `window.onhashchange` and `filter()` and a slightly modified `navItems` array.
 
+* examine the `navItems` array in `navItems.js`
 
 ```js
 const siteWrap = document.querySelector('.site-wrap');
 ```
 
-Isolate the hash:
+Store the hash in a variable `newLoc`::
 
 ```js
 window.onhashchange = function() {
@@ -53,27 +112,22 @@ window.onhashchange = function() {
   }
 ```
 
-Use that value to filter the navItems (our fake data):
+Use that value to filter the navItems (our fake data) using [Array.prototype.filter()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter). The `filter()` method creates a new array with all elements that pass the test implemented by the provided function.
 
 ```js
 window.onhashchange = function() {
   let newloc = window.location.hash;
-  console.log(newloc)
 
   let newContent = navItems.filter(
     function(navItem){
       return navItem.link == newloc
     })
 
-  console.log('new content: ' + newContent)
-  console.log('length ' + newContent.length)
-  console.log('new content item: ' + newContent[0].header)
+  console.log('new content header ' + newContent[0].header)
 }
 ```
 
-`array.prototype.filter()` - the filter() method creates a new array with all elements that pass the test implemented by the provided function.
-
-Filter selects an entry in navItems based on its hash (`newLoc`) and saves it into a const `newContent`.
+Filter selects an entry in navItems based on its hash (`newLoc`) and saves it into a const variable `newContent`.
 
 Finally, set the innerHTML of the siteWrap to content from the resulting array:
 
@@ -88,12 +142,12 @@ window.onhashchange = function() {
 
   siteWrap.innerHTML = `
   <h2>${newContent[0].header}</h2>
-  <p>${newContent[0].content}</p>
+  ${newContent[0].content}
   `;
 }
 ```
 
-Refactor to use an arrow function:
+Refactor to use an [arrow function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions):
 
 ```js
 window.onhashchange = function() {
@@ -101,12 +155,12 @@ window.onhashchange = function() {
   let newContent = navItems.filter( navItem => navItem.link == newloc );
   siteWrap.innerHTML = `
   <h2>${newContent[0].header}</h2>
-  <p>${newContent[0].content}</p>
+  ${newContent[0].content}
   `;
 }
 ```
 
-Note that arrow functions have an implicit return.
+Arrow functions are commonly used to shorten the syntax for anonymous functions. Note that arrow functions have an implicit return.
 
 ## NPM node-sass
 
@@ -114,7 +168,6 @@ Note that arrow functions have an implicit return.
 * [SASS](http://sass-lang.com)
 * [node-sass](https://www.npmjs.com/package/node-sass) and the [github repo](https://github.com/sass/node-sass)
 * sass processing can be accomplished using a [variety of desktop apps](https://graygrids.com/best-tools-resources-compile-manage-sass-less-stylus-css-preprocessors/)
-
 
 ### Node Package Manager (NPM)
 
@@ -153,7 +206,7 @@ You should probably install Xcode.
 
 Create `scss` directory and place `styles.scss` within. Test with a variable: `$badass: #bada55;` and:
 
-```
+```css
 html {
   background: $badass;
   ...
@@ -164,7 +217,7 @@ Compile the css: `$ npm run build-css`
 
 Add mapping:
 
-```
+```css
   "scripts": {
     "build-css": "node-sass --include-path scss scss/styles.scss   app/css/styles.css",
     "watch-node-sass": "node-sass -w scss  -o app/css/  --source-map true"
@@ -243,11 +296,11 @@ or
 }
 ```
 
-See https://code.visualstudio.com/docs/getstarted/settings
+See the Visual Studio Code [documentation](https://code.visualstudio.com/docs/getstarted/settings).
 
 ## SASS
 
-We are going to retrofit our page for responsive layout using SASS - and in particular node-sass. 
+We are going to retrofit our page for responsive layout using SASS - and in particular node-sass.
 
 [Sass homepage](http://sass-lang.com)
 
@@ -335,7 +388,7 @@ header {
     color: white;
     font-size: 7vw;
     font-weight: 300;
-    text-shadow: 3px 4px 0 rgba(0, 0, 0, 0.2); 
+    text-shadow: 3px 4px 0 rgba(0, 0, 0, 0.2);
   }
 }
 ```
@@ -388,7 +441,7 @@ nav {
   z-index: 1;
    .fixed-nav & {
     position: fixed;
-    box-shadow: 0 5px 3px rgba(0, 0, 0, 0.1); 
+    box-shadow: 0 5px 3px rgba(0, 0, 0, 0.1);
   }
 }
 ```
@@ -423,7 +476,7 @@ The grand daddy of media queries - print stylesheets:
 }
 ```
 
-The birth of [responsive design](http://alistapart.com/article/responsive-web-design) 
+The birth of [responsive design](http://alistapart.com/article/responsive-web-design)
 
 In `_header.scss`:
 
@@ -452,7 +505,7 @@ Translation:
 
 If the device width is less than or equal to [specified #], then do {...}
 
-The choice between max and min width has profound consquences for the way you write your CSS. Typically, with min-width patterns, you're designing for mobile first. With max-width patterns, you're designing for desktop first. 
+The choice between max and min width has profound consquences for the way you write your CSS. Typically, with min-width patterns, you're designing for mobile first. With max-width patterns, you're designing for desktop first.
 
 Mobile first design: use min-width media queries to add features to larger screens instead of using max-width media queries to add features to smaller screens.
 
@@ -482,7 +535,7 @@ header {
     color: white;
     font-size: 7vw;
     font-weight: 300;
-    text-shadow: 3px 4px 0 rgba(0, 0, 0, 0.2); 
+    text-shadow: 3px 4px 0 rgba(0, 0, 0, 0.2);
   }
 }
 ```
@@ -506,7 +559,7 @@ header {
       font-size: 12vw;
       line-height: 1;
       font-weight: 300;
-      text-shadow: 3px 4px 0 rgba(0, 0, 0, 0.2); 
+      text-shadow: 3px 4px 0 rgba(0, 0, 0, 0.2);
       @media (min-width: $break-two){
         font-size: 7vw;
       }
@@ -612,15 +665,14 @@ Add to `_nav.scss`:
 
 Some interesting applications of SVG:
 
-* http://responsivelogos.co.uk
-* http://www.svgeneration.com/recipes/Beam-Center/
+* [Responsive logos](http://responsivelogos.co.uk)
+* [Background generator](http://www.svgeneration.com/recipes/Beam-Center/)
 
 ## SASS Links
 
 [The SASS Way](http://thesassway.com)
 
 [Responsive Design Patterns](https://bradfrost.github.io/this-is-responsive/)
-
 
 ## Babel
 
@@ -669,7 +721,7 @@ Add babel to our concurrent commands:
 
 ## GIT and GITHUB
 
-Since we've just created a nice reusable setup we should save it. 
+Since we've just created a nice reusable setup we should save it.
 
 Git is a version control system originally invented for use developing Linux by Linus Torvalds. It is the standard version tool and integrates with Github to permit collaboration.
 
@@ -772,7 +824,7 @@ e.g. devereld // dd123890
 
 Test to see if your account is active by entering this URL into a new browser tab (use your username after the tilde):
 
-http://oit2.scps.nyu.edu/~******
+`http://oit2.scps.nyu.edu/~******`
 
 Ensure you are using sFTP (port 22).
 

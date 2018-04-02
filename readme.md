@@ -253,7 +253,7 @@ Run both processes:
 
 Note that you will end up with multiple tabs by doing this. They are identical.
 
-Here's my final package.json (yours will differ):
+Here's my final package.json. Yours will differ but the important parts - the scripts and dependencies - should be the same:
 
 ```js
 {
@@ -262,7 +262,7 @@ Here's my final package.json (yours will differ):
   "description": "## Homework",
   "main": "index.js",
   "scripts": {
-    "start": "browser-sync start --browser \"google chrome\" --server 'app' --files 'app'",
+    "start": "browser-sync start --server 'app' --files 'app'",
     "sassy": "node-sass --watch \"scss\"  --output \"app/css/\" --source-map true",
     "boom!": "concurrently \"npm run start\" \"npm run sassy\""
   },
@@ -288,7 +288,7 @@ Here's my final package.json (yours will differ):
 
 ## CSS Preprocessing in the Editor
 
-Most editors will offer the ability do the same thing.
+Most editors will offer the ability do preprocessing and browser refresh.
 
 [Visual Studio Code](https://code.visualstudio.com) offers an array of plug-ins that we can use to perform the same preprocessing function. Note that the use of VS Code will not protect you in the long run from having to have some facility with [NPM](https://marketplace.visualstudio.com/items?itemName=eg2.vscode-npm-script)
 

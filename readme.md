@@ -1,8 +1,13 @@
 # II - DOM Manipulation
 
+## Reading
+
+1. Bob on [Template Strings](https://youtu.be/INPob8yPyBo)
+1. Bob on DOM scripting parts [one](https://youtu.be/0ik6X4DJKCc), [two](https://youtu.be/mPd2aJXCZ2g), [three](https://youtu.be/wK2cBMcDTss) and [four](https://youtu.be/i37KVt_IcXw).  Please make every effort to follow along on your computer.
+
 ## Homework
 
-1. Bob on DOM scripting parts [one](https://youtu.be/0ik6X4DJKCc), [two](https://youtu.be/mPd2aJXCZ2g), [three](https://youtu.be/wK2cBMcDTss) and [four](https://youtu.be/i37KVt_IcXw).  Please make every effort to follow along on your computer.
+1. Review the notes below, paying particular attention to anything that was unclear to you in class.
 
 ## NPM Manifests
 

@@ -210,6 +210,8 @@ Windows users may wish to install and use [Visual Studio Code](https://code.visu
 
 Warning: use of VS Code will not protect you in the long run from having to have some facility with [NPM](https://marketplace.visualstudio.com/items?itemName=eg2.vscode-npm-script)
 
+[Live Sass Compiler](https://marketplace.visualstudio.com/items?itemName=ritwickdey.live-sass) for VS Code.
+
 Install Live SASS Compiler and set the workspace settings as shown:
 
 ```js
@@ -228,32 +230,15 @@ or
 {
     "liveSassCompile.settings.formats": [
         {
-            "savePath": "app/css"
+            "savePath": "app/css",
+            "format": "expanded"
         }
     ],
     "liveSassCompile.settings.excludeList": [
         "**/node_modules/**",
         ".vscode/**",
-        "other/**"
+        "**/other/**"
     ]
-}
-```
-
-and quite possibly:
-
-```js
-{
-    "liveSassCompile.settings.formats": [
-        {
-            "savePath": "app/css"
-        }
-    ],
-    "liveSassCompile.settings.excludeList": [
-        "**/node_modules/**",
-        ".vscode/**",
-        "other/**"
-    ],
-    "liveServer.settings.root": "/app"
 }
 ```
 

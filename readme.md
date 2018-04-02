@@ -2,7 +2,7 @@
 
 ## Homework
 
-1. tbd
+1. Bob on DOM scripting parts [one](https://youtu.be/0ik6X4DJKCc), [two](https://youtu.be/mPd2aJXCZ2g), [three](https://youtu.be/wK2cBMcDTss) and [four](https://youtu.be/i37KVt_IcXw).  Please make every effort to follow along on your computer.
 
 ## NPM Manifests
 
@@ -171,7 +171,7 @@ Arrow functions are commonly used to shorten the syntax for anonymous functions.
 
 ### Node Package Manager (NPM)
 
-* A Note for Windows users
+* A Note for Windows users:
 
 [Microsoft's Nodejs Guidelines](https://github.com/Microsoft/nodejs-guidelines) is full of helpful information.
 
@@ -179,7 +179,7 @@ Of particular note if you are trying to use the `node-sass` npm package is [this
 
 It appears that Windows users need to install [this npm package](https://github.com/nodejs/node-gyp#on-windows) using [elevated permissions](https://blogs.technet.microsoft.com/danstolts/2012/01/how-to-run-powershell-with-elevated-permissions/): `npm install -g node-gyp`.
 
-* A Note for MacOS users
+* A Note for MacOS users:
 
 You should probably install Xcode.
 
@@ -195,14 +195,18 @@ Use the existing manifest. In the terminal:
 {
 
   "scripts": {
-    "start": "browser-sync start --browser \"google chrome\" --server 'app' --files 'app'",
-     "build-css": "node-sass -w scss  -o app/css/"
+    "start": "browser-sync start --server 'app' --files 'app'",
+     "sassy": "node-sass --watch \"scss\"  --output \"app/css/\""
   },
 
 }
 ```
 
-Create `scss` directory and place `styles.scss` within. Test with a variable: `$badass: #bada55;` and:
+Create `scss` directory and copy styles.css as `styles.scss` to it.
+
+Test with a sass variable. Add:
+
+`$badass: #bada55;` as the first line in `styles.scss` and then apply it to the html selector:
 
 ```css
 html {
@@ -211,70 +215,79 @@ html {
 }
 ```
 
-Compile the css: `$ npm run build-css`
+Compile the css: `$ npm run sassy`
 
 Add mapping:
 
 ```css
   "scripts": {
     "build-css": "node-sass --include-path scss scss/styles.scss   app/css/styles.css",
-    "watch-node-sass": "node-sass -w scss  -o app/css/  --source-map true"
+    "sassy": "sassy": "node-sass --watch \"scss\"  --output \"app/css/\" --source-map true"
   },
 ```
 
-and `$ npm run watch-node-sass`. Note the map file.
+Cancel the process with Control-c and then run `$ npm run watch-node-sass`. Note the map file.
 
 #### Concurrently
 
-As it stands we need two terminal tabs to run our two processes - SASS and BrowserSync - in. To ameliorate this we can install a simple  utility called Concurrently and write a 'master' npm script.
+As it stands we need two terminal tabs to run our two processes - SASS and BrowserSync. To improve this we will install a simple utility called Concurrently and write a 'master' npm script.
 
-1. `$ npm install concurrently --save-dev`
-1. add a new script: `"boom!": "concurrently \"npm run start\" \"npm run watch-node-sass\" "`
-1. `$ npm run boom!`
+Stop any processes running in the terminal with Control-c and use the terminal to install and register Concurrently:
 
-Here's our final package.json:
+* `$ npm install concurrently --save-dev`
+
+Add a new script:
+
+* `"boom!": "concurrently \"npm run start\" \"npm run sassy\" "`
+
+Run both processes:
+
+* `$ npm run boom!`
+
+Note that you will end up with multiple tabs by doing this. They are identical.
+
+Here's my final package.json (yours will differ):
 
 ```js
 {
-  "name": "basic-dom",
+  "name": "session-2",
   "version": "1.0.0",
-  "description": "",
+  "description": "## Homework",
   "main": "index.js",
   "scripts": {
-    "watch-node-sass": "node-sass --watch scss/styles.scss --output app/css/  --source-map true",
     "start": "browser-sync start --browser \"google chrome\" --server 'app' --files 'app'",
-    "boom!": "concurrently \"npm run start\" \"npm run watch-node-sass\" "
+    "sassy": "node-sass --watch \"scss\"  --output \"app/css/\" --source-map true",
+    "boom!": "concurrently \"npm run start\" \"npm run sassy\""
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/front-end-intermediate/session-2.git"
+  },
+  "keywords": [],
   "author": "",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/front-end-intermediate/session-2/issues"
+  },
+  "homepage": "https://github.com/front-end-intermediate/session-2#readme",
   "devDependencies": {
-    "browser-sync": "^2.18.6",
-    "concurrently": "^3.1.0",
-    "node-sass": "^4.4.0"
+    "browser-sync": "^2.23.6",
+    "concurrently": "^3.5.1",
+    "node-sass": "^4.8.3"
   }
 }
 
 ```
 
-#### CSS Preprocessing in the Editor
+## CSS Preprocessing in the Editor
 
-[Visual Studio Code](https://code.visualstudio.com) offers an array of plug-ins that we can use to perform the same preprocessing function. Note that tse of VS Code will not protect you in the long run from having to have some facility with [NPM](https://marketplace.visualstudio.com/items?itemName=eg2.vscode-npm-script)
+Most editors will offer the ability do the same thing.
+
+[Visual Studio Code](https://code.visualstudio.com) offers an array of plug-ins that we can use to perform the same preprocessing function. Note that the use of VS Code will not protect you in the long run from having to have some facility with [NPM](https://marketplace.visualstudio.com/items?itemName=eg2.vscode-npm-script)
 
 [Live Sass Compiler](https://marketplace.visualstudio.com/items?itemName=ritwickdey.live-sass) for VS Code.
 
-Install Live SASS Compiler and set the workspace settings as shown:
-
-```js
-{
-    "liveSassCompile.settings.formats": [
-        {
-            "savePath": "/css"
-        }
-    ]
-}
-```
-
-or
+Install Live SASS Compiler and set the _workspace settings_ as shown:
 
 ```js
 {
@@ -292,7 +305,9 @@ or
 }
 ```
 
-See the Visual Studio Code [documentation](https://code.visualstudio.com/docs/getstarted/settings).
+VS Code is remarkably flexible and offers a setting for almost anything you could wish for. See the Visual Studio Code [documentation](https://code.visualstudio.com/docs/getstarted/settings) for changing settings.
+
+Test it.
 
 ## SASS
 
@@ -304,21 +319,20 @@ We are going to retrofit our page for responsive layout using SASS - and in part
 
 SASS Features:
 
-* error checking
-* 📌 watch for errors and messages in the terminal if it looks like the CSS is not being processed
+* error checking 📌 watch for errors and messages in the terminal if it looks like the CSS is not being processed
 * variables
 * imports
+* nesting
 * better structure and more
 
 Create `_variables.scss` in an new `scss > imports` folder
 
 * why are we using an underscore?
-
 * (See [bootstrap in sass](https://github.com/twbs/bootstrap-sass/tree/master/assets/stylesheets))
 
 Add `@import "imports/variables";` to the top of styles.scss
 
-Add badass to variables as well as:
+Remove `$badass` from `styles.scss` and add it to the variables file along with:
 
 ```css
 $break-five: 81.25em;
@@ -333,7 +347,7 @@ $break-one: 22.5em;
 // 360
 ```
 
-Checkout: [StatCounter Global Stats - Screen Resolution Market Share](href="http://gs.statcounter.com/screen-resolution-stats")
+Checkout: [StatCounter Global Stats - Screen Resolution Market Share](http://gs.statcounter.com/screen-resolution-stats)
 
 Create `_main.scss` in `scss > imports` folder
 
@@ -365,28 +379,39 @@ html {
 
 [Can I Use](http://caniuse.com/#search=css%20v)
 
-Note - because css variables are inherited from an element they cannot be used for media queries breakpoints.
+Note - because css variables are inherited from an element they cannot be used for media query breakpoints.
 
 ### Nesting - _header.scss
 
-Create a new _heading.scss import and move the code into it as:
+Create a nested sass block in `_main.scss`:
 
 ```css
 header {
-  text-align: center;
-  height: 40vh;
-  background: url(../img/img.jpg) top no-repeat;
-  background-size: cover;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  h1 {
-    color: white;
-    font-size: 7vw;
-    font-weight: 300;
-    text-shadow: 3px 4px 0 rgba(0, 0, 0, 0.2);
-  }
+    height: 24vh;
+    background: url(../img/img.jpg) center no-repeat;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    h1 {
+        color: white;
+        font-size: 7vw;
+        font-weight: 400;
+        text-shadow: 3px 4px 0 rgba(0, 0, 0, 0.2);
+    }
 }
+```
+
+Examine the output in styles.css.
+
+Create a new `_heading.scss` import and cut and paster the header code into it.
+
+Add it to `styles.scss`:
+
+```css
+@import "imports/variables";
+@import "imports/header";
+@import "imports/main";
 ```
 
 ### Ampersands
@@ -462,7 +487,7 @@ and
 
 ### Media Queries
 
-The grand daddy of media queries - print stylesheets:
+The birth of responsive design is in [this article](http://alistapart.com/article/responsive-web-design). The "grand daddy" of media queries are print stylesheets:
 
 ```css
 @media print {
@@ -472,16 +497,27 @@ The grand daddy of media queries - print stylesheets:
 }
 ```
 
-The birth of [responsive design](http://alistapart.com/article/responsive-web-design)
-
 In `_header.scss`:
 
 ```css
 @media screen and (min-width: $break-two){
+  /* $break-two = 740px */
   header {
     height: 10vh;
   }
 }
+```
+
+Examine using the Toggle Device Toolbar in Chrome's developer tools.
+
+### The Device meta tag
+
+Test in the browser
+
+[The responsive meta tag](https://css-tricks.com/snippets/html/responsive-meta-tag/)
+
+```html
+<meta name="viewport" content="width=device-width">
 ```
 
 ### min-width
@@ -511,27 +547,26 @@ Mobile first design: use min-width media queries to add features to larger scree
 
 Translation
 
-In this example you are only targeting devices with a width between 100px and 200px.
+In this example you are only targeting devices with a width between 100px and 200px. You shouldn't need to do this often.
 
-#### Nested Media Query (SASS)
+### Nested Media Query (SASS)
 
 ```css
 header {
-  text-align: center;
-  height: 40vh;
-  background: url(../img/img.jpg) top no-repeat;
+  height: 24vh;
+  background: url(../img/img.jpg) center no-repeat;
   background-size: cover;
   display: flex;
   align-items: center;
   justify-content: center;
-  @media (min-width: $break-two){
-    height: 10vh;
+  @media(min-width: $break-two){
+    height: 14vh;
   }
   h1 {
-    color: white;
-    font-size: 7vw;
-    font-weight: 300;
-    text-shadow: 3px 4px 0 rgba(0, 0, 0, 0.2);
+      color: white;
+      font-size: 7vw;
+      font-weight: 400;
+      text-shadow: 3px 4px 0 rgba(0, 0, 0, 0.2);
   }
 }
 ```
@@ -540,24 +575,23 @@ If we want to work mobile first then we want to establish the default CSS as tha
 
 ```css
 header {
-    text-align: center;
-    height: 20vh;
-    background: url(../img/img.jpg) top no-repeat;
-    background-size: cover;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    @media (min-width: $break-two){
-      height: 40vh;
-    }
+  height: 14vh;
+  background: url(../img/img.jpg) center no-repeat;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  @media(min-width: $break-two){
+    height: 24vh;
+  }
     h1 {
       color: white;
-      font-size: 12vw;
-      line-height: 1;
-      font-weight: 300;
+      font-size: 7vw;
+      font-weight: 400;
       text-shadow: 3px 4px 0 rgba(0, 0, 0, 0.2);
       @media (min-width: $break-two){
-        font-size: 7vw;
+        font-size: 10vw;
+        font-weight: 300;
       }
     }
   }
@@ -567,73 +601,224 @@ Leveraging SASS nesting in your media queries enforces a specific organization o
 
 Move all nav related css into a new partial `_nav.scss` and import.
 
-Nest the nav css in a new sass include:
+Start by nesting the nav and ul tags:
 
 ```css
 nav {
   background: #007eb6;
-
+  width: 100%;
+  transition: all 0.5s;
+  z-index: 1;
   ul {
-    margin: 0;
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 2.5rem;
+  }
+}
+```
 
+and then extend it to nest everything except the fixed-nav related material:
+
+```css
+nav {
+  background: #007eb6;
+  width: 100%;
+  transition: all 0.5s;
+  z-index: 1;
+  ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 2.5rem;
   }
   li {
     flex: 1;
+    text-align: center;
+  }
+  a {
+    text-decoration: none;
+    display: inline-block;
+    color: white;
+  }
 
+  li.logo img {
+    padding-top: 0.25rem;
+    width: 2.5rem;
+  }
+  li.logo {
+    max-width: 0;
+    overflow: hidden;
+    background: white;
+    transition: all 0.5s;
+    font-weight: 600;
+    font-size: 30px;
+  }
+}
+
+.fixed-nav li.logo {
+  max-width: 500px;
+}
+
+body.fixed-nav nav {
+  position: fixed;
+  top: 0;
+  box-shadow:0 5px 3px rgba(0,0,0,0.1);
+  width: 100%;
+  z-index: 100;
+}
+
+body.fixed-nav .site-wrap {
+  transform: scale(1);
+}
+```
+
+Use the ampersand to further nest the code:
+
+```css
+nav {
+  background: #007eb6;
+  width: 100%;
+  transition: all 0.5s;
+  z-index: 1;
+  ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 2.5rem;
+  }
+  li {
+    flex: 1;
+    text-align: center;
     &.logo {
-      max-width:0;
-
-      .fixed-nav & {
-        max-width:500px;
-      }
-      img {
-        padding-top: 0.25rem;
-      }
+      max-width: 0;
+      overflow: hidden;
+      background: white;
+      transition: all 0.5s;
+      font-weight: 600;
+      font-size: 30px;
+    }
+    &.logo img {
+      padding-top: 0.25rem;
+      width: 2.5rem;
     }
   }
   a {
     text-decoration: none;
-
+    display: inline-block;
+    color: white;
   }
+}
+
+.fixed-nav li.logo {
+  max-width: 500px;
+}
+
+body.fixed-nav nav {
+  position: fixed;
+  top: 0;
+  box-shadow:0 5px 3px rgba(0,0,0,0.1);
+  width: 100%;
+  z-index: 100;
+}
+
+body.fixed-nav .site-wrap {
+  transform: scale(1);
+}
+```
+
+Nest the `fixed-nav` using an ampersand _after_ the selector:
+
+```css
+nav {
+  background: #007eb6;
+  width: 100%;
+  transition: all 0.5s;
+  z-index: 1;
+  ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 2.5rem;
+  }
+  li {
+    flex: 1;
+    text-align: center;
+    &.logo {
+      max-width: 0;
+      overflow: hidden;
+      background: white;
+      transition: all 0.5s;
+      font-weight: 600;
+      font-size: 30px;
+      .fixed-nav & {
+        max-width: 500px;
+      }
+    }
+    &.logo img {
+      padding-top: 0.25rem;
+      width: 2.5rem;
+    }
+  }
+  a {
+    text-decoration: none;
+    display: inline-block;
+    color: white;
+  }
+}
+
+body.fixed-nav nav {
+  position: fixed;
+  top: 0;
+  box-shadow:0 5px 3px rgba(0,0,0,0.1);
+  width: 100%;
+  z-index: 100;
+}
+
+body.fixed-nav .site-wrap {
+  transform: scale(1);
 }
 ```
 
 Flip the `<ul>` flex direction on small screens vs wide:
 
 ```css
-ul {
-    margin: 0;
-    padding: 0;
+  ul {
     list-style: none;
     display: flex;
-    flex:1;
-    min-height: 2.25rem;
+    justify-content: center;
+    align-items: center;
+    height: 2.5rem;
     flex-direction: column;
     @media screen and (min-width: $break-two) {
-        flex-direction: row;
+      flex-direction: row;
     }
-}
+  }
 ```
 
 Hide the links initially on small screens while maintaining the flex display on wide:
 
 ```css
-li {
+  li {
     flex: 1;
     text-align: center;
-    // display: flex;
-    justify-content: center;
-    align-items: center;
     display: none;
     @media screen and (min-width: $break-two) {
-        display: flex;
+      display: flex;
     }
-}
-
-li.logo{
-    display: block;
-}
-
+    &.logo {
+      display: block;
+      // max-width: 0;
+      // overflow: hidden;
+      ...
+    }
+    ...
+  }
+...
 ```
 
 Make clicking on the logo show the menu on narrow screens:
@@ -659,10 +844,73 @@ Add to `_nav.scss`:
 
 ## Notes
 
-Some interesting applications of SVG:
+A working `_nav.scss`:
 
-* [Responsive logos](http://responsivelogos.co.uk)
-* [Background generator](http://www.svgeneration.com/recipes/Beam-Center/)
+```css
+nav {
+  background: #007eb6;
+  width: 100%;
+  transition: all 0.5s;
+  z-index: 1;
+  ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    @media screen and (min-width: $break-two) {
+      flex-direction: row;
+      align-items: center;
+    }
+  }
+  li {
+    flex: 1;
+    display: none;
+    padding: 0.25rem;
+    @media screen and (min-width: $break-two) {
+      display: flex;
+      justify-content: center;
+    }
+    &.logo {
+      padding: 0;
+      display: flex;
+      background: white;
+      font-size: 30px;
+      font-weight: 600;
+      @media screen and (min-width: $break-two) {
+      max-width: 0;
+      overflow: hidden;
+      transition: all 0.5s;
+      }
+      .fixed-nav & {
+        max-width: 100%;
+      }
+    }
+    &.logo img {
+      padding-top: 0.25rem;
+      width: 2.5rem;
+    }
+  }
+  a {
+    text-decoration: none;
+    display: inline-block;
+    color: white;
+  }
+}
+
+body.fixed-nav nav {
+  position: fixed;
+  top: 0;
+  box-shadow:0 5px 3px rgba(0,0,0,0.1);
+  width: 100%;
+  z-index: 100;
+}
+
+body.fixed-nav .site-wrap {
+  transform: scale(1);
+}
+.show ul li {
+  display: block !important;
+}
+```
 
 ## SASS Links
 

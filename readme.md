@@ -90,7 +90,7 @@ Note: Browser Sync has an interface running at port 3001.
 
 ## Faking a Single Page Application (SPA)
 
-Before beginning let's finish some of the material from [session one](https://github.com/front-end-intermediate/session-1#exercise---sticky-menu){:target="_blank"}.
+Before beginning let's finish some of the material from [session one](https://github.com/front-end-intermediate/session-1#exercise---sticky-menu).
 
 Page fragment links (`index.html#research`) allow us to navigate to sections of the document marked up with the corresponding id:
 
@@ -98,11 +98,13 @@ Page fragment links (`index.html#research`) allow us to navigate to sections of 
 
 Note that clicking on a hashed link doesn't refresh the page. This makes hashes an important feature for creating SPAs - they are used to load different content via AJAX from a server with no page refresh.
 
-We'll set up our page to _emulate_ a SPA.
+We'll set up our page to _emulate_ a SPA using hashes.
 
 This time we'll use a new event `window.onhashchange` and `filter()` and a slightly modified `navItems` array.
 
 * examine the `navItems` array in `navItems.js`
+* review the code in `main.js`
+* review using [.filter, .join, and .map](https://github.com/front-end-intermediate/session-1#array-methods) with arrays
 
 ```js
 const siteWrap = document.querySelector('.site-wrap');

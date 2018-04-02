@@ -65,7 +65,7 @@ Try adding a `--directory` option:
 ```js
   "scripts": {
     "startmac": "browser-sync start --directory --server 'app' --files 'app'",
-    "startpc": "browser-sync start --directory --server \"app\" --files \"app\""
+    "start": "browser-sync start --directory --server \"app\" --files \"app\""
   },
 ```
 
@@ -75,7 +75,7 @@ Try adding a `--browser` option (note the PC browser name):
 
 ```js
 "startmac": "browser-sync start --browser 'google chrome' --server 'app' --files 'app'"
-"startpc": "browser-sync start --browser \"chrome.exe\" --server \"app\" --files \"app\""
+"start": "browser-sync start --browser \"chrome.exe\" --server \"app\" --files \"app\""
 ```
 
 Run the script:
@@ -90,13 +90,13 @@ Note: Browser Sync has an interface running at port 3001.
 
 ## Faking a Single Page Application (SPA)
 
+Before beginning let's finish some of the material from [session one](https://github.com/front-end-intermediate/session-1#exercise---sticky-menu){:target="_blank"}.
+
 Page fragment links (`index.html#research`) allow us to navigate to sections of the document marked up with the corresponding id:
 
 `<p id="watchlist">`
 
-Like [this](https://live.barcap.com/publiccp/RSR/nyfipubs/barclaysliveapp/).
-
-Note that clicking on an hashed link doesn't refresh the page. This makes hashes an important feature for creating SPAs - they are used to load different content via AJAX from a server with no page refresh.
+Note that clicking on a hashed link doesn't refresh the page. This makes hashes an important feature for creating SPAs - they are used to load different content via AJAX from a server with no page refresh.
 
 We'll set up our page to _emulate_ a SPA.
 

@@ -1,0 +1,28 @@
+{
+  "name": "session-2",
+  "version": "1.0.0",
+  "description": "significanrt change ## Reading",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "browser-sync start --server \"app\" --files \"app\"",
+    "sassy": "node-sass --watch \"scss\"  --output \"app/css/\" --source-map true",
+    "boom!": "concurrently \"npm run start\" \"npm run sassy\" "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/front-end-intermediate/session-2.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/front-end-intermediate/session-2/issues"
+  },
+  "homepage": "https://github.com/front-end-intermediate/session-2#readme",
+  "devDependencies": {
+    "browser-sync": "^2.23.6",
+    "concurrently": "^3.5.1",
+    "node-sass": "^4.8.3"
+  }
+}

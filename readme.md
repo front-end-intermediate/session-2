@@ -8,6 +8,7 @@
 ## Homework
 
 1. Review the notes below, paying particular attention to anything that was unclear to you in class.
+1. Add JS to set the initial page to watchlist using onload and so that page refreshes honor the hash in the browser's location string.
 
 ## NPM Manifests
 

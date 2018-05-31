@@ -72,7 +72,7 @@ This time we'll use a new event `window.onhashchange` and `filter()` and a sligh
 const siteWrap = document.querySelector('.site-wrap');
 ```
 
-Attach 
+Attach an event listener to the hashchange event:
 
 ```js
 window.addEventListener("hashchange", navigate)
@@ -98,7 +98,7 @@ function navigate(){
       return navItem.link == newloc
     })
 
-  console.log('new content header ' + newContent[0].header)
+  console.log(newContent[0].header)
 }
 ```
 
@@ -135,7 +135,9 @@ function navigate(){
 }
 ```
 
-Arrow functions are commonly used to shorten the syntax for anonymous functions. Note that arrow functions have an implicit return.
+Note that arrow functions have an implicit return.
+
+Establish a default page:
 
 ```js
 if(!location.hash) {
@@ -176,7 +178,43 @@ navigate();
 window.addEventListener("hashchange", navigate)
 ```
 
+## JSON
+
+When sending data you need to convert it to a string using [JSON.stringify()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify)
+
 `JSON.stringify(navItems, null, 4)`
+
+[JSON Server](https://github.com/typicode/json-server)
+
+`"json": "json-server --watch db.json --port 3004"`
+
+Test it at [http://localhost:3004/content](http://localhost:3004/content)
+
+```js
+var xhr = new XMLHttpRequest();
+xhr.open('GET', 'http://localhost:3004/content', true);
+
+xhr.send();
+
+xhr.onreadystatechange = function () {
+  console.log(xhr.readyState);
+  console.log(xhr.status);
+  console.log(xhr.statusText);
+};
+
+xhr.onload = function(){
+
+  if(xhr.status === 200) {
+  var info = JSON.parse(xhr.responseText)
+  console.log(info)
+  }
+}
+
+function display(x){
+  console.log(x)
+}
+
+```
 
 ## NPM node-sass
 

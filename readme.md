@@ -180,15 +180,21 @@ window.addEventListener("hashchange", navigate)
 
 ## JSON
 
-When sending data you need to convert it to a string using [JSON.stringify()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify)
+When sending data you need to convert it to a string using [JSON.stringify()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify).
 
-`JSON.stringify(navItems, null, 4)`
+```sh
+JSON.stringify(navItems, null, 4)
+```
 
-[JSON Server](https://github.com/typicode/json-server)
+Use db.json at the top level of today's folder and [JSON Server](https://github.com/typicode/json-server).
 
-`"json": "json-server --watch db.json --port 3004"`
+Install it using npm (`--save-dev`) and edit the scripts in `package.json` to include:
 
-Test it at [http://localhost:3004/content](http://localhost:3004/content)
+```js
+"json": "json-server --watch db.json --port 3004"
+```
+
+Test it at [http://localhost:3004/content](http://localhost:3004/content).
 
 ```js
 var xhr = new XMLHttpRequest();

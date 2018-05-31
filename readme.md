@@ -14,8 +14,6 @@
 
 We will be again using [Browser Sync](https://www.browsersync.io) as our sample application.
 
-`npm init` and npm install:
-
 ```sh
 npm init
 npm install browser-sync --save-dev
@@ -24,13 +22,6 @@ npm install browser-sync --save-dev
 * `npm init` creates `package.json`
 * `npm install browser-sync --save-dev` installs [Browser Sync](https://www.browsersync.io) into the `node_modules` folder
 * `--save-dev` adds the software to a list of development dependancies in the manifest
-
-Notes:
-
-* package.json
-* dependencies
-* node_modules folder
-* discuss the need for `.gitignore`.
 
 ### Editing package.json
 
@@ -59,36 +50,6 @@ And run the process:
 npm run start
 ```
 
-Quit the process with Control-c.
-
-Try adding a `--directory` option:
-
-```js
-  "scripts": {
-    "startmac": "browser-sync start --directory --server 'app' --files 'app'",
-    "start": "browser-sync start --directory --server \"app\" --files \"app\""
-  },
-```
-
-Quit the process with Control-c.
-
-Try adding a `--browser` option (note the PC browser name):
-
-```js
-"startmac": "browser-sync start --browser 'google chrome' --server 'app' --files 'app'"
-"start": "browser-sync start --browser \"chrome.exe\" --server \"app\" --files \"app\""
-```
-
-Run the script:
-
-```sh
-npm run start
-```
-
-This will open index.html in your editor - examine the html and css in the inspector.
-
-Note: Browser Sync has an interface running at port 3001.
-
 ## Faking a Single Page Application (SPA)
 
 Before beginning let's finish some of the material from [session one](https://github.com/front-end-intermediate/session-1#exercise---sticky-menu).
@@ -111,10 +72,16 @@ This time we'll use a new event `window.onhashchange` and `filter()` and a sligh
 const siteWrap = document.querySelector('.site-wrap');
 ```
 
+Attach 
+
+```js
+window.addEventListener("hashchange", navigate)
+```
+
 Store the hash in a variable `newLoc`::
 
 ```js
-window.onhashchange = function() {
+function navigate(){
   let newloc = window.location.hash;
   console.log(newloc)
   }
@@ -123,7 +90,7 @@ window.onhashchange = function() {
 Use that value to filter the navItems (our fake data) using [Array.prototype.filter()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter). The `filter()` method creates a new array with all elements that pass the test implemented by the provided function.
 
 ```js
-window.onhashchange = function() {
+function navigate(){
   let newloc = window.location.hash;
 
   let newContent = navItems.filter(
@@ -140,7 +107,7 @@ Filter selects an entry in navItems based on its hash (`newLoc`) and saves it in
 Finally, set the innerHTML of the siteWrap to content from the resulting array:
 
 ```js
-window.onhashchange = function() {
+function navigate(){
   let newloc = window.location.hash;
 
   let newContent = navItems.filter(
@@ -158,7 +125,7 @@ window.onhashchange = function() {
 Refactor to use an [arrow function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions):
 
 ```js
-window.onhashchange = function() {
+function navigate(){
   let newloc = window.location.hash;
   let newContent = navItems.filter( navItem => navItem.link == newloc );
   siteWrap.innerHTML = `
@@ -169,6 +136,45 @@ window.onhashchange = function() {
 ```
 
 Arrow functions are commonly used to shorten the syntax for anonymous functions. Note that arrow functions have an implicit return.
+
+```js
+if(!location.hash) {
+  location.hash = "#watchlist";
+}
+```
+
+`navigate();`
+
+Final
+
+```js
+const nav = document.getElementById('main');
+const navLinks = nav.querySelector('#nav-links');
+const markup = `${navItems.map(
+  listItem => `<li><a href="${listItem.link}">${listItem.label}</a></li>`)
+  .join('')}`;
+navLinks.innerHTML = markup;
+
+
+const siteWrap = document.querySelector('.site-wrap');
+
+if(!location.hash) {
+  location.hash = "#watchlist";
+}
+
+function navigate(){
+  let newloc = window.location.hash;
+  let newContent = navItems.filter( navItem => navItem.link == newloc );
+  siteWrap.innerHTML = `
+  <h2>${newContent[0].header}</h2>
+  ${newContent[0].content}
+  `;
+}
+
+navigate();
+
+window.addEventListener("hashchange", navigate)
+```
 
 ## NPM node-sass
 

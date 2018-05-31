@@ -176,6 +176,8 @@ navigate();
 window.addEventListener("hashchange", navigate)
 ```
 
+`JSON.stringify(navItems, null, 4)`
+
 ## NPM node-sass
 
 * [Node Package Manager](https://www.npmjs.com)

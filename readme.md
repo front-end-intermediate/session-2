@@ -16,7 +16,7 @@
 We will be again using [Browser Sync](https://www.browsersync.io) as our sample application.
 
 ```sh
-npm init
+npm init -y
 npm install browser-sync --save-dev
 ```
 
@@ -198,29 +198,52 @@ Install it using npm (`--save-dev`) and edit the scripts in `package.json` to in
 Test it at [http://localhost:3004/content](http://localhost:3004/content).
 
 ```js
-var xhr = new XMLHttpRequest();
-xhr.open('GET', 'http://localhost:3004/content', true);
+// xhr.onreadystatechange = function () {
+//   console.log(xhr.readyState);
+//   console.log(xhr.status);
+//   console.log(xhr.statusText);
+// };
 
-xhr.send();
+const nav = document.getElementById('main');
 
-xhr.onreadystatechange = function () {
-  console.log(xhr.readyState);
-  console.log(xhr.status);
-  console.log(xhr.statusText);
-};
+const navLinks = nav.querySelector('#nav-links');
+const markup = `${navItems.map(listItem => `<li><a href="${listItem.link}">${listItem.label}</a></li>`).join('')}`;
 
-xhr.onload = function(){
+navLinks.innerHTML = markup;
 
-  if(xhr.status === 200) {
-  var info = JSON.parse(xhr.responseText)
-  console.log(info)
-  }
+
+const siteWrap = document.querySelector('.site-wrap');
+
+function fetchData(hash, callback) {
+  var xhr = new XMLHttpRequest();
+  
+  xhr.onload = function () {
+    callback(JSON.parse(xhr.response));
+  };
+  
+  xhr.open('GET', 'http://localhost:3004/content', true);
+  xhr.send();
 }
 
-function display(x){
-  console.log(x)
+function navigate() {
+  let newloc = window.location.hash;
+  fetchData(newloc, function (content) {
+    console.log(content)
+    let newContent = content.filter( contentItem => contentItem.link == newloc );
+    siteWrap.innerHTML = `
+    <h2>${newContent[0].header}</h2>
+    ${newContent[0].content}
+    `;
+  })
 }
 
+if(!location.hash) {
+  location.hash = "#watchlist";
+}
+
+navigate();
+
+window.addEventListener("hashchange", navigate)
 ```
 
 ## NPM node-sass

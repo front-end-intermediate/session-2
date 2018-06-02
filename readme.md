@@ -3,6 +3,7 @@
 ## Reading
 
 1. Bob on [Template Strings](https://youtu.be/INPob8yPyBo)
+1. https://www.youtube.com/watch?v=xN9QxPtK2LM  https://github.com/curran/screencasts/tree/gh-pages/navigation
 1. Bob on DOM scripting parts [one](https://youtu.be/0ik6X4DJKCc), [two](https://youtu.be/mPd2aJXCZ2g), [three](https://youtu.be/wK2cBMcDTss) and [four](https://youtu.be/i37KVt_IcXw).  Please make every effort to follow along on your computer.
 
 ## Homework

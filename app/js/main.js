@@ -22,7 +22,6 @@ function fetchData(hash, callback) {
 function navigate() {
   let newloc = window.location.hash;
   fetchData(newloc, function (content) {
-    console.log(content)
     let newContent = content.filter( contentItem => contentItem.link == newloc );
     siteWrap.innerHTML = `
     <h2>${newContent[0].header}</h2>

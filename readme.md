@@ -8,7 +8,7 @@
 
 ## Homework
 
-1. Review the notes below, paying particular attention to anything that was unclear to you in class.
+1. Review the notes below, paying particular attention to and researching anything that was unclear to you in class.
 1. Add JS to set the initial page to watchlist using onload and so that page refreshes honor the hash in the browser's location string.
 
 ## NPM Manifests
@@ -232,6 +232,7 @@ function navigate() {
     let newContent = content.filter( contentItem => contentItem.link == newloc );
     siteWrap.innerHTML = `
     <h2>${newContent[0].header}</h2>
+    ${newContent[0].image}
     ${newContent[0].content}
     `;
   })
@@ -244,6 +245,15 @@ if(!location.hash) {
 navigate();
 
 window.addEventListener("hashchange", navigate)
+```
+
+The navigation is still coming from the original `navitems.js` file. Comment it out in the html files and use the json:
+
+```js
+fetchData(null, function(content) {
+  const markup = `${content.map(listItem => `<li><a href="${listItem.link}">${listItem.label}</a></li>`).join('')}`;
+  navLinks.innerHTML = markup;
+})
 ```
 
 ## NPM node-sass

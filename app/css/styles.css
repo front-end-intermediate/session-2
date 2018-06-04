@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:300, 400, 400i, 600, 600i, 700');
+@import 'https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,600,600i,700';
 
 * {
     margin: 0;
@@ -18,16 +18,16 @@ html {
     box-sizing: inherit;
 }
 
-.site-wrap {
-    max-width: 90vw;
-    margin: 40px auto;
-    background: white;
-    padding: 20px 20px;
-    box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.05);
+p {
+    margin: 1rem 0;
+}
+
+img {
+    width: 100%;
 }
 
 header {
-    height: 24vh;
+    height: 20vh;
     background: url(../img/img.jpg) center no-repeat;
     background-size: cover;
     display: flex;
@@ -39,11 +39,13 @@ h1 {
     color: white;
     font-size: 7vw;
     font-weight: 400;
-    text-shadow: 3px 4px 0 rgba(0, 0, 0, 0.2);
+    text-shadow: 3px 4px 0 rgba(0, 0, 0, 0.2)
 }
 
-p {
-    margin: 1rem 0;
+@media (max-width: 420px){
+    header {
+        height: 12vh;
+    }
 }
 
 nav {
@@ -72,11 +74,40 @@ nav a {
     color: white;
 }
 
-img {
+body.fixed-nav nav {
+    position: fixed;
+    top: 0;
+    box-shadow:0 5px 3px rgba(0,0,0,0.1);
     width: 100%;
+    z-index: 1;
 }
 
-#main {
-    position: sticky;
-    top: 0px;
-  }
+.site-wrap {
+    max-width: 90vw;
+    margin: 40px auto;
+    background: white;
+    padding: 20px 20px;
+    box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.05);
+    transform: scale(0.98);
+    transition: transform 0.5s;
+}
+
+body.fixed-nav .site-wrap {
+    transform: scale(1);
+}
+
+.logo img {
+    padding-top: 0.25rem;
+    width: 2.5rem;
+}
+.logo {
+    max-width:0;
+    overflow: hidden;
+    background: white;
+    transition: all 0.5s;
+    font-weight: 600;
+    font-size: 30px;
+}
+.fixed-nav .logo {
+    max-width:500px;
+}

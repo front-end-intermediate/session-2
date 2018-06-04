@@ -1,10 +1,29 @@
-
 const nav = document.getElementById('main');
 
-const navLinks = nav.querySelector('#nav-links');
+const markup = `
+    <ul>
+      ${navItems.map(
+        navItem => `<li><a href="${navItem.link}">${navItem.label}</a></li>` 
+        ).join('')}
+    </ul>
+    `;
 
-const markup = `${navItems
-  .map(listItem => `<li><a href="${listItem.link}">${listItem.label}</a></li>`)
-  .join('')}`;
+nav.innerHTML = markup;
 
-navLinks.innerHTML = markup;
+let topOfNav = nav.offsetTop;
+
+function fixNav() {
+  if(window.scrollY >= topOfNav) {
+    document.body.style.paddingTop = nav.offsetHeight + 'px';
+    document.body.classList.add('fixed-nav');
+  } else {
+    document.body.classList.remove('fixed-nav');
+    document.body.style.paddingTop = 0;
+  }
+}
+
+const logo = document.querySelector('#main ul li');
+logo.classList.add('logo');
+logo.firstChild.innerHTML = '<img src="img/logo.svg" />';
+
+window.addEventListener('scroll', fixNav);

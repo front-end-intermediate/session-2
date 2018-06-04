@@ -52,8 +52,6 @@ npm run start
 
 ## Faking a Single Page Application (SPA)
 
-Before beginning let's finish some of the material from [session one](https://github.com/front-end-intermediate/session-1#exercise---sticky-menu).
-
 Page fragment links (`index.html#research`) allow us to navigate to sections of the document marked up with the corresponding id:
 
 `<p id="watchlist">`

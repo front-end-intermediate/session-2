@@ -210,7 +210,7 @@ This is the source for `db.json` at the top level of today's folder.
 
 We could use `db.json` as a static file but lets use it with [JSON Server](https://github.com/typicode/json-server) instead.
 
-Install it using npm (`--save-dev`): 
+Install it using npm (`--save-dev`):
 
 ```sh
 npm i json-server --save-dev
@@ -231,11 +231,11 @@ Create a new function `fetchData` that takes a hash and callback:
 ```js
 function fetchData(hash, callback) {
   var xhr = new XMLHttpRequest();
-  
+
   xhr.onload = function () {
     callback(JSON.parse(xhr.response));
   };
-  
+
   xhr.open('GET', 'http://localhost:3004/content', true);
   xhr.send();
 }
@@ -290,7 +290,7 @@ fetchData(null, function(content) {
   const logo = document.querySelector('#main ul li');
   logo.classList.add('logo');
   logo.firstChild.innerHTML = '<img src="img/logo.svg" />';
-  
+
 })
 ```
 
@@ -319,7 +319,7 @@ You should probably install Xcode.
 
 ### Method One - Node Sass
 
-Use the existing package.json. 
+Use the existing package.json.
 
 In the terminal (you will need to temporarily stop node sync with Control + c):
 
@@ -347,12 +347,16 @@ Compile the css: `$ npm run sassy`
 
 Add mapping:
 
-<!-- ```css
+<!--
+
+```css
   "scripts": {
     "build-css": "node-sass --include-path scss scss/styles.scss   app/css/styles.css",
     "sassy": "node-sass --watch \"scss\"  --output \"app/css/\" --source-map true"
   },
-``` -->
+```
+
+-->
 
 ```js
   "sassy": "node-sass --watch \"scss\"  --output \"app/css/\" --source-map true"
@@ -634,7 +638,7 @@ and (demo only):
 
 ### Media Queries
 
-The birth of responsive design is [this article](http://alistapart.com/article/responsive-web-design). 
+The birth of responsive design is [this article](http://alistapart.com/article/responsive-web-design).
 
 The "grand daddy" of media queries are print stylesheets:
 
@@ -680,7 +684,7 @@ Test in the browser using the Developer Tools.
 
 Translation:
 
-If the device width is greater than or equal to 760px then do {...}. 
+If the device width is greater than or equal to 760px then do {...}.
 
 If the actual device width is 320px this condition will return false.
 

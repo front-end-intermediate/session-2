@@ -66,6 +66,8 @@ This time we'll use a new event `window.onhashchange` and `filter()` and a sligh
 * review the code in `main.js`
 * review using [.filter, .join, and .map](https://github.com/front-end-intermediate/session-1#array-methods) with arrays
 
+Begin by selecting the `site-wrap`:
+
 ```js
 const siteWrap = document.querySelector('.site-wrap');
 ```
@@ -200,7 +202,7 @@ When sending data you need to convert it to a string using [JSON.stringify()](ht
 
 Run this in the browser's console:
 
-```sh
+```js
 JSON.stringify(navItems, null, 4)
 ```
 
@@ -208,7 +210,13 @@ This is the source for `db.json` at the top level of today's folder.
 
 We could use `db.json` as a static file but lets use it with [JSON Server](https://github.com/typicode/json-server) instead.
 
-Install it using npm (`--save-dev`) and edit the scripts in `package.json` to include:
+Install it using npm (`--save-dev`): 
+
+```sh
+npm i json-server --save-dev
+```
+
+and add this scripts in `package.json`:
 
 ```js
 "json": "json-server --watch db.json --port 3004"
@@ -233,7 +241,7 @@ function fetchData(hash, callback) {
 }
 ```
 
-Edit the navigate function to use it:
+Edit the navigate function to call it:
 
 ```js
 function navigate() {
@@ -257,8 +265,13 @@ Call our fetchData function with null (we are not looking for a page here):
 
 ```js
 fetchData(null, function(content) {
-  const markup = `${content.map(listItem => `<li><a href="${listItem.link}">${listItem.label}</a></li>`).join('')}`;
-  navLinks.innerHTML = markup;
+  const markup =
+    `<ul>
+    ${content.map(
+      listItem => `<li><a href="${listItem.link}">${listItem.label}</a></li>`
+    ).join('')}
+    </ul>`;
+  nav.innerHTML = markup;
 })
 ```
 
@@ -266,12 +279,18 @@ Note that we need to initialize our logo as it doesn't exist until the navigatio
 
 ```js
 fetchData(null, function(content) {
-  const markup = `${content.map(listItem => `<li><a href="${listItem.link}">${listItem.label}</a></li>`).join('')}`;
-  navLinks.innerHTML = markup;
-  
+  const markup =
+    `<ul>
+    ${content.map(
+      listItem => `<li><a href="${listItem.link}">${listItem.label}</a></li>`
+    ).join('')}
+    </ul>`;
+  nav.innerHTML = markup;
+
   const logo = document.querySelector('#main ul li');
   logo.classList.add('logo');
   logo.firstChild.innerHTML = '<img src="img/logo.svg" />';
+  
 })
 ```
 

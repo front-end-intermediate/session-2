@@ -3,13 +3,12 @@
 ## Reading
 
 1. Bob on [Template Strings](https://youtu.be/INPob8yPyBo)
-1. https://www.youtube.com/watch?v=xN9QxPtK2LM  https://github.com/curran/screencasts/tree/gh-pages/navigation
 1. Bob on DOM scripting parts [one](https://youtu.be/0ik6X4DJKCc), [two](https://youtu.be/mPd2aJXCZ2g), [three](https://youtu.be/wK2cBMcDTss) and [four](https://youtu.be/i37KVt_IcXw).  Please make every effort to follow along on your computer.
+1. If you want more information on navigating with JSON and JavaScript watch [this video](https://www.youtube.com/watch?v=xN9QxPtK2LM). The source code for it is [here](https://github.com/curran/screencasts/tree/gh-pages/navigation).
 
 ## Homework
 
 1. Review the notes below, paying particular attention to and researching anything that was unclear to you in class.
-1. Add JS to set the initial page to watchlist using onload and so that page refreshes honor the hash in the browser's location string.
 
 ## NPM Manifests
 
@@ -21,7 +20,7 @@ npm install browser-sync --save-dev
 ```
 
 * `npm init` creates `package.json`
-* `npm install browser-sync --save-dev` installs [Browser Sync](https://www.browsersync.io) into the `node_modules` folder
+* `npm install browser-sync` installs [Browser Sync](https://www.browsersync.io) into a new `node_modules` folder
 * `--save-dev` adds the software to a list of development dependancies in the manifest
 
 ### Editing package.json
@@ -138,31 +137,44 @@ function navigate(){
 
 Note that arrow functions have an implicit return.
 
-Establish a default page:
+Establish a default page and call navigate to set the initial view:
 
 ```js
 if(!location.hash) {
   location.hash = "#watchlist";
 }
+
+navigate();
 ```
 
-`navigate();`
-
-Final
+Final script:
 
 ```js
 const nav = document.getElementById('main');
 const navLinks = nav.querySelector('#nav-links');
-const markup = `${navItems.map(
-  listItem => `<li><a href="${listItem.link}">${listItem.label}</a></li>`)
-  .join('')}`;
-navLinks.innerHTML = markup;
-
-
 const siteWrap = document.querySelector('.site-wrap');
 
-if(!location.hash) {
-  location.hash = "#watchlist";
+const markup = `${navItems
+  .map(listItem => `<li><a href="${listItem.link}">${listItem.label}</a></li>`)
+  .join('')}`;
+
+navLinks.innerHTML = markup;
+
+const logo = document.querySelector('#main ul li');
+logo.classList.add('logo');
+logo.firstChild.innerHTML = '<img src="img/logo.svg" />';
+
+
+let topOfNav = nav.offsetTop;
+
+function fixNav() {
+  if(window.scrollY >= topOfNav) {
+    document.body.style.paddingTop = nav.offsetHeight + 'px';
+    document.body.classList.add('fixed-nav');
+  } else {
+    document.body.classList.remove('fixed-nav');
+    document.body.style.paddingTop = 0;
+  }
 }
 
 function navigate(){
@@ -174,8 +186,13 @@ function navigate(){
   `;
 }
 
+if(!location.hash) {
+  location.hash = "#watchlist";
+}
+
 navigate();
 
+window.addEventListener('scroll', fixNav);
 window.addEventListener("hashchange", navigate)
 ```
 
@@ -183,11 +200,15 @@ window.addEventListener("hashchange", navigate)
 
 When sending data you need to convert it to a string using [JSON.stringify()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify).
 
+Run this in the browser's console:
+
 ```sh
 JSON.stringify(navItems, null, 4)
 ```
 
-Use db.json at the top level of today's folder and [JSON Server](https://github.com/typicode/json-server).
+This is the source for `db.json` at the top level of today's folder.
+
+We could use `db.json` as a static file but lets use it with [JSON Server](https://github.com/typicode/json-server) instead.
 
 Install it using npm (`--save-dev`) and edit the scripts in `package.json` to include:
 
@@ -195,25 +216,13 @@ Install it using npm (`--save-dev`) and edit the scripts in `package.json` to in
 "json": "json-server --watch db.json --port 3004"
 ```
 
+We will need to use a second terminal in order to run `npm run json` as our first is tied up with browser-sync.
+
 Test it at [http://localhost:3004/content](http://localhost:3004/content).
 
+Create a new function `fetchData` that takes a hash and callback:
+
 ```js
-// xhr.onreadystatechange = function () {
-//   console.log(xhr.readyState);
-//   console.log(xhr.status);
-//   console.log(xhr.statusText);
-// };
-
-const nav = document.getElementById('main');
-
-const navLinks = nav.querySelector('#nav-links');
-const markup = `${navItems.map(listItem => `<li><a href="${listItem.link}">${listItem.label}</a></li>`).join('')}`;
-
-navLinks.innerHTML = markup;
-
-
-const siteWrap = document.querySelector('.site-wrap');
-
 function fetchData(hash, callback) {
   var xhr = new XMLHttpRequest();
   
@@ -224,11 +233,14 @@ function fetchData(hash, callback) {
   xhr.open('GET', 'http://localhost:3004/content', true);
   xhr.send();
 }
+```
 
+Edit the navigate function to use it:
+
+```js
 function navigate() {
   let newloc = window.location.hash;
   fetchData(newloc, function (content) {
-    console.log(content)
     let newContent = content.filter( contentItem => contentItem.link == newloc );
     siteWrap.innerHTML = `
     <h2>${newContent[0].header}</h2>
@@ -237,17 +249,13 @@ function navigate() {
     `;
   })
 }
-
-if(!location.hash) {
-  location.hash = "#watchlist";
-}
-
-navigate();
-
-window.addEventListener("hashchange", navigate)
 ```
 
-The navigation is still coming from the original `navitems.js` file. Comment it out in the html files and use the json:
+Note the use of callbacks.
+
+The navigation is still coming from the original `navitems.js` file. Comment it out in the html files and use the json.
+
+Call our fetchData function with null (we are not looking for a page here):
 
 ```js
 fetchData(null, function(content) {
@@ -255,6 +263,21 @@ fetchData(null, function(content) {
   navLinks.innerHTML = markup;
 })
 ```
+
+Note that we need to initialize our logo as it doesn't exist until the navigation is built.
+
+```js
+fetchData(null, function(content) {
+  const markup = `${content.map(listItem => `<li><a href="${listItem.link}">${listItem.label}</a></li>`).join('')}`;
+  navLinks.innerHTML = markup;
+  
+  const logo = document.querySelector('#main ul li');
+  logo.classList.add('logo');
+  logo.firstChild.innerHTML = '<img src="img/logo.svg" />';
+})
+```
+
+We can now remove the content from `index.html`.
 
 ## NPM node-sass
 
@@ -277,23 +300,17 @@ It appears that Windows users need to install [this npm package](https://github.
 
 You should probably install Xcode.
 
-Use the existing manifest. In the terminal:
+### Method One - Node Sass
 
-1. `$ cd` to the working directory
-1. examine the `package.json` file
+Use the existing package.json. 
+
+In the terminal (you will need to temporarily stop node sync with Control + c):
+
 1. `$ npm install --save-dev node-sass`
-1. examine the file again (note: --save-dev vs. --save, vs. -g, and the node_modules folder)
-1. Add a [sass script](https://github.com/sass/node-sass#usage-1) to the package.json file. e.g.:
+1. Add a [script](https://github.com/sass/node-sass#usage-1) to the package.json file. e.g.:
 
 ```js
-{
-
-  "scripts": {
-    "start": "browser-sync start --server 'app' --files 'app'",
-     "sassy": "node-sass --watch \"scss\"  --output \"app/css/\""
-  },
-
-}
+  "sassy": "node-sass --watch \"scss\"  --output \"app/css/\""
 ```
 
 Create `scss` directory and copy styles.css as `styles.scss` to it.
@@ -313,18 +330,22 @@ Compile the css: `$ npm run sassy`
 
 Add mapping:
 
-```css
+<!-- ```css
   "scripts": {
     "build-css": "node-sass --include-path scss scss/styles.scss   app/css/styles.css",
-    "sassy": "sassy": "node-sass --watch \"scss\"  --output \"app/css/\" --source-map true"
+    "sassy": "node-sass --watch \"scss\"  --output \"app/css/\" --source-map true"
   },
+``` -->
+
+```js
+  "sassy": "node-sass --watch \"scss\"  --output \"app/css/\" --source-map true"
 ```
 
 Cancel the process with Control-c and then run `$ npm run watch-node-sass`. Note the map file.
 
 #### Concurrently
 
-As it stands we need two terminal tabs to run our two processes - SASS and BrowserSync. To improve this we will install a simple utility called Concurrently and write a 'master' npm script.
+As it stands we need multiple terminal tabs to run our npm scripts. To improve this we will install a simple utility called Concurrently and write a 'master' npm script.
 
 Stop any processes running in the terminal with Control-c and use the terminal to install and register Concurrently:
 
@@ -332,13 +353,13 @@ Stop any processes running in the terminal with Control-c and use the terminal t
 
 Add a new script:
 
-* `"boom!": "concurrently \"npm run start\" \"npm run sassy\" "`
+* `"boom!": "concurrently \"npm run start\" \"npm run json\" \"npm run sassy\" "`
 
-Run both processes:
+Run all processes:
 
 * `$ npm run boom!`
 
-Note that you will end up with multiple tabs by doing this. They are identical.
+Note that you will end up with multiple browser tabs by doing this. They are identical.
 
 Here's my final package.json. Yours will differ but the important parts - the scripts and dependencies - should be the same:
 
@@ -346,12 +367,13 @@ Here's my final package.json. Yours will differ but the important parts - the sc
 {
   "name": "session-2",
   "version": "1.0.0",
-  "description": "## Homework",
+  "description": "## Reading",
   "main": "index.js",
   "scripts": {
     "start": "browser-sync start --server 'app' --files 'app'",
+    "json": "json-server --watch db.json --port 3004",
     "sassy": "node-sass --watch \"scss\"  --output \"app/css/\" --source-map true",
-    "boom!": "concurrently \"npm run start\" \"npm run sassy\""
+    "boom!": "concurrently \"npm run start\" \"npm run json\" \"npm run sassy\" "
   },
   "repository": {
     "type": "git",
@@ -365,12 +387,11 @@ Here's my final package.json. Yours will differ but the important parts - the sc
   },
   "homepage": "https://github.com/front-end-intermediate/session-2#readme",
   "devDependencies": {
-    "browser-sync": "^2.23.6",
-    "concurrently": "^3.5.1",
-    "node-sass": "^4.8.3"
+    "browser-sync": "^2.24.4",
+    "json-server": "^0.13.0",
+    "node-sass": "^4.9.0"
   }
 }
-
 ```
 
 ## CSS Preprocessing in the Editor
@@ -405,7 +426,7 @@ Test it.
 
 ## SASS
 
-We are going to retrofit our page for responsive layout using SASS - and in particular node-sass.
+We are going to retrofit our page for responsive layout using SASS.
 
 [Sass homepage](http://sass-lang.com)
 
@@ -417,16 +438,14 @@ SASS Features:
 * variables
 * imports
 * nesting
-* better structure and more
+* better structure and more...
 
-Create `_variables.scss` in an new `scss > imports` folder
+Note `_variables.scss` in the `scss > imports` folder
 
 * why are we using an underscore?
 * (See [bootstrap in sass](https://github.com/twbs/bootstrap-sass/tree/master/assets/stylesheets))
 
-Add `@import "imports/variables";` to the top of styles.scss
-
-Remove `$badass` from `styles.scss` and add it to the variables file along with:
+Cut the variable `$badass: #bada55;` from `styles.scss` and paste it into the variables file along with:
 
 ```css
 $break-five: 81.25em;
@@ -441,9 +460,25 @@ $break-one: 22.5em;
 // 360
 ```
 
-Create `_main.scss` in `scss > imports` folder
+Note `_base.scss` in the `scss > imports` folder
 
-Copy paste all code from styles (except first line) and add `@import "imports/main";` to the top of styles.scss
+* Cut and paste all code from styles.scss
+* Add `@import "imports/variables";` to the top of styles.scss
+* Add `@import "imports/base";` to the top of styles.scss
+
+Note the import statement and how a SASS import differs from a native CSS import such as the one used for the Google font.
+
+Create a new `_nav.scss` file in `imports` and cut and paste the navigation CSS from `_base.scss` into it.
+
+Import it into `styles.scss` so it now contains:
+
+```css
+@import "imports/variables";
+@import "imports/base";
+@import "imports/nav";
+```
+
+Nest the contents of `_nav.scss`.
 
 <!-- ### Aside - CSS native variables
 
@@ -473,9 +508,9 @@ html {
 
 Note - because css variables are inherited from an element they cannot be used for media query breakpoints. -->
 
-### Nesting - _header.scss
+### Header SASS
 
-Create a nested sass block in `_main.scss`:
+Create a new `_header.scss` file and cut and paste the header and h1 CSS rules into it:
 
 ```css
 header {
@@ -485,6 +520,7 @@ header {
     display: flex;
     align-items: center;
     justify-content: center;
+
     h1 {
         color: white;
         font-size: 7vw;
@@ -494,36 +530,38 @@ header {
 }
 ```
 
-Examine the output in styles.css.
-
-Create a new `_heading.scss` import and cut and paster the header code into it.
-
-Add it to `styles.scss`:
+Import the new header SASS file into `styles.scss`:
 
 ```css
 @import "imports/variables";
+@import "imports/base";
 @import "imports/header";
-@import "imports/main";
+@import "imports/nav";
 ```
 
 ### Ampersands
 
-Frequently used with pseudo selectors:
+Frequently used with pseudo selectors.
+
+In `_variables.scss`:
 
 ```css
 $link-blue: #007eb6;
 ```
 
+In `_base.scss`:
+
 ```css
 a {
   color: $link-blue;
+  text-decoration: none;
   &:hover {
     text-decoration: underline;
   }
 }
 ```
 
-Prefix: before:
+They are used prefixed before the selector in nested SASS (demo only).
 
 ```css
 body {
@@ -559,7 +597,7 @@ nav {
 }
 ```
 
-and
+and (demo only):
 
 ```css
 .site-wrap {
@@ -579,7 +617,9 @@ and
 
 ### Media Queries
 
-The birth of responsive design is [this article](http://alistapart.com/article/responsive-web-design). The "grand daddy" of media queries are print stylesheets:
+The birth of responsive design is [this article](http://alistapart.com/article/responsive-web-design). 
+
+The "grand daddy" of media queries are print stylesheets:
 
 ```css
 @media print {
@@ -593,7 +633,7 @@ In `_header.scss`:
 
 ```css
 @media screen and (min-width: $break-two){
-  /* $break-two = 740px */
+  // 740px
   header {
     height: 10vh;
   }
@@ -615,13 +655,16 @@ Test in the browser using the Developer Tools.
 <meta name="viewport" content="width=device-width">
 ```
 
+## Mobile First Design
+
 ### min-width
 
 `@media (min-width: $break-two){ ... }`
 
 Translation:
 
-If the device width is greater than or equal to 760px then do {...}
+If the device width is greater than or equal to 760px then do {...}. 
+
 If the actual device width is 320px this condition will return false.
 
 ### max-width
@@ -630,7 +673,7 @@ If the actual device width is 320px this condition will return false.
 
 Translation:
 
-If the device width is less than or equal to [specified #], then do {...}
+If the device width is less than or equal to 760px then do {...}
 
 The choice between max and min width has profound consquences for the way you write your CSS. Typically, with min-width patterns, you're designing for mobile first. With max-width patterns, you're designing for desktop first.
 
@@ -683,7 +726,7 @@ header {
       font-weight: 400;
       text-shadow: 3px 4px 0 rgba(0, 0, 0, 0.2);
       @media (min-width: $break-two){
-        font-size: 10vw;
+        font-size: 8vw;
         font-weight: 300;
       }
     }

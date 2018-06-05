@@ -220,7 +220,7 @@ Initialize our page with a call to our fetchData function using `null` (we are n
 // const markup = `
 // <ul>
 // ${navItems.map(
-//   navItem => `<li><a href="${navItem.link}">${navItem.label}</a></li>` 
+//   navItem => `<li><a href="${navItem.link}">${navItem.label}</a></li>`
 // ).join('')}
 // </ul>
 // `;
@@ -269,19 +269,18 @@ We can now remove `<script src="js/navitems.js"></script>` and the HTML content 
 
 SASS Features:
 
-* error checking 📌 watch for errors and messages in the terminal if it looks like the CSS is not being processed
+* transpiling and concatenation of multiple css files into a single download via import
+* error checking (📌 watch for errors and messages in the terminal if it looks like the CSS is not displaying)
 * variables
-* imports
-* nesting
-* better structure and more...
+* nesting and simpler media queries
 
-SASS processing can be accomplished using a [variety of desktop apps](https://graygrids.com/best-tools-resources-compile-manage-sass-less-stylus-css-preprocessors/)
+SASS processing can be accomplished using a [variety of desktop apps](https://graygrids.com/best-tools-resources-compile-manage-sass-less-stylus-css-preprocessors/), using node, or in your editor.
 
 ### Method One - Node Sass
 
 [Node-sass](https://www.npmjs.com/package/node-sass) and its [github repo](https://github.com/sass/node-sass)
 
-Use the existing package.json. 
+Use the existing package.json.
 
 In the terminal (you will need to temporarily stop with Control + c):
 
@@ -564,7 +563,7 @@ and (demo only):
 
 ### Media Queries
 
-The birth of responsive design is [this article](http://alistapart.com/article/responsive-web-design). 
+The birth of responsive design is [this article](http://alistapart.com/article/responsive-web-design).
 
 The "grand daddy" of media queries are print stylesheets:
 
@@ -614,7 +613,7 @@ Test in the browser using the Developer Tools.
 }
 ```
 
-If the device width is greater than or equal to 760px then do {...}. 
+If the device width is greater than or equal to 760px then do {...}.
 
 `min-width` adds features to the wide screen.
 
@@ -967,5 +966,3 @@ Suggested clients: Cyberduck, FileZilla
 ## Debug
 
 Sources > Network
-
-

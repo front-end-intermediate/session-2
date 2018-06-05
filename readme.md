@@ -36,7 +36,7 @@ Create the NPM script using the Browser Sync command line documentation:
   },
 ```
 
-Or, on a Windows PC:
+Or, cross platform, for a Mac or Windows PC:
 
 ```js
 "start": "browser-sync start --server \"app\" --files \"app\""
@@ -64,7 +64,9 @@ This time we'll use a new event `window.onhashchange` and `filter()` and a sligh
 
 * examine the `navItems` array in `navItems.js`
 * review the code in `main.js`
-* review using [.filter, .join, and .map](https://github.com/front-end-intermediate/session-1#array-methods) with arrays
+* review [.filter, .join, and .map](https://github.com/front-end-intermediate/session-1#array-methods) with arrays
+
+Note that despite the added content in the `navItems` variable, we are currently only using it for the navigation, not the content.
 
 Begin by selecting the `site-wrap`:
 
@@ -135,9 +137,9 @@ function navigate(){
 }
 ```
 
-Note that arrow functions have an implicit return.
+Note: arrow functions have an implicit return.
 
-Establish a default page and call navigate to set the initial view:
+Establish a default landing page and call navigate to set the initial view:
 
 ```js
 if(!location.hash) {
@@ -145,55 +147,6 @@ if(!location.hash) {
 }
 
 navigate();
-```
-
-Final script:
-
-```js
-const nav = document.getElementById('main');
-const navLinks = nav.querySelector('#nav-links');
-const siteWrap = document.querySelector('.site-wrap');
-
-const markup = `${navItems
-  .map(listItem => `<li><a href="${listItem.link}">${listItem.label}</a></li>`)
-  .join('')}`;
-
-navLinks.innerHTML = markup;
-
-const logo = document.querySelector('#main ul li');
-logo.classList.add('logo');
-logo.firstChild.innerHTML = '<img src="img/logo.svg" />';
-
-
-let topOfNav = nav.offsetTop;
-
-function fixNav() {
-  if(window.scrollY >= topOfNav) {
-    document.body.style.paddingTop = nav.offsetHeight + 'px';
-    document.body.classList.add('fixed-nav');
-  } else {
-    document.body.classList.remove('fixed-nav');
-    document.body.style.paddingTop = 0;
-  }
-}
-
-function navigate(){
-  let newloc = window.location.hash;
-  let newContent = navItems.filter( navItem => navItem.link == newloc );
-  siteWrap.innerHTML = `
-  <h2>${newContent[0].header}</h2>
-  ${newContent[0].content}
-  `;
-}
-
-if(!location.hash) {
-  location.hash = "#watchlist";
-}
-
-navigate();
-
-window.addEventListener('scroll', fixNav);
-window.addEventListener("hashchange", navigate)
 ```
 
 ## JSON
@@ -210,19 +163,19 @@ This is the source for `db.json` at the top level of today's folder.
 
 We could use `db.json` as a static file but lets use it with [JSON Server](https://github.com/typicode/json-server) instead.
 
-Install it using npm (`--save-dev`): 
+Create a new terminal in the editor and install it using npm (`--save-dev`):
 
 ```sh
 npm i json-server --save-dev
 ```
 
-and add this scripts in `package.json`:
+and add this script in `package.json`:
 
 ```js
 "json": "json-server --watch db.json --port 3004"
 ```
 
-We will need to use a second terminal in order to run `npm run json` as our first is tied up with browser-sync.
+We will use a second terminal to run `npm run json` as our first is tied up with browser-sync.
 
 Test it at [http://localhost:3004/content](http://localhost:3004/content).
 
@@ -261,9 +214,19 @@ Note the use of callbacks.
 
 The navigation is still coming from the original `navitems.js` file. Comment it out in the html files and use the json.
 
-Call our fetchData function with null (we are not looking for a page here):
+Initialize our page with a call to our fetchData function using `null` (we are not looking for a page here) and a callback function:
 
 ```js
+// const markup = `
+// <ul>
+// ${navItems.map(
+//   navItem => `<li><a href="${navItem.link}">${navItem.label}</a></li>` 
+// ).join('')}
+// </ul>
+// `;
+
+// navbar.innerHTML = markup;
+
 fetchData(null, function(content) {
   const markup =
     `<ul>
@@ -275,7 +238,7 @@ fetchData(null, function(content) {
 })
 ```
 
-Note that we need to initialize our logo as it doesn't exist until the navigation is built.
+Note that we could initialize our logo here as `logo` doesn't exist until the navigation is built.
 
 ```js
 fetchData(null, function(content) {
@@ -294,7 +257,11 @@ fetchData(null, function(content) {
 })
 ```
 
-We can now remove the content from `index.html`.
+We can now remove `<script src="js/navitems.js"></script>` and the HTML content from `index.html`. Just be sure to leave the empty div required by our scripts:
+
+```html
+<div class="site-wrap"></div>
+```
 
 ## Sass
 
@@ -325,15 +292,23 @@ In the terminal (you will need to temporarily stop with Control + c):
   "sassy": "node-sass --watch \"scss\"  --output \"app/css/\""
 ```
 
-Run the script: 
+Run the script:
 
 `$ npm run sassy`
 
-Note the `scss` directory and copy the contents of styles.css into `styles.scss`.
+Note the `scss` directory and copy the contents of styles.css into `imports/_base.scss`.
+
+Import `_base` into `styles.scss`:
+
+```css
+@import 'imports/base';
+```
 
 Test with a sass variable. Add:
 
-`$badass: #bada55;` as the first line in `styles.scss` and then apply it to the html selector:
+`$badass: #bada55;`
+
+as the first line in `_variables.scss` and then apply it to the html selector:
 
 ```css
 html {
@@ -343,21 +318,29 @@ html {
 }
 ```
 
-Examine the output.
+Import `_variables` into `styles.scss`:
 
-Add mapping to the NPM script:
+```css
+@import 'imports/variables';
+```
+
+Examine the output and inspect the html tag in the developer tool.
+
+Cancel the process with Control-c  and add mapping to the NPM script:
 
 ```js
   "sassy": "node-sass --watch \"scss\"  --output \"app/css/\" --source-map true"
 ```
 
-Cancel the process with Control-c and then run `$ npm run watch-node-sass`. Note the map file.
+and then run `$ npm run sassy`.
+
+Note the new map file and the reference to the SASS in the browser's inspector.
 
 #### Concurrently
 
 As it stands we need multiple terminal tabs to run our npm scripts. To improve this we will install a simple utility called Concurrently and write a 'master' npm script.
 
-Stop all processes running in the terminals with Control-c and dispose of them. 
+Stop all processes running in the terminals with Control-c and dispose of them.
 
 Use the remaining terminal to install and register Concurrently:
 
@@ -412,12 +395,10 @@ Click the `Watch Sass` button at the bottom of the editor.
 
 We are going to retrofit our page for responsive layout using SASS.
 
-Note `_variables.scss` in the `scss > imports` folder
-
 * why are we using an underscore?
 * (See [bootstrap in sass](https://github.com/twbs/bootstrap-sass/tree/master/assets/stylesheets))
 
-Cut the variable `$badass: #bada55;` from `styles.scss` and paste it into the variables file along with:
+In `_variables`:
 
 ```css
 $break-five: 81.25em;
@@ -431,12 +412,6 @@ $break-two: 46.25em;
 $break-one: 22.5em;
 // 360
 ```
-
-Note `_base.scss` in the `scss > imports` folder
-
-* Cut and paste all code from styles.scss
-* Add `@import "imports/variables";` to the top of styles.scss
-* Add `@import "imports/base";` to the top of styles.scss
 
 Note the import statement and how a SASS import differs from a native CSS import such as the one used for the Google font.
 
@@ -513,7 +488,7 @@ Import the new header SASS file into `styles.scss`:
 
 ### Ampersands
 
-Frequently used with pseudo selectors.
+Ampersands are the 'glue' for selectors that are *not* descendant. Frequently used with pseudo selectors.
 
 In `_variables.scss`:
 
@@ -605,7 +580,6 @@ In `_header.scss`:
 
 ```css
 @media screen and (min-width: $break-two){
-  // 740px
   header {
     height: 10vh;
   }
@@ -631,23 +605,35 @@ Test in the browser using the Developer Tools.
 
 ### min-width
 
-`@media (min-width: $break-two){ ... }`
+```css
 
-Translation:
+@media screen and (min-width: $break-two){
+  header {
+    height: 10vh;
+  }
+}
+```
 
 If the device width is greater than or equal to 760px then do {...}. 
 
-If the actual device width is 320px this condition will return false.
+`min-width` adds features to the wide screen.
 
 ### max-width
 
-`@media (max-width: $break-two) { ... }`
+```css
 
-Translation:
+@media screen and (max-width: $break-two){
+  header {
+    height: 10vh;
+  }
+}
+```
 
-If the device width is less than or equal to 760px then do {...}
+If the device width is less than or equal to 760px then do {...}.
 
-The choice between max and min width has profound consquences for the way you write your CSS. Typically, with min-width patterns, you're designing for mobile first. With max-width patterns, you're designing for desktop first.
+`max-width` adds features to the small screen.
+
+The choice between max and min width has profound consquences for the way you write your CSS. Typically, with min-width patterns, you're designing for mobile first. With max-width patterns, you're designing for desktop first. For sanity, you should stick with one or the other and not mix them.
 
 Mobile first design: use `min-width` media queries to add features to larger screens instead of using `max-width` media queries to add features to smaller screens.
 
@@ -661,20 +647,20 @@ In this example you are only targeting devices with a width between 100px and 20
 
 ```css
 header {
-  height: 24vh;
+  height: 10vh;
   background: url(../img/img.jpg) center no-repeat;
   background-size: cover;
   display: flex;
   align-items: center;
   justify-content: center;
   @media(min-width: $break-two){
-    height: 14vh;
-  }
+        height: 20vh;
+      }
   h1 {
-      color: white;
-      font-size: 7vw;
-      font-weight: 400;
-      text-shadow: 3px 4px 0 rgba(0, 0, 0, 0.2);
+    color: white;
+    font-size: 7vw;
+    font-weight: 400;
+    text-shadow: 3px 4px 0 rgba(0, 0, 0, 0.2)
   }
 }
 ```
@@ -683,257 +669,120 @@ If we want to work mobile first then we want to establish the default CSS as tha
 
 ```css
 header {
-  height: 14vh;
+  height: 10vh;
   background: url(../img/img.jpg) center no-repeat;
   background-size: cover;
   display: flex;
   align-items: center;
   justify-content: center;
   @media(min-width: $break-two){
-    height: 24vh;
-  }
-    h1 {
-      color: white;
-      font-size: 7vw;
-      font-weight: 400;
-      text-shadow: 3px 4px 0 rgba(0, 0, 0, 0.2);
-      @media (min-width: $break-two){
-        font-size: 8vw;
-        font-weight: 300;
+        height: 20vh;
       }
+  h1 {
+    color: white;
+    font-size: 7vw;
+    font-weight: 400;
+    text-shadow: 3px 4px 0 rgba(0, 0, 0, 0.2);
+    @media (min-width: $break-two){
+      font-size: 8vw;
+      font-weight: 300;
     }
   }
+}
 ```
 
 Leveraging SASS nesting in your media queries enforces a specific organization of your code. The media queries are grouped together with the element - not in separate files or in separate blocks within your CSS.
 
 ### The Navbar
 
-Move all nav related css into a new partial `_nav.scss` and import.
-
-Start by nesting the nav and ul tags:
-
-```css
-nav {
-  background: #007eb6;
-  width: 100%;
-  transition: all 0.5s;
-  z-index: 1;
-  ul {
-    list-style: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 2.5rem;
-  }
-}
-```
-
-and then extend it to nest everything except the fixed-nav related material:
-
-```css
-nav {
-  background: #007eb6;
-  width: 100%;
-  transition: all 0.5s;
-  z-index: 1;
-  ul {
-    list-style: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 2.5rem;
-  }
-  li {
-    flex: 1;
-    text-align: center;
-  }
-  a {
-    text-decoration: none;
-    display: inline-block;
-    color: white;
-  }
-
-  li.logo img {
-    padding-top: 0.25rem;
-    width: 2.5rem;
-  }
-  li.logo {
-    max-width: 0;
-    overflow: hidden;
-    background: white;
-    transition: all 0.5s;
-    font-weight: 600;
-    font-size: 30px;
-  }
-}
-
-.fixed-nav li.logo {
-  max-width: 500px;
-}
-
-body.fixed-nav nav {
-  position: fixed;
-  top: 0;
-  box-shadow:0 5px 3px rgba(0,0,0,0.1);
-  width: 100%;
-  z-index: 100;
-}
-
-body.fixed-nav .site-wrap {
-  transform: scale(1);
-}
-```
-
-Use the ampersand to further nest the code (see the `.logo img` selector):
-
-```css
-nav {
-  background: #007eb6;
-  width: 100%;
-  transition: all 0.5s;
-  z-index: 1;
-  ul {
-    list-style: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 2.5rem;
-  }
-  li {
-    flex: 1;
-    text-align: center;
-    &.logo {
-      max-width: 0;
-      overflow: hidden;
-      background: white;
-      transition: all 0.5s;
-      font-weight: 600;
-      font-size: 30px;
-    }
-    &.logo img {
-      padding-top: 0.25rem;
-      width: 2.5rem;
-    }
-  }
-  a {
-    text-decoration: none;
-    display: inline-block;
-    color: white;
-  }
-}
-
-.fixed-nav li.logo {
-  max-width: 500px;
-}
-
-body.fixed-nav nav {
-  position: fixed;
-  top: 0;
-  box-shadow:0 5px 3px rgba(0,0,0,0.1);
-  width: 100%;
-  z-index: 100;
-}
-
-body.fixed-nav .site-wrap {
-  transform: scale(1);
-}
-```
-
-Nest the `fixed-nav` using an ampersand _after_ the selector:
-
-```css
-nav {
-  background: #007eb6;
-  width: 100%;
-  transition: all 0.5s;
-  z-index: 1;
-  ul {
-    list-style: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 2.5rem;
-  }
-  li {
-    flex: 1;
-    text-align: center;
-    &.logo {
-      max-width: 0;
-      overflow: hidden;
-      background: white;
-      transition: all 0.5s;
-      font-weight: 600;
-      font-size: 30px;
-      .fixed-nav & {
-        max-width: 500px;
-      }
-    }
-    &.logo img {
-      padding-top: 0.25rem;
-      width: 2.5rem;
-    }
-  }
-  a {
-    text-decoration: none;
-    display: inline-block;
-    color: white;
-  }
-}
-
-body.fixed-nav nav {
-  position: fixed;
-  top: 0;
-  box-shadow:0 5px 3px rgba(0,0,0,0.1);
-  width: 100%;
-  z-index: 100;
-}
-
-body.fixed-nav .site-wrap {
-  transform: scale(1);
-}
-```
-
-Flip the `<ul>` flex direction on small screens vs wide:
-
-```css
-  ul {
-    list-style: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 2.5rem;
-    flex-direction: column;
-    @media screen and (min-width: $break-two) {
-      flex-direction: row;
-    }
-  }
-```
-
-Hide the links initially on small screens while maintaining the flex display on wide:
-
-```css
-  li {
-    flex: 1;
-    text-align: center;
-    display: none;
-    @media screen and (min-width: $break-two) {
-      display: flex;
-    }
-    &.logo {
-      display: block;
-      // max-width: 0;
-      // overflow: hidden;
-      ...
-    }
-    ...
-  }
-...
-```
-
-Make clicking on the logo show the menu on narrow screens:
+Comment out the code responsibe for adding the logo in main.js.
 
 ```js
+// const logo = document.querySelector('#main ul li');
+// logo.classList.add('logo');
+// logo.firstChild.innerHTML = '<img src="img/logo.svg" />';
+```
+
+Add a logo div to the HTML:
+
+`<div class="logo"><img src="img/logo.svg" /></div>`
+
+and check to make sure you can see it (e.g. `navbar.innerHTML = markup;`).
+
+Move any logo related CSS from `_base` to `_nav`.
+
+We moved all nav related css into a new partial `_nav.scss`.
+
+Allow the logo to display only on small screens:
+
+```css
+.logo img {
+  padding-top: 0.25rem;
+  width: 2.5rem;
+}
+.logo {
+  background: white;
+  @media (min-width: $break-two){
+    display:  none;
+  }
+}
+```
+
+And allow the navitems to display only on wide screen:
+
+```css
+  .navitems {
+    display:none;
+    @media (min-width: $break-two){
+      display:block;
+    }
+  }
+```
+
+Temporarily display the navitems on small screens:
+
+```css
+  .navitems {
+    // display:none;
+    @media (min-width: $break-two){
+      display:block;
+    }
+  }
+```
+
+Set the `ul` to display as a row or column depending on browser width using a media query:
+
+```css
+  ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    @media (min-width: $break-two){
+      flex-direction: row;
+      height: 2.5rem;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+```
+
+Format the list items:
+
+```css
+  li {
+    flex: 1;
+    padding: 0.5rem;
+    @media (min-width: $break-two){
+    text-align: center;
+    }
+  }
+```
+
+Rehide the navitems on small screen and code the logo to add a class to the document that we can use to show and hide them.
+
+```js
+const logo = document.querySelector('.logo')
+
 if (document.documentElement.clientWidth <= 740) {
   logo.addEventListener('click', showMenu);
 }
@@ -947,82 +796,14 @@ function showMenu(e) {
 Add to `_nav.scss`:
 
 ```css
-.show ul li {
-    display: block !important;
-  }
-```
-
-## Notes
-
-A working `_nav.scss`:
-
-```css
-nav {
-  background: #007eb6;
-  width: 100%;
-  transition: all 0.5s;
-  z-index: 1;
-  ul {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    @media screen and (min-width: $break-two) {
-      flex-direction: row;
-      align-items: center;
-    }
-  }
-  li {
-    flex: 1;
-    display: none;
-    padding: 0.25rem;
-    @media screen and (min-width: $break-two) {
-      display: flex;
-      justify-content: center;
-    }
-    &.logo {
-      padding: 0;
-      display: flex;
-      background: white;
-      font-size: 30px;
-      font-weight: 600;
-      @media screen and (min-width: $break-two) {
-      max-width: 0;
-      overflow: hidden;
-      transition: all 0.5s;
-      }
-      .fixed-nav & {
-        max-width: 100%;
-      }
-    }
-    &.logo img {
-      padding-top: 0.25rem;
-      width: 2.5rem;
-    }
-  }
-  a {
-    text-decoration: none;
-    display: inline-block;
-    color: white;
-  }
-}
-
-body.fixed-nav nav {
-  position: fixed;
-  top: 0;
-  box-shadow:0 5px 3px rgba(0,0,0,0.1);
-  width: 100%;
-  z-index: 100;
-}
-
-body.fixed-nav .site-wrap {
-  transform: scale(1);
-}
-.show ul li {
+.show .navitems {
   display: block !important;
 }
 ```
 
-## SASS Links
+## Notes
+
+## More SASS Links
 
 * [The SASS Way](http://thesassway.com)
 * [Responsive Design Patterns](https://bradfrost.github.io/this-is-responsive/)

@@ -1,4 +1,5 @@
 const nav = document.getElementById('main');
+const navbar = nav.querySelector('.navItems');
 
 const markup = `
     <ul>
@@ -8,7 +9,7 @@ const markup = `
     </ul>
     `;
 
-nav.innerHTML = markup;
+navbar.innerHTML = markup;
 
 let topOfNav = nav.offsetTop;
 

@@ -1,5 +1,5 @@
 const nav = document.getElementById('main');
-const navbar = nav.querySelector('.navItems');
+const navbar = nav.querySelector('.navitems');
 
 const markup = `
     <ul>

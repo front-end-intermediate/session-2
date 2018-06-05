@@ -231,11 +231,11 @@ Create a new function `fetchData` that takes a hash and callback:
 ```js
 function fetchData(hash, callback) {
   var xhr = new XMLHttpRequest();
-
+  
   xhr.onload = function () {
     callback(JSON.parse(xhr.response));
   };
-
+  
   xhr.open('GET', 'http://localhost:3004/content', true);
   xhr.send();
 }
@@ -290,37 +290,33 @@ fetchData(null, function(content) {
   const logo = document.querySelector('#main ul li');
   logo.classList.add('logo');
   logo.firstChild.innerHTML = '<img src="img/logo.svg" />';
+  
 })
 ```
 
 We can now remove the content from `index.html`.
 
-## NPM node-sass
+## Sass
 
-* [Node Package Manager](https://www.npmjs.com)
-* [SASS](http://sass-lang.com)
-* [node-sass](https://www.npmjs.com/package/node-sass) and its [github repo](https://github.com/sass/node-sass)
-* sass processing can be accomplished using a [variety of desktop apps](https://graygrids.com/best-tools-resources-compile-manage-sass-less-stylus-css-preprocessors/)
+[Sass homepage](http://sass-lang.com)
 
-### Node Package Manager (NPM)
+SASS Features:
 
-* A Note for Windows users:
+* error checking 📌 watch for errors and messages in the terminal if it looks like the CSS is not being processed
+* variables
+* imports
+* nesting
+* better structure and more...
 
-[Microsoft's Nodejs Guidelines](https://github.com/Microsoft/nodejs-guidelines) is full of helpful information.
-
-Of particular note if you are trying to use the `node-sass` npm package is [this entry](https://github.com/Microsoft/nodejs-guidelines/blob/master/windows-environment.md#compiling-native-addon-modules) on compiling modules.
-
-It appears that Windows users need to install [this npm package](https://github.com/nodejs/node-gyp#on-windows) using [elevated permissions](https://blogs.technet.microsoft.com/danstolts/2012/01/how-to-run-powershell-with-elevated-permissions/): `npm install -g node-gyp`.
-
-* A Note for MacOS users:
-
-You should probably install Xcode.
+SASS processing can be accomplished using a [variety of desktop apps](https://graygrids.com/best-tools-resources-compile-manage-sass-less-stylus-css-preprocessors/)
 
 ### Method One - Node Sass
 
-Use the existing package.json.
+[Node-sass](https://www.npmjs.com/package/node-sass) and its [github repo](https://github.com/sass/node-sass)
 
-In the terminal (you will need to temporarily stop node sync with Control + c):
+Use the existing package.json. 
+
+In the terminal (you will need to temporarily stop with Control + c):
 
 1. `$ npm install --save-dev node-sass`
 1. Add a [script](https://github.com/sass/node-sass#usage-1) to the package.json file. e.g.:
@@ -329,7 +325,11 @@ In the terminal (you will need to temporarily stop node sync with Control + c):
   "sassy": "node-sass --watch \"scss\"  --output \"app/css/\""
 ```
 
-Create `scss` directory and copy styles.css as `styles.scss` to it.
+Run the script: 
+
+`$ npm run sassy`
+
+Note the `scss` directory and copy the contents of styles.css into `styles.scss`.
 
 Test with a sass variable. Add:
 
@@ -337,25 +337,15 @@ Test with a sass variable. Add:
 
 ```css
 html {
+  ...
   background: $badass;
   ...
 }
 ```
 
-Compile the css: `$ npm run sassy`
+Examine the output.
 
-Add mapping:
-
-<!--
-
-```css
-  "scripts": {
-    "build-css": "node-sass --include-path scss scss/styles.scss   app/css/styles.css",
-    "sassy": "node-sass --watch \"scss\"  --output \"app/css/\" --source-map true"
-  },
-```
-
--->
+Add mapping to the NPM script:
 
 ```js
   "sassy": "node-sass --watch \"scss\"  --output \"app/css/\" --source-map true"
@@ -367,13 +357,18 @@ Cancel the process with Control-c and then run `$ npm run watch-node-sass`. Note
 
 As it stands we need multiple terminal tabs to run our npm scripts. To improve this we will install a simple utility called Concurrently and write a 'master' npm script.
 
-Stop any processes running in the terminal with Control-c and use the terminal to install and register Concurrently:
+Stop all processes running in the terminals with Control-c and dispose of them. 
+
+Use the remaining terminal to install and register Concurrently:
 
 * `$ npm install concurrently --save-dev`
 
-Add a new script:
+Add some new scripts:
 
-* `"boom!": "concurrently \"npm run start\" \"npm run json\" \"npm run sassy\" "`
+```js
+"boom!": "concurrently \"npm run start\" \"npm run json\" \"npm run sassy\" ",
+"boomlet!": "concurrently \"npm run start\" \"npm run json\" "
+```
 
 Run all processes:
 
@@ -381,46 +376,15 @@ Run all processes:
 
 Note that you will end up with multiple browser tabs by doing this. They are identical.
 
-Here's my final package.json. Yours will differ but the important parts - the scripts and dependencies - should be the same:
-
-```js
-{
-  "name": "session-2",
-  "version": "1.0.0",
-  "description": "## Reading",
-  "main": "index.js",
-  "scripts": {
-    "start": "browser-sync start --server 'app' --files 'app'",
-    "json": "json-server --watch db.json --port 3004",
-    "sassy": "node-sass --watch \"scss\"  --output \"app/css/\" --source-map true",
-    "boom!": "concurrently \"npm run start\" \"npm run json\" \"npm run sassy\" "
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/front-end-intermediate/session-2.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/front-end-intermediate/session-2/issues"
-  },
-  "homepage": "https://github.com/front-end-intermediate/session-2#readme",
-  "devDependencies": {
-    "browser-sync": "^2.24.4",
-    "json-server": "^0.13.0",
-    "node-sass": "^4.9.0"
-  }
-}
-```
-
 ## CSS Preprocessing in the Editor
 
-Most editors will offer the ability do preprocessing and browser refresh.
+Most editors will offer the ability do preprocessing as well as browser refresh.
 
-[Visual Studio Code](https://code.visualstudio.com) offers an array of plug-ins that we can use to perform the same preprocessing function. Note that the use of VS Code will not protect you in the long run from having to have some facility with [NPM](https://marketplace.visualstudio.com/items?itemName=eg2.vscode-npm-script)
+[Visual Studio Code](https://code.visualstudio.com) offers an array of plug-ins that we can use to perform the SASS preprocessing function. VS Code is remarkably flexible and offers a setting for almost anything you could wish for. See the Visual Studio Code [documentation](https://code.visualstudio.com/docs/getstarted/settings) for changing settings.
 
 [Live Sass Compiler](https://marketplace.visualstudio.com/items?itemName=ritwickdey.live-sass) for VS Code.
+
+Quit the `boom!` process and run `boomlet`.
 
 Install Live SASS Compiler and set the _workspace settings_ as shown:
 
@@ -440,25 +404,13 @@ Install Live SASS Compiler and set the _workspace settings_ as shown:
 }
 ```
 
-VS Code is remarkably flexible and offers a setting for almost anything you could wish for. See the Visual Studio Code [documentation](https://code.visualstudio.com/docs/getstarted/settings) for changing settings.
+Note the `.vscode` directory that is created for per project settings.
 
-Test it.
+Click the `Watch Sass` button at the bottom of the editor.
 
 ## SASS
 
 We are going to retrofit our page for responsive layout using SASS.
-
-[Sass homepage](http://sass-lang.com)
-
-[Bootstrap SASS](https://github.com/twbs/bootstrap-sass)
-
-SASS Features:
-
-* error checking 📌 watch for errors and messages in the terminal if it looks like the CSS is not being processed
-* variables
-* imports
-* nesting
-* better structure and more...
 
 Note `_variables.scss` in the `scss > imports` folder
 
@@ -637,7 +589,7 @@ and (demo only):
 
 ### Media Queries
 
-The birth of responsive design is [this article](http://alistapart.com/article/responsive-web-design).
+The birth of responsive design is [this article](http://alistapart.com/article/responsive-web-design). 
 
 The "grand daddy" of media queries are print stylesheets:
 
@@ -683,7 +635,7 @@ Test in the browser using the Developer Tools.
 
 Translation:
 
-If the device width is greater than or equal to 760px then do {...}.
+If the device width is greater than or equal to 760px then do {...}. 
 
 If the actual device width is 320px this condition will return false.
 
@@ -1230,3 +1182,9 @@ Test to see if your account is active by entering this URL into a new browser ta
 Ensure you are using sFTP (port 22).
 
 Suggested clients: Cyberduck, FileZilla
+
+## Debug
+
+Sources > Network
+
+

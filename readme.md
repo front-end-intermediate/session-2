@@ -4,7 +4,7 @@
 
 1. Bob on [Template Strings](https://youtu.be/INPob8yPyBo)
 1. Bob on DOM scripting parts [one](https://youtu.be/0ik6X4DJKCc), [two](https://youtu.be/mPd2aJXCZ2g), [three](https://youtu.be/wK2cBMcDTss) and [four](https://youtu.be/i37KVt_IcXw).  Please make every effort to follow along on your computer.
-1. If you want more information on navigating with JSON and JavaScript watch [this video](https://www.youtube.com/watch?v=xN9QxPtK2LM). The source code for it is [here](https://github.com/curran/screencasts/tree/gh-pages/navigation).
+1. If you want more information on navigating with JSON and JavaScript watch [this video](https://www.youtube.com/watch?v=xN9QxPtK2LM). The source code for the lessons is [here](https://github.com/curran/screencasts/tree/gh-pages/navigation).
 
 ## Homework
 
@@ -16,7 +16,7 @@ We will be again using [Browser Sync](https://www.browsersync.io) as our sample 
 
 ```sh
 npm init -y
-npm install browser-sync --save-dev
+npm i browser-sync --save-dev
 ```
 
 * `npm init` creates `package.json`
@@ -104,9 +104,28 @@ function navigate(){
 }
 ```
 
+Return values stops the execution of a function and return a value from that function.
+
+Suppose we wanted a variable that made one of our objects globally available:
+
+```js
+function navigate(){
+  let newloc = window.location.hash;
+
+  let newContent = navItems.filter(
+    function(navItem){
+      return navItem.link == newloc
+    })
+  return newContent;
+  console.log(newContent[0].header)
+}
+
+let test = navigate()
+```
+
 Filter selects an entry in navItems based on its hash (`newLoc`) and saves it into a const variable `newContent`.
 
-Finally, set the innerHTML of the siteWrap to content from the resulting array:
+Finally, set the innerHTML of the `siteWrap` to content from the resulting array:
 
 ```js
 function navigate(){
@@ -177,9 +196,30 @@ and add this script in `package.json`:
 
 We will use a second terminal to run `npm run json` as our first is tied up with browser-sync.
 
-Test it at [http://localhost:3004/content](http://localhost:3004/content).
+Test it at:
 
-Create a new function `fetchData` that takes a hash and callback:
+[http://localhost:3004](http://localhost:3004)
+
+[http://localhost:3004/content](http://localhost:3004/content).
+
+Create a new function `fetchData`:
+
+```js
+function fetchData() {
+  var xhr = new XMLHttpRequest();
+  
+  xhr.onload = function () {
+    console.log(JSON.parse(xhr.response));
+  };
+  
+  xhr.open('GET', 'http://localhost:3004/content', true);
+  xhr.send();
+}
+```
+
+Test it by calling the function from the browser console with `fetchData()`.
+
+Add a hash and `callback`:
 
 ```js
 function fetchData(hash, callback) {
@@ -208,6 +248,16 @@ function navigate() {
     `;
   })
 }
+```
+
+Add an image:
+
+```js
+  siteWrap.innerHTML = `
+  <h2>${newContent[0].header}</h2>
+  ${newContent[0].image}
+  ${newContent[0].content}
+  `;
 ```
 
 Note the use of callbacks.
@@ -297,6 +347,8 @@ Run the script:
 
 Note the `scss` directory and copy the contents of styles.css into `imports/_base.scss`.
 
+(See [bootstrap in sass](https://github.com/twbs/bootstrap-sass/tree/master/assets/stylesheets))
+
 Import `_base` into `styles.scss`:
 
 ```css
@@ -358,6 +410,22 @@ Run all processes:
 
 Note that you will end up with multiple browser tabs by doing this. They are identical.
 
+## SASS Nesting
+
+Note the import statement and how a SASS import differs from a native CSS import such as the one used for the Google font.
+
+Create a new `_nav.scss` file in `imports` and cut and paste the navigation CSS from `_base.scss` into it.
+
+Import it into `styles.scss` so it now contains:
+
+```css
+@import "imports/variables";
+@import "imports/base";
+@import "imports/nav";
+```
+
+Nest the contents of `_nav.scss`.
+
 ## CSS Preprocessing in the Editor
 
 Most editors will offer the ability do preprocessing as well as browser refresh.
@@ -389,42 +457,6 @@ Install Live SASS Compiler and set the _workspace settings_ as shown:
 Note the `.vscode` directory that is created for per project settings.
 
 Click the `Watch Sass` button at the bottom of the editor.
-
-## SASS
-
-We are going to retrofit our page for responsive layout using SASS.
-
-* why are we using an underscore?
-* (See [bootstrap in sass](https://github.com/twbs/bootstrap-sass/tree/master/assets/stylesheets))
-
-In `_variables`:
-
-```css
-$break-five: 81.25em;
-// 1300px
-$break-four: 71.25em;
-// 1140
-$break-three: 61.25em;
-// 980
-$break-two: 46.25em;
-// 740
-$break-one: 22.5em;
-// 360
-```
-
-Note the import statement and how a SASS import differs from a native CSS import such as the one used for the Google font.
-
-Create a new `_nav.scss` file in `imports` and cut and paste the navigation CSS from `_base.scss` into it.
-
-Import it into `styles.scss` so it now contains:
-
-```css
-@import "imports/variables";
-@import "imports/base";
-@import "imports/nav";
-```
-
-Nest the contents of `_nav.scss`.
 
 <!-- ### Aside - CSS native variables
 
@@ -563,6 +595,21 @@ and (demo only):
 
 ### Media Queries
 
+In `_variables`:
+
+```css
+$break-five: 81.25em;
+// 1300px
+$break-four: 71.25em;
+// 1140
+$break-three: 61.25em;
+// 980
+$break-two: 46.25em;
+// 740
+$break-one: 22.5em;
+// 360
+```
+
 The birth of responsive design is [this article](http://alistapart.com/article/responsive-web-design).
 
 The "grand daddy" of media queries are print stylesheets:
@@ -605,8 +652,7 @@ Test in the browser using the Developer Tools.
 ### min-width
 
 ```css
-
-@media screen and (min-width: $break-two){
+@media (min-width: $break-two){
   header {
     height: 10vh;
   }
@@ -615,13 +661,13 @@ Test in the browser using the Developer Tools.
 
 If the device width is greater than or equal to 760px then do {...}.
 
-`min-width` adds features to the wide screen.
+* `min-width` adds features to the *wide* screen
 
 ### max-width
 
 ```css
 
-@media screen and (max-width: $break-two){
+@media (max-width: $break-two){
   header {
     height: 10vh;
   }
@@ -630,19 +676,21 @@ If the device width is greater than or equal to 760px then do {...}.
 
 If the device width is less than or equal to 760px then do {...}.
 
-`max-width` adds features to the small screen.
+* `max-width` adds features to the *small* screen
 
 The choice between max and min width has profound consquences for the way you write your CSS. Typically, with min-width patterns, you're designing for mobile first. With max-width patterns, you're designing for desktop first. For sanity, you should stick with one or the other and not mix them.
 
 Mobile first design: use `min-width` media queries to add features to larger screens instead of using `max-width` media queries to add features to smaller screens.
 
-### min / max width
+### Aside: min / max width
 
 `@media screen and (min-width:100px) and (max-width:200px) { ... }`
 
 In this example you are only targeting devices with a width between 100px and 200px. You shouldn't need to do this often.
 
 ### Nested Media Query (SASS)
+
+Use 10vh for small screens and 20vh for wide screens with a min-width breakpoint:
 
 ```css
 header {
@@ -694,7 +742,7 @@ Leveraging SASS nesting in your media queries enforces a specific organization o
 
 ### The Navbar
 
-Comment out the code responsibe for adding the logo in main.js.
+Comment out the code responsible for adding the logo in main.js.
 
 ```js
 // const logo = document.querySelector('#main ul li');
@@ -702,13 +750,18 @@ Comment out the code responsibe for adding the logo in main.js.
 // logo.firstChild.innerHTML = '<img src="img/logo.svg" />';
 ```
 
+Move any logo related CSS from `_base` to `_nav`.
+
 Add a logo div to the HTML:
 
-`<div class="logo"><img src="img/logo.svg" /></div>`
+```html
+  <nav id="main">
+      <div class="logo"><img src="img/logo.svg" /></div>
+    <div class="navitems"></div>
+  </nav>
+```
 
-and check to make sure you can see it (e.g. `navbar.innerHTML = markup;`).
-
-Move any logo related CSS from `_base` to `_nav`.
+Comment out the logo related css and check to make sure you can see it (e.g. `navbar.innerHTML = markup;`).
 
 We moved all nav related css into a new partial `_nav.scss`.
 
@@ -731,9 +784,9 @@ And allow the navitems to display only on wide screen:
 
 ```css
   .navitems {
-    display:none;
+    display: none;
     @media (min-width: $break-two){
-      display:block;
+      display: block;
     }
   }
 ```
@@ -742,9 +795,9 @@ Temporarily display the navitems on small screens:
 
 ```css
   .navitems {
-    // display:none;
+    // display: none;
     @media (min-width: $break-two){
-      display:block;
+      display: block;
     }
   }
 ```
@@ -772,7 +825,7 @@ Format the list items:
     flex: 1;
     padding: 0.5rem;
     @media (min-width: $break-two){
-    text-align: center;
+      text-align: center;
     }
   }
 ```
@@ -782,9 +835,7 @@ Rehide the navitems on small screen and code the logo to add a class to the docu
 ```js
 const logo = document.querySelector('.logo')
 
-if (document.documentElement.clientWidth <= 740) {
-  logo.addEventListener('click', showMenu);
-}
+logo.addEventListener('click', showMenu);
 
 function showMenu(e) {
   document.body.classList.toggle('show');
@@ -797,6 +848,49 @@ Add to `_nav.scss`:
 ```css
 .show .navitems {
   display: block !important;
+}
+```
+
+Close the navigation when one of the items is selected:
+
+```js
+function showMenu(e) {
+  document.body.classList.toggle('show');
+  const navLinks = document.querySelectorAll('.navitems a');
+  navLinks.forEach(link => link.addEventListener('click', dump))
+  console.log(navLinks)
+  e.preventDefault();
+}
+
+function dump(){
+  document.body.classList.toggle('show');
+}
+```
+
+### CSS Animation
+
+```css
+  .navitems {
+    // display:none;
+
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.5s;
+
+    @media (min-width: $break-two){
+      // display:block;
+
+      max-height: 2.5rem;
+      overflow: hidden;
+    }
+  }
+```
+
+```css
+.show .navitems {
+  // display: block !important;
+
+  max-height: 800px;
 }
 ```
 

@@ -491,4 +491,207 @@ window.addEventListener('load', getData);
 Its at this point where we realize that getting and setting these values could get quite long and that there is probably a better way. But that's OK - most scripts start out rough and then are refined as you proceed. 
 
 
+```js
+;(function (window, document, undefined) {
+	'use strict';
+	var forms = document.querySelectorAll('form');
 
+	var loadData = function (form) {
+
+		// Get data
+		var formData = localStorage.getItem('formData-' + form.id);
+		if (!formData) return;
+
+		formData = JSON.parse(formData);
+
+		// Loop through formData object
+		for (var data in formData) {
+			// Get form field
+			var field = form.querySelector('[name="' + data + '"]');
+			if (!field) continue;
+
+			if (field.type === 'checkbox') {
+				field.checked = formData[data];
+			} else if (field.type === 'radio') {
+				var radios = Array.from(form.querySelectorAll('input[type="radio"]'));
+				radios.forEach(function (radio) {
+					if (radio.value === formData[data]) {
+						radio.checked = true;
+					}
+				});
+			} else {
+				field.value = formData[data];
+			}
+		}
+	};
+
+	var saveData = function (event) {
+		// Get data
+		var id = event.target.closest('form').id;
+		if (!id) return;
+
+		var formData = localStorage.getItem('formData-' + id);
+		formData = formData ? JSON.parse(formData) : {};
+
+		if (event.target.type === 'checkbox') {
+			formData[event.target.name] = event.target.checked;
+		} else {
+			formData[event.target.name] = event.target.value;
+		}
+		localStorage.setItem('formData-' + id, JSON.stringify(formData));
+	};
+
+	// Reset formData to empty object
+	var resetData = function (event) {
+		var id = event.target.closest('form').id;
+		if (!id) return;
+
+		localStorage.setItem('formData-' + id, JSON.stringify({}));
+	};
+
+	// Load data from localStorage
+	forms.forEach(function (form) {
+		loadData(form);
+	});
+
+	// Listen for input changes
+	document.addEventListener('input', saveData, false);
+
+	// Listen for submit event
+	document.addEventListener('submit', resetData, false);
+})(window, document);
+```
+
+
+```html
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+	<title>Autosave</title>
+
+	<meta charset="utf-8">
+
+	<!-- Force latest available IE rendering engine and Chrome Frame (if installed) -->
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+	<!-- Mobile Screen Resizing -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+	<h1>Autosave</h1>
+
+	<form class="save-me" id="save-me">
+
+		<label for="name">Name</label>
+		<input type="text" name="name" id="name">
+
+		<label for="address">Address</label>
+		<input type="text" name="address" id="address">
+
+		<label for="email">Email</label>
+		<input type="email" name="email" id="email">
+
+		<label for="hear-about-us">How did you hear about us?</label>
+		<select name="hear-about-us" id="hear-about-us">
+			<option value=""></option>
+			<option value="google">Google</option>
+			<option value="referral">Referred by a Friend</option>
+			<option value="tv">A TV Ad</option>
+			<option value="radio">A Radio Ad</option>
+		</select>
+
+		<label id="more">Additional thoughts?</label>
+		<textarea name="more" id="more"></textarea>
+
+		<p><strong>Do you agree to our terms of service?</strong></p>
+		<label class="label-plain">
+			<input type="radio" name="tos" value="yes">
+			Yes
+		</label>
+		<label class="label-plain">
+			<input type="radio" name="tos" value="no">
+			No
+		</label>
+
+		<p><strong>Pick your favorite super heros.</strong></p>
+
+		<label class="label-plain">
+			<input type="checkbox" name="spiderman">
+			Spiderman
+		</label>
+
+		<label class="label-plain">
+			<input type="checkbox" name="wonderwoman">
+			Wonder Woman
+		</label>
+
+		<label class="label-plain">
+			<input type="checkbox" name="blackpanther">
+			Black Panther
+		</label>
+
+		<p><button type="submit">Submit</button></p>
+
+	</form>
+
+	<form class="save-me" id="save-me-twice">
+
+		<label for="name">Name</label>
+		<input type="text" name="name" id="name">
+
+		<label for="address">Address</label>
+		<input type="text" name="address" id="address">
+
+		<label for="email">Email</label>
+		<input type="email" name="email" id="email">
+
+		<label for="hear-about-us">How did you hear about us?</label>
+		<select name="hear-about-us" id="hear-about-us">
+			<option value=""></option>
+			<option value="google">Google</option>
+			<option value="referral">Referred by a Friend</option>
+			<option value="tv">A TV Ad</option>
+			<option value="radio">A Radio Ad</option>
+		</select>
+
+		<label id="more">Additional thoughts?</label>
+		<textarea name="more" id="more"></textarea>
+
+		<p><strong>Do you agree to our terms of service?</strong></p>
+		<label class="label-plain">
+			<input type="radio" name="tos" value="yes">
+			Yes
+		</label>
+		<label class="label-plain">
+			<input type="radio" name="tos" value="no">
+			No
+		</label>
+
+		<p><strong>Pick your favorite super heros.</strong></p>
+
+		<label class="label-plain">
+			<input type="checkbox" name="spiderman">
+			Spiderman
+		</label>
+
+		<label class="label-plain">
+			<input type="checkbox" name="wonderwoman">
+			Wonder Woman
+		</label>
+
+		<label class="label-plain">
+			<input type="checkbox" name="blackpanther">
+			Black Panther
+		</label>
+
+		<p><button type="submit">Submit</button></p>
+
+	</form>
+
+	<script src="js/script.js"></script>
+</body>
+</html>
+```

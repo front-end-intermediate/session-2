@@ -4,6 +4,8 @@ We'll learn how to use `localStorage` and `sessionStorage` to store data nativel
 
 These browser APIs let you do full, real page reloads while maintaining state and user data. They’re great for enhancing the user experience.
 
+Take a moment to add a new script in package.json that targets the autosave directory.
+
 ## localStorage and sessionStorage
 
 There are two browser APIs you can use to save data natively in the browser: `localStorage` and `sessionStorage`. They work mostly the same way, with a few notable differences.

@@ -1,8 +1,10 @@
-# II - DOM Manipulation
+# II - DOM Manipulation, AJAX and LocalStorage
 
 ## Homework
 
 1. Review the notes below, paying particular attention to and researching anything that was unclear to you in class.
+1. Using the review below, add multiple sections to the page of your own choosing and with your own api key (see session one notes)
+1. Prepare and begin working on the exercise outlined in the second section of this exercise (local storage api)
 
 ## NPM Manifests
 
@@ -17,7 +19,7 @@ npm i browser-sync --save-dev
 * `npm install browser-sync` installs [Browser Sync](https://www.browsersync.io) into a new `node_modules` folder
 * `--save-dev` adds the software to a list of development dependancies in the manifest
 
-### Editing package.json
+Edit `package.json`:
 
 * Browser Sync [Command Line (CLI) documentation](https://www.browsersync.io/docs/command-line)
 * [Github Repo](https://github.com/BrowserSync/browser-sync)
@@ -29,14 +31,6 @@ Create the NPM script using the Browser Sync command line documentation:
     "start": "browser-sync start --server 'app' --files 'app'"
   },
 ```
-
-Or, cross platform, for a Mac or Windows PC:
-
-```js
-"start": "browser-sync start --server \"app\" --files \"app\""
-```
-
-Note: Windows users should check out Microsoft's [Nodejs Guidelines](https://github.com/Microsoft/nodejs-guidelines).
 
 And run the process:
 

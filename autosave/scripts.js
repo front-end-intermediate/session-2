@@ -1,44 +1,62 @@
 // Your code goes here...
-
+var log = console.log;
 const formElem = document.getElementById('save-me');
 var formElems = formElem.querySelectorAll('input');
 var faves = [];
 var dataToSave = [];
 
 var saveData = function(){
+  var id = formElem.id;
+  var formData = localStorage.getItem('formData-' + id);
+  formData = formData ? JSON.parse(formData) : {};
   
-  if(event.target.id){
-    var elem = event.target.id;
-    var someData = event.target.value;
-  } else if (event.target.type == 'radio'){
-    var elem = event.target.name;
-    var someData = event.target.value;
-  } else if (event.target.type == 'checkbox'){
-    var elem = 'faves';
-    faves.push(event.target.name)
-    var someData = faves;
-  }
-  
-  var dataKey = elem;
-  var inputData = JSON.stringify(someData);
-  
-  localStorage.setItem(dataKey, inputData);
-}
-
-// var saveData = function(key, data){
-//   console.log('hi')
-// }
-
-var getData = function(){
-  var nameItem = JSON.parse(localStorage.getItem('name'));
-  if (nameItem) {
-    document.querySelector('#name').value = nameItem;
+  if (event.target.type === 'checkbox') {
+    formData[event.target.name] = event.target.checked;
   } else {
-    document.querySelector('#name').placeholder = 'Please enter a name';
-  }
+    formData[event.target.name] = event.target.value;
+	}
+  localStorage.setItem('formData-' + id, JSON.stringify(formData));
 }
+
+
+var getData = function () {
+	var formData = localStorage.getItem('formData-' + formElem.id);
+  formData = JSON.parse(formData);
+  
+  for (var data in formData) {
+    var field = formElem.querySelector('[name="' + data + '"]');
+    
+    if (field.type === 'checkbox') {
+      field.checked = formData[data];
+    }
+    
+    else if (field.type === 'radio') {
+      var radios = Array.from(formElem.querySelectorAll('input[type="radio"]'));
+      radios.forEach(function (radio) {
+        if (radio.value === formData[data]) {
+          radio.checked = true;
+        }
+      });
+    }
+
+    else {
+      field.value = formData[data];
+    }
+  }
+
+  log(formData)
+  
+}
+
+// Reset formData to empty object
+var resetData = function (event) {
+	var id = formElem.id;
+	localStorage.setItem('formData-' + id, JSON.stringify({}));
+};
 
 window.addEventListener('load', getData);
 formElem.addEventListener('input', saveData);
-// formElemsArr = Array.from(formElems).forEach.addEventListener('blur', saveData);
-// window.addEventListener('load', getData);
+
+// Listen for submit event
+document.addEventListener('submit', resetData, false);
+

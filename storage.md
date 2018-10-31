@@ -4,8 +4,6 @@ We'll learn how to use `localStorage` and `sessionStorage` to store data nativel
 
 These browser APIs let you do full, real page reloads while maintaining state and user data. They’re great for enhancing the user experience.
 
-For this week’s projects, you’ll use browser storage to track progress across a multi-page form, and display a progress bar to track the user’s progress. You also setup some shopping cart filters to narrow down a set of products.
-
 ## localStorage and sessionStorage
 
 There are two browser APIs you can use to save data natively in the browser: `localStorage` and `sessionStorage`. They work mostly the same way, with a few notable differences.
@@ -32,26 +30,15 @@ var data = localStorage.getItem('myDataKey');
 localStorage.removeItem('myDatakey');
 ```
 
-Your data must be a string. If you try to store an array or object, you’ll get back a string instead:
+Note the Application pane in the browser tools:
 
-```js
-var dinner = {
-    main: 'lasagna',
-    dessert: 'parfait',
-    drink: 'Red Wine'
-};
+![Image of browser inspector](other/app.png)
 
-// Save dinner to localStorage
-localStorage.setItem('dinnerOrder', dinner);
-
-// Get dinner
-// returns "[object Object]"
-localStorage.getItem('dinnerOrder');
-```
+You can right click on the localStorage item (`http://127.0.0.1:5500` in the image) to clear the storage.
 
 ### sessionStorage
 
-The sessionStorage API works just like localStorage, except the data is cleared when the browser session ends. If the user closes the browser or opens a new tab to the same page, that’s generally a new session.
+The sessionStorage API works just like localStorage, except the data is cleared when the browser session ends. If the user closes the browser or opens a new tab to the same page, that’s a new session.
 
 ```js
 // Store data
@@ -65,13 +52,34 @@ var tempData = sessionStorage.getItem('myTempDataKey');
 sessionStorage.removeItem('myTempDatakey');
 ```
 
+Your data must be a string. If you try to store an array or object, you’ll get back a string instead.
+
+This will not work:
+
+```js
+var dinner = {
+    main: 'lasagna',
+    dessert: 'parfait',
+    drink: 'Red Wine'
+};
+
+// Save dinner to localStorage
+localStorage.setItem('dinnerOrder', dinner);
+
+// Get dinner
+// returns "[object Object]" - a string, not an object
+localStorage.getItem('dinnerOrder');
+```
+
 ## Storing arrays and objects
 
-Data stored with the browser storage APIs must be a string, so how do you save arrays and objects or data?
+Data stored in storage APIs must be a string, but you'll typically be working with arrays and objects.
 
-You can convert arrays and objects to strings (and then transform them back) using `JSON.stringify()`. This allows you to store multiple values as a single item.
+You convert arrays and objects to strings using `JSON.stringify()`. This allows you to store multiple values as a single item.
 
-The JSON.stringify() method converts objects into strings.
+The `JSON.stringify()` method converts objects into strings.
+
+This works:
 
 ```js
 var dinner = {
@@ -82,6 +90,10 @@ var dinner = {
 
 // Save data to local storage
 localStorage.setItem('dinnerOrder', JSON.stringify(dinner));
+
+// Get dinner
+// doesn't return "[object Object]" - but a string that looks like an object
+localStorage.getItem('dinnerOrder');
 ```
 
 It works with arrays, too.
@@ -96,7 +108,7 @@ localStorage.setItem('drinkOptions', JSON.stringify(drinks));
 
 ### JSON.parse
 
-The JSON.parse method converts stringified JSON back into an object or array.
+The `JSON.parse` method converts stringified JSON back into an object or array.
 
 ```js
 // Get data from local storage
@@ -104,27 +116,27 @@ var savedDinner = JSON.parse(localStorage.getItem('dinnerOrder'));
 var savedDrinks = JSON.parse(localStorage.getItem('drinkOptions'));
 ```
 
-If there is no saved entry in localStorage (or sessionStorage), calling JSON.parse() with null will throw an error. As a result, it’s a good idea to check that the item exists first:
+If there is no saved entry in localStorage (or sessionStorage), calling `JSON.parse()` with null will throw an error. As a result, it’s often a good idea to check that the item exists first:
 
 ```js
 // Get data
-var savedLunch = localStorage.getItem('lunchOrder');
+var savedDinner = localStorage.getItem('dinnerOrder');
 
 // If there's data, convert it back to an object
-if (data) {
-    data = JSON.parse(data);
+if (savedDinner) {
+    savedDinner = JSON.parse(savedDinner);
 }
 ```
 
-## Storage Limits
+## A Note on Storage Limits
 
 Browsers provide differing levels of storage space for localStorage and sessionStorage, ranging from as little as 2mb up to unlimited.
 
-To make things more confusing, some browsers limit both localStorage and sessionStorage, while others do not restrict sessionStorage size. Not doing so is what’s in the W3C standard, but not all browsers historically adhered to it.
+To make things more confusing, some browsers limit both localStorage and sessionStorage, while others do not restrict sessionStorage size. Not doing so is what’s in the W3C standard, but not all browsers adhered to it.
 
 For browsers with a maximum storage limit, this amount is a total allowable amount of data, not just a max for your specific site or web app. Accordingly, you should try to reduce the overall footprint of your data as much as possible.
 
-## Expiring localStorage data
+<!-- ## Expiring localStorage data
 
 Unlike cookies, localStorage does not have a native method for expiring data. It’s kept in storage until you or the user explicitly delete it.
 
@@ -261,7 +273,7 @@ For four weeks, you’d do this:
 ```js
 // 4 Weeks =  1000ms * 60s * 60m * 24h * 7 days * 4
 var fourWeeks = 1000 * 60 * 60 * 24 * 7 * 4;
-```
+``` -->
 
 ## EXERCISE
 
@@ -490,6 +502,245 @@ window.addEventListener('load', getData);
 
 Its at this point where we realize that getting and setting these values could get quite long and that there is probably a better way. But that's OK - most scripts start out rough and then are refined as you proceed. 
 
+Let's unify the storage objects by prefixing them with the form's id.
+
+Because we are going to be using `console.log` a lot more let's shorten it:
+
+```js
+var log = console.log;
+```
+
+We'll use the id for the local storage key name:
+
+```js
+var saveData = function(){
+  var id = formElem.id;
+	log(id);
+
+	localStorage.setItem('formData-' + id, JSON.stringify(formData));
+}
+```
+
+Before we start recording the input data we will get any pre-existing data:
+
+```js
+var saveData = function(){
+  var id = formElem.id;
+	var formData = localStorage.getItem('formData-' + id);
+	log(formData)
+
+	localStorage.setItem('formData-' + id, JSON.stringify(formData));
+}
+```
+
+Now, because it is possible that the form data is empty we will use a ternary operator (rather than an if statement) to set formData to either the existing data or just an empty object:
+
+```js
+var saveData = function(){
+  var id = formElem.id;
+  var formData = localStorage.getItem('formData-' + id);
+  formData = formData ? JSON.parse(formData) : {};
+  log(formData)
+  
+	localStorage.setItem('formData-' + id, JSON.stringify(formData));
+}
+```
+
+Finally, let's refactor the code that works with the checkboxes:
+
+```js
+var saveData = function(){
+  var id = formElem.id;
+  var formData = localStorage.getItem('formData-' + id);
+  formData = formData ? JSON.parse(formData) : {};
+  log(formData)
+
+  if (event.target.type === 'checkbox') {
+    formData[event.target.name] = event.target.checked;
+  } else {
+    formData[event.target.name] = event.target.value;
+	}
+		localStorage.setItem('formData-' + id, JSON.stringify(formData));
+}
+```
+
+Let's look at the getData function.
+
+Start by getting the dta from local storage:
+
+```js
+var getData = function () {
+	var formData = localStorage.getItem('formData-' + formElem.id);
+	log(formData)
+}
+```
+
+Parse the JSON:
+
+```js
+var getData = function () {
+	var formData = localStorage.getItem('formData-' + formElem.id);
+	formData = JSON.parse(formData);
+	log(formData)
+}
+```
+
+Now formData is an object. We will use a `for ... in` loop to work with it:
+
+```js
+var getData = function () {
+	var formData = localStorage.getItem('formData-' + formElem.id);
+  formData = JSON.parse(formData);
+  
+  for (var data in formData) {
+    log(data)
+	}
+}
+```
+
+Note the name attributes on the form elements. We will loop through setting field by using an attribute selector, e.g.:
+
+```js
+[name="tos"]
+```
+
+```js
+var getData = function () {
+	var formData = localStorage.getItem('formData-' + formElem.id);
+  formData = JSON.parse(formData);
+  
+  for (var data in formData) {
+    var field = formElem.querySelector('[name="' + data + '"]'); // NEW
+    log(field)
+	}
+}
+```
+
+The checkboxes are a special case. CHeckboxes have a simple property - `checked` - which is either true or false.
+
+We will include any checkbox in our loop and set the formData with the name of the check box to the value of checked:
+
+```js
+var getData = function () {
+	var formData = localStorage.getItem('formData-' + formElem.id);
+  formData = JSON.parse(formData);
+  
+  for (var data in formData) {
+    var field = formElem.querySelector('[name="' + data + '"]');
+
+    if (field.type === 'checkbox') {
+      field.checked = formData[data];
+    }
+	log(formData)
+  }
+```
+
+Now, about those pesky radio buttons. 
+
+Let's check to see if we are dealing with a radio button and, if so, create a new array `radios` so we can run a `forEach` on them. We'll use an inner `if` statement to set the checked value to true.
+
+```js
+var getData = function () {
+	var formData = localStorage.getItem('formData-' + formElem.id);
+  formData = JSON.parse(formData);
+  
+  for (var data in formData) {
+    var field = formElem.querySelector('[name="' + data + '"]');
+    
+    if (field.type === 'checkbox') {
+      field.checked = formData[data];
+    }
+    
+    if (field.type === 'radio') {
+      var radios = Array.from(formElem.querySelectorAll('input[type="radio"]'));
+      radios.forEach(function (radio) {
+        if (radio.value === formData[data]) {
+          radio.checked = true;
+        }
+      });
+    }
+    log(formData)
+  }
+```
+
+We have one more condition to account for. if the field type is not a checkbox or a radio button it must be a field.
+
+We'll use `else if` for the radios:
+
+```js
+var getData = function () {
+	var formData = localStorage.getItem('formData-' + formElem.id);
+  formData = JSON.parse(formData);
+  
+  for (var data in formData) {
+    var field = formElem.querySelector('[name="' + data + '"]');
+    
+    if (field.type === 'checkbox') {
+      field.checked = formData[data];
+    }
+    
+    else if (field.type === 'radio') { // NEW
+      var radios = Array.from(formElem.querySelectorAll('input[type="radio"]'));
+      radios.forEach(function (radio) {
+        if (radio.value === formData[data]) {
+          radio.checked = true;
+        }
+      });
+    }
+    log(formData)
+  }
+```
+
+And add a final `else` clause for everything else (the form fields):
+
+```js
+var getData = function () {
+	var formData = localStorage.getItem('formData-' + formElem.id);
+  formData = JSON.parse(formData);
+  
+  for (var data in formData) {
+    var field = formElem.querySelector('[name="' + data + '"]');
+    
+    if (field.type === 'checkbox') {
+      field.checked = formData[data];
+    }
+    
+    else if (field.type === 'radio') {
+      var radios = Array.from(formElem.querySelectorAll('input[type="radio"]'));
+      radios.forEach(function (radio) {
+        if (radio.value === formData[data]) {
+          radio.checked = true;
+        }
+      });
+    }
+
+    else {
+      field.value = formData[data];
+    }
+  }
+
+  log(formData)
+  }
+```
+
+Add an event listener for when the user hits the submit button. This will remove local storage.
+
+```js
+// Listen for submit event
+document.addEventListener('submit', resetData, false);
+```
+
+Create the resetData function:
+
+
+```js
+// Reset formData to empty object
+var resetData = function (event) {
+	var id = formElem.id;
+	localStorage.setItem('formData-' + id, JSON.stringify({}));
+};
+	```
+
 
 ```js
 ;(function (window, document, undefined) {
@@ -497,7 +748,6 @@ Its at this point where we realize that getting and setting these values could g
 	var forms = document.querySelectorAll('form');
 
 	var loadData = function (form) {
-
 		// Get data
 		var formData = localStorage.getItem('formData-' + form.id);
 		if (!formData) return;

@@ -2,9 +2,9 @@
 
 ## Reading
 
-1. Bob on [Template Strings](https://youtu.be/INPob8yPyBo)
+<!-- 1. Bob on [Template Strings](https://youtu.be/INPob8yPyBo)
 1. Bob on DOM scripting parts [one](https://youtu.be/0ik6X4DJKCc), [two](https://youtu.be/mPd2aJXCZ2g), [three](https://youtu.be/wK2cBMcDTss) and [four](https://youtu.be/i37KVt_IcXw).  Please make every effort to follow along on your computer.
-1. If you want more information on navigating with JSON and JavaScript watch [this video](https://www.youtube.com/watch?v=xN9QxPtK2LM). The source code for the lessons is [here](https://github.com/curran/screencasts/tree/gh-pages/navigation).
+1. If you want more information on navigating with JSON and JavaScript watch [this video](https://www.youtube.com/watch?v=xN9QxPtK2LM). The source code for the lessons is [here](https://github.com/curran/screencasts/tree/gh-pages/navigation). -->
 
 ## Homework
 
@@ -12,7 +12,7 @@
 
 ## NPM Manifests
 
-We will be again using [Browser Sync](https://www.browsersync.io) as our sample application.
+We will start off using [Browser Sync](https://www.browsersync.io) as our sample application.
 
 ```sh
 npm init -y
@@ -50,7 +50,7 @@ And run the process:
 npm run start
 ```
 
-## Faking a Single Page Application (SPA)
+<!-- ## Faking a Single Page Application (SPA)
 
 Page fragment links (`index.html#research`) allow us to navigate to sections of the document marked up with the corresponding id:
 
@@ -311,7 +311,9 @@ We can now remove `<script src="js/navitems.js"></script>` and the HTML content 
 
 ```html
 <div class="site-wrap"></div>
-```
+``` -->
+
+
 
 ## Sass
 

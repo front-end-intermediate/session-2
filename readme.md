@@ -50,272 +50,174 @@ And run the process:
 npm run start
 ```
 
-<!-- ## Faking a Single Page Application (SPA)
-
-Page fragment links (`index.html#research`) allow us to navigate to sections of the document marked up with the corresponding id:
-
-`<p id="watchlist">`
-
-Note that clicking on a hashed link doesn't refresh the page. This makes hashes an important feature for creating SPAs - they are used to load different content via AJAX from a server with no page refresh.
-
-We'll set up our page to _emulate_ a SPA using hashes.
-
-This time we'll use a new event `window.onhashchange` and `filter()` and a slightly modified `navItems` array.
-
-* examine the `navItems` array in `navItems.js`
-* review the code in `main.js`
-* review [.filter, .join, and .map](https://github.com/front-end-intermediate/session-1#array-methods) with arrays
-
-Note that despite the added content in the `navItems` variable, we are currently only using it for the navigation, not the content.
-
-Begin by selecting the `site-wrap`:
-
-```js
-const siteWrap = document.querySelector('.site-wrap');
-```
-
-Attach an event listener to the hashchange event:
-
-```js
-window.addEventListener("hashchange", navigate)
-```
-
-Store the hash in a variable `newLoc`::
-
-```js
-function navigate(){
-  let newloc = window.location.hash;
-  console.log(newloc)
-  }
-```
-
-Use that value to filter the navItems (our fake data) using [Array.prototype.filter()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter). The `filter()` method creates a new array with all elements that pass the test implemented by the provided function.
-
-```js
-function navigate(){
-  let newloc = window.location.hash;
-
-  let newContent = navItems.filter(
-    function(navItem){
-      return navItem.link == newloc
-    })
-
-  console.log(newContent[0].header)
-}
-```
-
-Return values stops the execution of a function and return a value from that function.
-
-Suppose we wanted a variable that made one of our objects globally available:
-
-```js
-function navigate(){
-  let newloc = window.location.hash;
-
-  let newContent = navItems.filter(
-    function(navItem){
-      return navItem.link == newloc
-    })
-  return newContent;
-  console.log(newContent[0].header)
-}
-
-let test = navigate()
-```
-
-Filter selects an entry in navItems based on its hash (`newLoc`) and saves it into a const variable `newContent`.
-
-Finally, set the innerHTML of the `siteWrap` to content from the resulting array:
-
-```js
-function navigate(){
-  let newloc = window.location.hash;
-
-  let newContent = navItems.filter(
-    function(navItem){
-      return navItem.link == newloc
-    })
-
-  siteWrap.innerHTML = `
-  <h2>${newContent[0].header}</h2>
-  ${newContent[0].content}
-  `;
-}
-```
-
-Refactor to use an [arrow function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions):
-
-```js
-function navigate(){
-  let newloc = window.location.hash;
-  let newContent = navItems.filter( navItem => navItem.link == newloc );
-  siteWrap.innerHTML = `
-  <h2>${newContent[0].header}</h2>
-  ${newContent[0].content}
-  `;
-}
-```
-
-Note: arrow functions have an implicit return.
-
-Establish a default landing page and call navigate to set the initial view:
-
-```js
-if(!location.hash) {
-  location.hash = "#watchlist";
-}
-
-navigate();
-```
-
-## JSON
-
-When sending data you need to convert it to a string using [JSON.stringify()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify).
-
-Run this in the browser's console:
-
-```js
-JSON.stringify(navItems, null, 4)
-```
-
-This is the source for `db.json` at the top level of today's folder.
-
-We could use `db.json` as a static file but lets use it with [JSON Server](https://github.com/typicode/json-server) instead.
-
-Create a new terminal in the editor and install it using npm (`--save-dev`):
-
-```sh
-npm i json-server --save-dev
-```
-
-and add this script in `package.json`:
-
-```js
-"json": "json-server --watch db.json --port 3004"
-```
-
-We will use a second terminal to run `npm run json` as our first is tied up with browser-sync.
-
-Test it at:
-
-[http://localhost:3004](http://localhost:3004)
-
-[http://localhost:3004/content](http://localhost:3004/content).
-
-Create a new function `fetchData`:
-
-```js
-function fetchData() {
-  var xhr = new XMLHttpRequest();
-  
-  xhr.onload = function () {
-    console.log(JSON.parse(xhr.response));
-  };
-  
-  xhr.open('GET', 'http://localhost:3004/content', true);
-  xhr.send();
-}
-```
-
-Test it by calling the function from the browser console with `fetchData()`.
-
-Add a hash and `callback`:
-
-```js
-function fetchData(hash, callback) {
-  var xhr = new XMLHttpRequest();
-  
-  xhr.onload = function () {
-    callback(JSON.parse(xhr.response));
-  };
-  
-  xhr.open('GET', 'http://localhost:3004/content', true);
-  xhr.send();
-}
-```
-
-Edit the navigate function to call it:
-
-```js
-function navigate() {
-  let newloc = window.location.hash;
-  fetchData(newloc, function (content) {
-    let newContent = content.filter( contentItem => contentItem.link == newloc );
-    siteWrap.innerHTML = `
-    <h2>${newContent[0].header}</h2>
-    ${newContent[0].image}
-    ${newContent[0].content}
-    `;
-  })
-}
-```
-
-Add an image:
-
-```js
-  siteWrap.innerHTML = `
-  <h2>${newContent[0].header}</h2>
-  ${newContent[0].image}
-  ${newContent[0].content}
-  `;
-```
-
-Note the use of callbacks.
-
-The navigation is still coming from the original `navitems.js` file. Comment it out in the html files and use the json.
-
-Initialize our page with a call to our fetchData function using `null` (we are not looking for a page here) and a callback function:
-
-```js
-// const markup = `
-// <ul>
-// ${navItems.map(
-//   navItem => `<li><a href="${navItem.link}">${navItem.label}</a></li>`
-// ).join('')}
-// </ul>
-// `;
-
-// navbar.innerHTML = markup;
-
-fetchData(null, function(content) {
-  const markup =
-    `<ul>
-    ${content.map(
-      listItem => `<li><a href="${listItem.link}">${listItem.label}</a></li>`
-    ).join('')}
-    </ul>`;
-  nav.innerHTML = markup;
-})
-```
-
-Note that we could initialize our logo here as `logo` doesn't exist until the navigation is built.
-
-```js
-fetchData(null, function(content) {
-  const markup =
-    `<ul>
-    ${content.map(
-      listItem => `<li><a href="${listItem.link}">${listItem.label}</a></li>`
-    ).join('')}
-    </ul>`;
-  nav.innerHTML = markup;
-
-  const logo = document.querySelector('#main ul li');
-  logo.classList.add('logo');
-  logo.firstChild.innerHTML = '<img src="img/logo.svg" />';
-  
-})
-```
-
-We can now remove `<script src="js/navitems.js"></script>` and the HTML content from `index.html`. Just be sure to leave the empty div required by our scripts:
-
-```html
-<div class="site-wrap"></div>
-``` -->
-
-## AJAX Adding Categories
+## AJAX - Adding Categories
 
 Let's add additional categories to our page.
+
+Comment out the function call:
+
+```js
+// requestStories();
+```
+
+Add a categories variable:
+
+```js
+var elem = document.querySelector('.site-wrap');
+const nytapi = 'd7d88f32a04d4c6aab4e46735441d0ee';
+const limit = 3;
+var categories = ['food', 'fashion', 'travel']; // NEW
+```
+
+Minimize the renderStoreis function:
+
+```js
+function renderStories(data) {
+  console.log(data)
+  // var content = (JSON.parse(data.responseText));
+  // var stories = content.results.slice(0, limit);
+  // //NEW
+  // const htmlFrag = stories.map(story => `
+  //   <div class="entry">
+  //   <div>
+  //     <img src="${story.multimedia[0].url}" /> 
+  //     <h3><a target="_blank" href="${story.short_url}">${story.title}</a></h3>
+  //   </div>
+  //   <p>${story.abstract}</p>
+  //   </div>
+  // `).join('')
+  // elem.innerHTML = htmlFrag;
+}
+```
+
+Reset our requestStories function:
+
+```js
+function requestStories(section) {
+
+  // Setup the request URL
+  var url = 'https://api.nytimes.com/svc/topstories/v2/' + section + '.json?api-key=' + nytapi;
+
+  // Create the XHR request
+  var xhr = new XMLHttpRequest();
+
+  // Setup our listener to process request state changes
+  xhr.onreadystatechange = function () {
+
+    // Only run if the request is complete
+    if (xhr.readyState !== 4) return;
+
+    // Process the response
+    if (xhr.status >= 200 && xhr.status < 300) {
+      // If successful
+      renderStories(xhr, section);
+    }
+
+  };
+
+  // Setup our HTTP request
+  xhr.open('GET', url, true);
+
+  // Send the request
+  xhr.send();
+
+};
+```
+
+Create a new function and call it:
+
+```js
+var getArticles = function () {
+  categories.forEach(function (category, index) {
+    // Make the request
+    requestStories(category);
+  });
+};
+
+getArticles();
+```
+
+in the renderStories function
+
+```js
+function renderStories(stories, title) {
+  stories = JSON.parse(stories.responseText).results.slice(0, limit);
+  stories.forEach(function (story) {
+    var storyEl = document.createElement('div');
+    storyEl.className = 'entry';
+    storyEl.innerHTML = `
+      <div>
+      <img src="${story.multimedia[0].url}" /> 
+      <h3><a target="_blank" href="${story.short_url}">${story.title}</a></h3>
+      </div>
+      <p>${story.abstract}</p>
+    `;
+    elem.append(storyEl); 
+  });
+}
+```
+
+Create a section heading div:
+
+```js
+function renderStories(stories, title) {
+  // NEW
+  var sectionHead = document.createElement('div');
+  sectionHead.id = title;
+  sectionHead.innerHTML = `<h3 class="section-head">${title}</h3>`;
+  elem.prepend(sectionHead)
+
+  stories = JSON.parse(stories.responseText).results.slice(0, limit);
+  stories.forEach(function (story) {
+    var storyEl = document.createElement('div');
+    storyEl.className = 'entry';
+    storyEl.innerHTML = `
+      <div>
+      <img src="${story.multimedia[0].url}" /> 
+      <h3><a target="_blank" href="${story.short_url}">${story.title}</a></h3>
+      </div>
+      <p>${story.abstract}</p>
+    `;
+    sectionHead.append(storyEl); // NEW
+  });
+}
+```
+
+Style it:
+
+```css
+.section-head {
+    text-transform: uppercase;
+    padding-bottom: 0.25rem;
+    margin-bottom: 1rem;
+    color: #666;
+    border-bottom: 1px solid #007eb6;
+}
+```
+
+Replace navitems.js with
+
+```js
+const navItems = [
+  {
+    label: 'LOGO',
+    link: '#'
+  },
+  {
+    label: 'Travel',
+    link: '#travel'
+  },
+  {
+    label: 'Fashion',
+    link: '#fashion'
+  },
+  {
+    label: 'Food',
+    link: '#food'
+  }
+];
+```
+
 
 
 

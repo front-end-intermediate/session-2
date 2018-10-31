@@ -313,6 +313,11 @@ We can now remove `<script src="js/navitems.js"></script>` and the HTML content 
 <div class="site-wrap"></div>
 ``` -->
 
+## AJAX Adding Categories
+
+Let's add additional categories to our page.
+
+
 
 
 ## Sass

@@ -25,9 +25,9 @@ var saveData = function(){
   localStorage.setItem(dataKey, inputData);
 }
 
-var saveData = function(key, data){
-  console.log('hi')
-}
+// var saveData = function(key, data){
+//   console.log('hi')
+// }
 
 var getData = function(){
   var nameItem = JSON.parse(localStorage.getItem('name'));
@@ -38,6 +38,7 @@ var getData = function(){
   }
 }
 
-formElem.addEventListener('input', saveData);
-formElemsArr = Array.from(formElems).forEach.addEventListener('blur', saveData);
 window.addEventListener('load', getData);
+formElem.addEventListener('input', saveData);
+// formElemsArr = Array.from(formElems).forEach.addEventListener('blur', saveData);
+// window.addEventListener('load', getData);

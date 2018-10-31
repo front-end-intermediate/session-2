@@ -63,7 +63,7 @@ const limit = 3;
 var categories = ['food', 'fashion', 'travel']; // NEW
 ```
 
-Minimize the renderStoreis function:
+Minimize the renderStories function:
 
 ```js
 function renderStories(data) {
@@ -84,37 +84,42 @@ function renderStories(data) {
 }
 ```
 
-Reset our requestStories function:
+Reset our requestStories function to recieve a section (or category): 
+
+```js
+function requestStories(section)
+```
+
+We will also generate a url to be called based on the category: 
+
+```js
+var url = 'https://api.nytimes.com/svc/topstories/v2/' + section + '.json?api-key=' + nytapi;`
+```
+
+Note that in the complete function below we have also called `renderStories` with both the response and the section name as well as replaced the `open` command with the url variable:
 
 ```js
 function requestStories(section) {
-
   // Setup the request URL
   var url = 'https://api.nytimes.com/svc/topstories/v2/' + section + '.json?api-key=' + nytapi;
-
   // Create the XHR request
-  var xhr = new XMLHttpRequest();
+  var request = new XMLHttpRequest();
 
   // Setup our listener to process request state changes
-  xhr.onreadystatechange = function () {
-
+  request.onreadystatechange = function () {
     // Only run if the request is complete
-    if (xhr.readyState !== 4) return;
-
+    if (request.readyState !== 4) return;
     // Process the response
-    if (xhr.status >= 200 && xhr.status < 300) {
+    if (request.status >= 200 && request.status < 300) {
       // If successful
-      renderStories(xhr, section);
+      renderStories(request, section);
     }
-
   };
 
-  // Setup our HTTP request
-  xhr.open('GET', url, true);
-
-  // Send the request
-  xhr.send();
-
+    // Setup our HTTP request
+    request.open('GET', url, true);
+    // Send the request
+    request.send();
 };
 ```
 
@@ -131,7 +136,26 @@ var getArticles = function () {
 getArticles();
 ```
 
-in the renderStories function
+You should see the requests showing up in the console.
+
+In the renderStories function we begin by adding the title variable:
+
+```js
+function renderStories(stories, title) {
+  console.log(title)
+```
+
+Note that stories is the request object and title comes originate in our categories array.
+
+Let's consolidate our JSON parsing and limiting into a single line:
+
+```js
+function renderStories(stories, title) {
+  stories = JSON.parse(stories.responseText).results.slice(0, limit);
+  console.log(stories)
+```
+
+Now we will use `forEach` to create our html fragments and append them to the DOM:
 
 ```js
 function renderStories(stories, title) {
@@ -151,7 +175,9 @@ function renderStories(stories, title) {
 }
 ```
 
-Create a section heading div:
+We are using `append` here so the stories will appear at the bottom of the page.
+
+Create a section heading div and `prepend` the generated html to _that_ so we can have nice category headers:
 
 ```js
 function renderStories(stories, title) {
@@ -177,7 +203,9 @@ function renderStories(stories, title) {
 }
 ```
 
-Style it:
+Note that we are adding an id (`sectionHead.id = title;`) to the new section heads.
+
+Style the new category headers:
 
 ```css
 .section-head {

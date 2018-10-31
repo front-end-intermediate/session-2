@@ -1,11 +1,5 @@
 # II - DOM Manipulation
 
-## Reading
-
-<!-- 1. Bob on [Template Strings](https://youtu.be/INPob8yPyBo)
-1. Bob on DOM scripting parts [one](https://youtu.be/0ik6X4DJKCc), [two](https://youtu.be/mPd2aJXCZ2g), [three](https://youtu.be/wK2cBMcDTss) and [four](https://youtu.be/i37KVt_IcXw).  Please make every effort to follow along on your computer.
-1. If you want more information on navigating with JSON and JavaScript watch [this video](https://www.youtube.com/watch?v=xN9QxPtK2LM). The source code for the lessons is [here](https://github.com/curran/screencasts/tree/gh-pages/navigation). -->
-
 ## Homework
 
 1. Review the notes below, paying particular attention to and researching anything that was unclear to you in class.

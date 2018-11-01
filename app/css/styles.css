@@ -117,16 +117,15 @@ li.logo {
 
 .entry {
     margin-bottom: 1.5rem;
-}
-.entry div {
     display: flex;
 }
+
 .entry h4 {
     margin: 0.25rem 0;
 }
 .entry p {
     margin: 0;
-    margin-left: 75px;
+    /* margin-left: 75px; */
 }
 .entry img {
     float: left;

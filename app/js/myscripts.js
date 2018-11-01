@@ -59,14 +59,14 @@ function renderStories(data) {
   var stories = content.results.slice(0, limit);
   //NEW
   const htmlFrag = stories.map(story => `
-    <div class="entry">
-    <div>
-      <img src="${story.multimedia[0].url}" /> 
-      <h3><a target="_blank" href="${story.short_url}">${story.title}</a></h3>
-    </div>
-    <p>${story.abstract}</p>
-    </div>
-  `).join('')
+  <div class="entry">
+  <img src="${story.multimedia[0].url}" /> 
+  <div>
+  <h3><a target="_blank" href="${story.short_url}">${story.title}</a></h3>
+  <p>${story.abstract}</p>
+  </div>
+</div>
+`).join('')
   elem.innerHTML = htmlFrag;
 }
 

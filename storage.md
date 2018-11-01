@@ -8,13 +8,13 @@ Take a moment to add a new script in package.json that targets the autosave dire
 
 ## localStorage and sessionStorage
 
-There are two browser APIs you can use to save data natively in the browser: `localStorage` and `sessionStorage`. They work mostly the same way, with a few notable differences.
+There are two browser APIs you can use to save data natively in the browser: `localStorage` and `sessionStorage`. They work mostly the same way.
 
 ### localStorage
 
 The localStorage API lets you store data locally that the browser can access later. This data is stored indefinitely and must be a string.
 
-There are three methods in the API:
+Here are three methods in the API:
 
 1. `setItem(key, value)` saves data to localStorage. The first argument is the key for the data, and the second is the data itself.
 1. `getItem(key)` retrieves saved data from localStorage using a provided key.
@@ -30,6 +30,8 @@ var data = localStorage.getItem('myDataKey');
 
 // Remove data
 localStorage.removeItem('myDatakey');
+// or
+localStorage.clear();
 ```
 
 Note the Application pane in the browser tools:
@@ -37,22 +39,6 @@ Note the Application pane in the browser tools:
 ![Image of browser inspector](other/app.png)
 
 You can right click on the localStorage item (`http://127.0.0.1:5500` in the image) to clear the storage.
-
-### sessionStorage
-
-The sessionStorage API works just like localStorage, except the data is cleared when the browser session ends. If the user closes the browser or opens a new tab to the same page, that’s a new session.
-
-```js
-// Store data
-var someTempData = 'The data that I want to store temporarily.';
-sessionStorage.setItem('myTempDataKey', someTempData);
-
-// Get data
-var tempData = sessionStorage.getItem('myTempDataKey');
-
-// Remove data
-sessionStorage.removeItem('myTempDatakey');
-```
 
 Your data must be a string. If you try to store an array or object, you’ll get back a string instead.
 
@@ -71,6 +57,9 @@ localStorage.setItem('dinnerOrder', dinner);
 // Get dinner
 // returns "[object Object]" - a string, not an object
 localStorage.getItem('dinnerOrder');
+
+var temp = localStorage.getItem('dinnerOrder');
+typeof(temp)
 ```
 
 ## Storing arrays and objects
@@ -96,6 +85,10 @@ localStorage.setItem('dinnerOrder', JSON.stringify(dinner));
 // Get dinner
 // doesn't return "[object Object]" - but a string that looks like an object
 localStorage.getItem('dinnerOrder');
+
+// but its still a string
+var temp = localStorage.getItem('dinnerOrder');
+typeof(temp)
 ```
 
 It works with arrays, too.
@@ -116,6 +109,8 @@ The `JSON.parse` method converts stringified JSON back into an object or array.
 // Get data from local storage
 var savedDinner = JSON.parse(localStorage.getItem('dinnerOrder'));
 var savedDrinks = JSON.parse(localStorage.getItem('drinkOptions'));
+
+typeof(savedDrinks)
 ```
 
 If there is no saved entry in localStorage (or sessionStorage), calling `JSON.parse()` with null will throw an error. As a result, it’s often a good idea to check that the item exists first:
@@ -127,6 +122,27 @@ var savedDinner = localStorage.getItem('dinnerOrder');
 // If there's data, convert it back to an object
 if (savedDinner) {
     savedDinner = JSON.parse(savedDinner);
+}
+```
+
+Because we will be working with on objects today, recall from session one that a `for...in loop` is a modified version of a for loop that you can use to loop through objects.
+
+The first part, `key`, is a variable that gets assigned to the object key on each loop. The second part is the object to loop over.
+
+```js
+var dinner = {
+  // key: value
+  main: 'pasta',
+  appetizer: 'corn',
+  drink: 'martini',
+  desert: 'parfait',
+  guests: 4,
+  alcohol: true,
+};
+
+for (let key in dinner) {
+    console.log(key); // key
+    console.log(dinner[key]); // value
 }
 ```
 
@@ -142,11 +158,79 @@ For browsers with a maximum storage limit, this amount is a total allowable amou
 
 Let's build a form that automatically saves a user’s data as they type.
 
+### Function expressions vs. function declarations
+
+What is the difference between these two ways of writing a function:
+
+```js
+// Function declaration
+function add(num1, num2) {
+	return num1 + num2;
+}
+
+// Function expression
+var add = function (num1, num2) {
+	return num1 + num2;
+};
+```
+
+The first example, `function add() {}`, is called a function declaration. The second example, `var add = function () {}`, is called a function expression.
+
+They more-or-less do the same example thing but when a JavaScript file is loaded, function declarations are hoisted to the top of the code by the browser before any code is executed.
+
+All of the function declarations are “known” before any code is run. This allows you to call a function before you declare.
+
+```js
+/**
+ * This works!
+ */
+function add(num1, num2) {
+	return num1 + num2;
+}
+add(3, 3); // returns 6
+
+
+/**
+ * This does, too!
+ */
+substract(7, 4); // returns 3
+function subtract(num1, num2) {
+	return num1 - num2;
+}
+```
+
+Function expressions, however, do not hoist. If you try to run a function before you’ve expressed it, you’ll get an error.
+
+```js
+/**
+ * This works!
+ */
+var add = function(num1, num2) {
+	return num1 + num2;
+};
+add(3, 3); // returns 6
+
+
+/**
+ * This does not =(
+ */
+substract(7, 4); // returns Uncaught TypeError: subtract is not a function
+var subtract = function (num1, num2) {
+	return num1 - num2;
+};
+```
+
+Which one you chose is almost entirely a matter of personal taste. I think the more important thing is to pick one style of writing functions and stick with it throughout your script.
+
+Function expressions force more structure into the code base.
+
+With function expressions, you cannot call a function before you’ve expressed it, so your code has more structure to it. Functions that call other functions are written in a specific order every time, because they won’t work otherwise. And any code you run to kick things off happens at the end of the file.
+
+In this exercise I will use function expressions for a change - but this is entirely personal preference, and either one works.
+
 ### The template
 
-The template for this project is a form with a variety of input types, as well as a select menu and textarea element.
-
-The form has a class and ID of save-me. Each form element has a unique ID you can hook into.
+The template is a form with a variety of input types, as well as a select menu and textarea element. The form has a class and ID of `save-me`. Each form element has a unique ID.
 
 ```html
 <form class="save-me" id="save-me">
@@ -204,19 +288,17 @@ The form has a class and ID of save-me. Each form element has a unique ID you ca
 </form>
 ```
 
-As the user types, we'll save their data in real time to `localStorage`. When the page loads, automatically populate the form fields with any saved data.
+As the user types, we'll save their data in real time to `localStorage`. And when the page loads, we'll automatically populate the form fields with any saved data.
 
 You should be able to type, reload the page in the browser (or quit and come back later) and see all of your data just as you left it.
 
-When the user clicks submit, wipe out any saved data.
+When the user clicks submit, we'll wipe out any saved data.
 
-Should we store each element individually, or as part of a single item in localStorage? How will we match fields against data in localStorage? What would happen if there were more than one form on the page?
+Should we store each element individually, or as part of a single item in localStorage? How will we match fields against data in localStorage? And what would happen if there were more than one form on the page?
 
 Implement a bare bones local storage structure: 
 
 ```js
-// Your code goes here...
-
 const formElem = document.getElementById('save-me');
 
 var saveData = function(){
@@ -238,26 +320,15 @@ When you enter data into any of the forms the string is added to local storage.
 Let's focus on the first input field.
 
 ```js
-// Your code goes here...
-
-const formElem = document.getElementById('save-me');
-
 var saveData = function(){
   var someData = document.querySelector('#name').value;
   console.log(someData);
   localStorage.setItem('name', someData);
   getData()
 }
-
-var getData = function(){
-  var data = localStorage.getItem('name');
-  console.log(data)
-}
-
-formElem.addEventListener('input', saveData);
 ```
 
-Note - the input event is being used here.
+Note - the input event is being used here so you will see your typing in the console.
 
 At this point you should start monitoring the Application portion of the browser's inspector:
 
@@ -265,7 +336,7 @@ At this point you should start monitoring the Application portion of the browser
 
 Note that you can right click on the Local Storage url to clear the contents.
 
-For the following we will use `event`:
+For the following we will use `event.target`. Here's a demo:
 
 ```js
 const formElem = document.getElementById('save-me');
@@ -277,14 +348,14 @@ var test = function(){
 formElem.addEventListener('click', test);
 ```
 
-When you add an event listener, that event is passed to the function. We can use the `event.target` property to get the element and `event.target.value` to get the element's contents.
+When you add an event listener, the event is passed to the function you are calling. We can use the `event.target` property to get the element and `event.target.value` to get the element's contents.
 
 ```js
 const formElem = document.getElementById('save-me');
 
 var saveData = function(){
   var someData = document.querySelector('#name').value;
-  console.log(event.target.value);
+  console.log(event.target.value); // NEW
   localStorage.setItem('name', someData);
   getData()
 }
@@ -307,8 +378,10 @@ var saveData = function(){
   var elem = event.target.id;
   var someData = event.target.value;
 
-  var dataKey = JSON.stringify(elem);
-  var inputData = JSON.stringify(someData);
+  console.log(typeof (someData));
+  
+  var dataKey = elem;
+  var inputData = someData;
 
   localStorage.setItem(dataKey, inputData);
   getData(dataKey)
@@ -323,6 +396,8 @@ var getData = function(key){
 formElem.addEventListener('input', saveData);
 ```
 
+The change to `getData` is for logging purposes only. You should also check out the applications tab.
+
 Let's try accounting for elements that do not have an id such as radio buttons and check boxes.
 
 ```js
@@ -331,6 +406,7 @@ var faves = []; // NEW
 
 var saveData = function(){
   
+  // NEW
   if(event.target.id){
     var elem = event.target.id;
     var someData = event.target.value;
@@ -343,8 +419,8 @@ var saveData = function(){
     var someData = faves;
   }
   
-  var dataKey = JSON.stringify(elem);  // NEW
-  var inputData = JSON.stringify(someData);
+  var dataKey = elem;
+  var inputData = someData;
   
   localStorage.setItem(dataKey, inputData);
   getData(dataKey)
@@ -365,7 +441,8 @@ Consult [MDN's Events page](https://developer.mozilla.org/en-US/docs/Web/Events)
 
 ```js
 var getData = function(){
-  var nameItem = JSON.parse(localStorage.getItem('name'));
+  var nameItem = localStorage.getItem('name');
+  console.log(nameItem)
   if (nameItem) {
     document.querySelector('#name').value = nameItem;
   } else {
@@ -374,13 +451,16 @@ var getData = function(){
 }
 
 window.addEventListener('load', getData);
+formElem.addEventListener('input', saveData);
 ```
 
-Its at this point where we realize that getting and setting these values could get quite long and that there is probably a better way. But that's OK - most scripts start out rough and then are refined as you proceed. 
+Its at this point where we realize that getting and setting these values could get quite long and that there is probably a better way. (But that's OK - most scripts start out rough and then are refined as you proceed.)
 
-Let's unify the storage objects by prefixing them with the form's id.
+Let's unify the storage objects into a single object - prefixing it with the form's id. 
 
-Because we are going to be using `console.log` a lot more let's shorten it:
+This might be useful later if we wanted to generalize the script to work with multiple forms.
+
+Because we are using `console.log` a lot more let's shorten it:
 
 ```js
 const formElem = document.getElementById('save-me');
@@ -393,8 +473,6 @@ We'll use the id for the local storage key name:
 var saveData = function(){
   var id = formElem.id;
 	log(id);
-
-	localStorage.setItem('formData-' + id, JSON.stringify(formData));
 }
 ```
 
@@ -410,9 +488,9 @@ var saveData = function(){
 }
 ```
 
-We are getting the form data before setting it. This is resulting in `null` because there is no form data yet. 
+We are getting the form data before setting it resulting in `null` because there is no form data yet. 
 
-Because it is possible that the form data is null we will use a ternary operator (rather than an if statement) to set formData to either the existing data or just an empty object:
+Because it is possible that the form data will be null we will use a [ternary operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_Operator) to set formData to either the existing data or an empty object:
 
 ```js
 var saveData = function(){
@@ -427,7 +505,9 @@ var saveData = function(){
 }
 ```
 
-Finally, let's refactor the code so the checkboxes report true if checked:
+Test the form now and examine the localStorage as you enter items.
+
+Let's add code so the checkboxes report true if checked:
 
 ```js
 var saveData = function(){
@@ -468,7 +548,7 @@ var getData = function () {
 }
 ```
 
-Now formData is an object. We will use a `for ... in` loop to work with it:
+Now that formData is an object. We will use a `for ... in` loop to work with it:
 
 ```js
 var getData = function () {
@@ -499,8 +579,6 @@ var getData = function () {
 }
 ```
 
-Again, the checkboxes are a special case. Checkboxes have a simple property - `checked` - which is either true or false.
-
 We will start populating our form by including checkboxes in our loop and using the formData to set the value of the form element:
 
 ```js
@@ -519,7 +597,7 @@ var getData = function () {
 }
 ```
 
-Now, about those pesky radio buttons. 
+Now, about those pesky radio buttons. Radio buttons are unique in that they use the name property to determined toggle state.
 
 Let's check to see if we are dealing with a radio button and, if so, create a new array `radios` so we can run a `forEach` on them. We'll use an inner `if` statement to set the checked value to true.
 
@@ -535,7 +613,7 @@ var getData = function () {
       field.checked = formData[data];
     }
     
-    if (field.type === 'radio') {
+    if (field.type === 'radio') { // NEW
       var radios = Array.from(formElem.querySelectorAll('input[type="radio"]'));
       radios.forEach(function (radio) {
         if (radio.value === formData[data]) {
@@ -564,7 +642,7 @@ var getData = function () {
       field.checked = formData[data];
     }
     
-    else if (field.type === 'radio') { // NEW
+    else if (field.type === 'radio') { 
       var radios = Array.from(formElem.querySelectorAll('input[type="radio"]'));
       radios.forEach(function (radio) {
         if (radio.value === formData[data]) {
@@ -599,7 +677,7 @@ var getData = function () {
         }
       });
     }
-    
+    // NEW
     else {
       field.value = formData[data];
     }
@@ -627,8 +705,21 @@ var resetData = function (event) {
 };
 ```
 
-Finally we can use an IIFE
+If you want your code to run immediately when the file runs you can use something called an Immediately Invoked Function Expression (or IIFE). An IIFE is an anonymous (as in, unnamed) function that runs immediately.
 
+```js
+(function () {
+	// Your code goes here...
+})();
+```
+
+We'll use this version:
+
+```js
+;(function (window, document, undefined) {
+	// Your code goes here...
+})(window, document);
+```
 
 ```js
 ;(function (window, document, undefined) {
@@ -693,6 +784,21 @@ Finally we can use an IIFE
 })(window, document);
 ```
 
+## sessionStorage
+
+The sessionStorage API works just like localStorage, except the data is cleared when the browser session ends. If the user closes the browser or opens a new tab to the same page, that’s a new session.
+
+```js
+// Store data
+var someTempData = 'The data that I want to store temporarily.';
+sessionStorage.setItem('myTempDataKey', someTempData);
+
+// Get data
+var tempData = sessionStorage.getItem('myTempDataKey');
+
+// Remove data
+sessionStorage.removeItem('myTempDatakey');
+```
 
 ## Expiring localStorage data
 

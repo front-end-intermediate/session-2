@@ -900,7 +900,7 @@ For this assignment:
 		 * @return {String} The API endpoint
 		 */
 		var getEndpoint = function () {
-			var endpoint = 'https://daniel.deverell.com/api/';
+			var endpoint = 'http://oit2.scps.nyu.edu/~devereld/api/';
 			var random = Math.random();
 			if (random < 0.3) return endpoint + 'pirates.json';
 			if (random < 0.6) return endpoint + 'pirates2.json';
@@ -935,7 +935,7 @@ Some considerations
 
 When you should you delete your saved data from localStorage? What happens if your API call fails and there is no data in localStorage to fallback on? How can you best structure your code to avoid repeating yourself.
 
-pirates.json
+`pirates.json`:
 
 ```js
 {
@@ -985,7 +985,7 @@ pirates.json
 }
 ```
 
-pirates2.json
+`pirates2.json`:
 
 ```js
 {

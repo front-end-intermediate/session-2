@@ -6,7 +6,7 @@
 1. Using the review below, add multiple sections to the page of your own choosing and with your own api key (see session one notes)
 1. Prepare and begin working on the exercise outlined in the second section of this exercise (local storage api)
 
-## NPM Manifests
+## NPM Review
 
 We will start off using [Browser Sync](https://www.browsersync.io) as our sample application.
 
@@ -84,10 +84,41 @@ Reset our requestStories function to recieve a section (or category):
 function requestStories(section)
 ```
 
-We will also generate a url to be called based on the category: 
+Create a new function and call it:
 
 ```js
-var url = 'https://api.nytimes.com/svc/topstories/v2/' + section + '.json?api-key=' + nytapi;`
+function getArticles () {
+  categories.forEach(function (category, index) {
+    // Make the request
+    requestStories(category);
+  });
+};
+
+getArticles();
+```
+
+You should see the requests showing up in the console. We are getting the same URL three times.
+
+Generate a url to be called based on the section: 
+
+```js
+function requestStories(section) {
+  var url = 'https://api.nytimes.com/svc/topstories/v2/' + section + '.json?api-key=' + nytapi;
+```
+
+Edit the `request.open` to use the new url variable:
+
+```js
+// NEW
+request.open('GET', url, true);
+// Send the request
+request.send();
+```
+
+And finally, call the `renderStories` function passing both the request and the section:
+
+```js
+renderStories(request, section); 
 ```
 
 Note that in the complete function below we have also called `renderStories` with both the response and the section name as well as replaced the `open` command with the url variable:
@@ -106,31 +137,16 @@ function requestStories(section) {
     // Process the response
     if (request.status >= 200 && request.status < 300) {
       // If successful
-      renderStories(request, section);
+      renderStories(request, section); // NEW
     }
   };
 
-    // Setup our HTTP request
+    // NEW
     request.open('GET', url, true);
     // Send the request
     request.send();
 };
 ```
-
-Create a new function and call it:
-
-```js
-var getArticles = function () {
-  categories.forEach(function (category, index) {
-    // Make the request
-    requestStories(category);
-  });
-};
-
-getArticles();
-```
-
-You should see the requests showing up in the console.
 
 In the renderStories function we begin by adding the title variable:
 
@@ -139,7 +155,7 @@ function renderStories(stories, title) {
   console.log(title)
 ```
 
-Note that stories is the request object and title comes originate in our categories array.
+Note that stories is the request object and title originates in our categories array variable.
 
 Let's consolidate our JSON parsing and limiting into a single line:
 
@@ -158,11 +174,11 @@ function renderStories(stories, title) {
     var storyEl = document.createElement('div');
     storyEl.className = 'entry';
     storyEl.innerHTML = `
+      <img src="${story.multimedia[0].url}" />
       <div>
-      <img src="${story.multimedia[0].url}" /> 
       <h3><a target="_blank" href="${story.short_url}">${story.title}</a></h3>
-      </div>
       <p>${story.abstract}</p>
+      </div>
     `;
     elem.append(storyEl); 
   });
@@ -234,13 +250,35 @@ const navItems = [
 ];
 ```
 
+## Security Notes
+Note that the innerHTML property can be used to create cross-site scripting (XSS) attacks.
+
+The idea behind an XSS attack with innerHTML is that malicious code would get injected into your site and then execute. This is possible because innerHTML renders complete markup and not just text.
+
+You can avoid attacks by sanitizing the content before injecting it.
+
+```js
+var sanitizeHTML = function (str) {
+	var temp = document.createElement('div');
+	temp.textContent = str;
+	return temp.innerHTML;
+};
+```
+
+This works by creating a temporary div and adding the content with textContent to escape any characters. It then returns them using innerHTML to prevent those escaped characters from transforming back into unescaped markup.
+
+```js
+// Renders <h1>&lt;img src=x onerror="alert('XSS Attack')"&gt;</h1>
+div.innerHTML = '<h1>' + sanitizeHTML('<img src=x onerror="alert(\'XSS Attack\')">') + '</h1>';
+```
+
 ## GIT and GITHUB
 
-Git is a version control system originally invented for use developing Linux by Linus Torvalds. It is the standard version tool and integrates with Github to permit collaboration.
+Git is a version control system originally invented for use developing Linux by Linus Torvalds. It is the standard versioning tool and integrates with Github to permit collaboration.
 
 There is a handy and very simple tutorial for Git on [the Git Website](https://try.github.io/levels/1/challenges/1) which is highly recommended for newbies.
 
-1. make sure terminal is in the `basic-dom` directory using `cd` (drag-and-drop, copy paste)
+1. make sure terminal is in today's directory using `cd` (drag-and-drop, copy paste)
 1. initialize the repo:
 
 ```bash
@@ -254,6 +292,14 @@ git config
 git config --global user.name " ***** "
 git config --global user.email " ***** "
 git config --list
+```
+
+Note: always create a .gitignore file to prevent local working / utility files from being pushed.
+
+```sh
+.sass_cache
+.DS_store
+node_modules
 ```
 
 * Add (watch) all your files:
@@ -306,14 +352,6 @@ git branch -d <branchname>
 
 Pushing Files to Remote Repos - Github
 
-Note: always create a .gitignore file to prevent local working / utility files from being pushed.
-
-```bash
-.sass_cache
-.DS_store
-node_modules
-```
-
 * Log into Github, create and new repo and follow the instructions e.g.:
 
 ```bash
@@ -323,9 +361,9 @@ git push -u origin master
 
 Finally - when downloading a github repo use the `clone` method to move it to your local disk while retaining the git history, branches, and etc.
 
-Use of MSCode as a Git / diff client?
+Note the integrated git features in MSCode
 
-## Server Accounts
+<!-- ## Server Accounts
 
 Username is the first seven letters of your last name + first letter of first name
 
@@ -345,4 +383,4 @@ Suggested clients: Cyberduck, FileZilla
 
 ## Debug
 
-Sources > Network
+Sources > Network -->

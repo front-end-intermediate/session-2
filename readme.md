@@ -27,9 +27,9 @@ Edit `package.json`:
 Create the NPM script using the Browser Sync command line documentation:
 
 ```js
-  "scripts": {
-    "start": "browser-sync start --server 'app' --files 'app'"
-  },
+"scripts": {
+  "start": "browser-sync start --server 'app' --files 'app'"
+},
 ```
 
 And run the process:

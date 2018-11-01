@@ -361,7 +361,7 @@ git push -u origin master
 
 Finally - when downloading a github repo use the `clone` method to move it to your local disk while retaining the git history, branches, and etc.
 
-Note the integrated git features in MSCode
+Note the integrated git features in VSCode.
 
 <!-- ## Server Accounts
 

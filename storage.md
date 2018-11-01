@@ -682,6 +682,8 @@ Finally we can use an IIFE
   var resetData = function (event) {
     var id = formElem.id;
     localStorage.setItem('formData-' + id, JSON.stringify({}));
+    // localStorage.clear(); // alternative
+    // localStorage.removeItem('formData-' + id); // alternative
   };
   
   formElem.addEventListener('input', saveData);

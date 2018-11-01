@@ -103,7 +103,7 @@ localStorage.setItem('drinkOptions', JSON.stringify(drinks));
 
 ### JSON.parse
 
-The `JSON.parse` method converts stringified JSON back into an object or array.
+The `JSON.parse` method converts stringified JSON back into an _object or array_.
 
 ```js
 // Get data from local storage
@@ -321,14 +321,14 @@ Let's focus on the first input field.
 
 ```js
 var saveData = function(){
-  var someData = document.querySelector('#name').value;
+  var someData = document.querySelector('#name').value; // NEW
   console.log(someData);
   localStorage.setItem('name', someData);
   getData()
 }
 ```
 
-Note - the input event is being used here so you will see your typing in the console.
+Note - the input event is being used here so you will see your typing in the console 'in real time.'
 
 At this point you should start monitoring the Application portion of the browser's inspector:
 
@@ -368,7 +368,20 @@ var getData = function(){
 formElem.addEventListener('input', saveData);
 ```
 
-We'll use `event.target` to set both the target (the name of the input field) and the target's value (the value of the input field) to JSON. (Remember, local storage can only accept strings.)
+For ease of testing let's add a click event on the submit bottun that clears the localStorage:
+
+```js
+// clear formData
+var resetData = function (event) {
+	var id = formElem.id;
+	localStorage.clear();
+};
+
+// Listen for submit event
+document.addEventListener('submit', resetData);
+```
+
+We'll use `event.target` to get both the target (the name of the input field) and the target's value (the value of the input field). 
 
 ```js
 const formElem = document.getElementById('save-me');
@@ -378,7 +391,7 @@ var saveData = function(){
   var elem = event.target.id;
   var someData = event.target.value;
 
-  console.log(typeof (someData));
+  console.log(typeof (someData)); // local storage can only accept strings
   
   var dataKey = elem;
   var inputData = someData;
@@ -393,10 +406,18 @@ var getData = function(key){
   console.log(data)
 }
 
+// clear formData
+var resetData = function (event) {
+	var id = formElem.id;
+	localStorage.clear();
+};
+
+// Listen for submit event
+document.addEventListener('submit', resetData);
 formElem.addEventListener('input', saveData);
 ```
 
-The change to `getData` is for logging purposes only. You should also check out the applications tab.
+The change to `getData` is for logging purposes only. (You can check out the applications tab to see inputs as well.)
 
 Let's try accounting for elements that do not have an id such as radio buttons and check boxes.
 
@@ -425,19 +446,9 @@ var saveData = function(){
   localStorage.setItem(dataKey, inputData);
   getData(dataKey)
 }
-
-var getData = function(key){
-  console.log(key)  
-  var data = localStorage.getItem(key);
-  console.log(data)
-}
-
-formElem.addEventListener('input', saveData);
 ```
 
 Now let's focus on refreshing and onload - events which should populate the form with data from local storage. Fortunately we already have a `getData()` function we can use.
-
-Consult [MDN's Events page](https://developer.mozilla.org/en-US/docs/Web/Events)
 
 ```js
 var getData = function(){
@@ -450,8 +461,8 @@ var getData = function(){
   }
 }
 
+// NEW
 window.addEventListener('load', getData);
-formElem.addEventListener('input', saveData);
 ```
 
 Its at this point where we realize that getting and setting these values could get quite long and that there is probably a better way. (But that's OK - most scripts start out rough and then are refined as you proceed.)
@@ -460,14 +471,14 @@ Let's unify the storage objects into a single object - prefixing it with the for
 
 This might be useful later if we wanted to generalize the script to work with multiple forms.
 
-Because we are using `console.log` a lot more let's shorten it:
+Because we are using `console.log` a lot, let's shorten it by adding this near the top of our scripts:
 
 ```js
 const formElem = document.getElementById('save-me');
 var log = console.log;
 ```
 
-We'll use the id for the local storage key name:
+We'll back out of our old `saveData` scipt and use the id for the local storage key name:
 
 ```js
 var saveData = function(){
@@ -527,9 +538,11 @@ var saveData = function(){
 
 `"spiderman": "on"` now becomes `"spiderman":true`
 
-Let's look at the getData function.
+### getData
 
-Start by getting the dta from local storage:
+Let's look at the `getData` function.
+
+Start by getting the data from local storage:
 
 ```js
 var getData = function () {
@@ -543,12 +556,12 @@ Parse the JSON:
 ```js
 var getData = function () {
 	var formData = localStorage.getItem('formData-' + formElem.id);
-	formData = JSON.parse(formData);
+	formData = JSON.parse(formData); // NEW
 	log(formData)
 }
 ```
 
-Now that formData is an object. We will use a `for ... in` loop to work with it:
+Now that formData is an object we can use a `for ... in` loop to work with it:
 
 ```js
 var getData = function () {
@@ -626,6 +639,8 @@ var getData = function () {
 }
 ```
 
+Radio buttons should now remember their state on refresh.
+
 We have one more condition to account for. if the field type is not a checkbox or a radio button it must be a field.
 
 We'll use `else if` for the radios:
@@ -687,14 +702,16 @@ var getData = function () {
 }
 ```
 
-Add an event listener for when the user hits the submit button. This will remove local storage.
+Form fields should now remember their state on refresh.
+
+Remeber the event listener for when the user hits the submit button. 
 
 ```js
 // Listen for submit event
-document.addEventListener('submit', resetData, false);
+document.addEventListener('submit', resetData);
 ```
 
-Create the resetData function:
+Edit the resetData function:
 
 
 ```js

@@ -1,4 +1,4 @@
-## Browser Storage
+# Part II - Browser Storage
 
 We'll learn how to use `localStorage` and `sessionStorage` to store data natively in the browser and use it later.
 
